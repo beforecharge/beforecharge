@@ -1,4 +1,4 @@
-# 🔔 Subscription Manager
+# 🔔 MyRenewly - Subscription Manager
 
 A comprehensive web application to track, manage, and optimize your subscription services. Take control of your recurring payments with powerful analytics, smart reminders, and cost optimization insights.
 
@@ -67,8 +67,8 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd subs-manage
+git clone https://gitlab.com/zode-nexus/myrenewly.git
+cd myrenewly
 ```
 
 ### 2. Install Dependencies
@@ -95,7 +95,7 @@ VITE_SUPABASE_URL=your_supabase_project_url_here
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 
 # App Configuration
-VITE_APP_NAME=Subscription Manager
+VITE_APP_NAME=MyRenewly
 VITE_APP_URL=http://localhost:5173
 
 # Feature Flags
@@ -165,7 +165,7 @@ The application will be available at `http://localhost:5173`
 ## 📁 Project Structure
 
 ```
-subscription-manager/
+myrenewly/
 ├── public/                 # Static assets
 ├── src/
 │   ├── components/        # React components
@@ -248,10 +248,10 @@ supabase functions deploy send-reminders
 ### Docker
 ```bash
 # Build the image
-docker build -t subscription-manager .
+docker build -t myrenewly .
 
 # Run the container
-docker run -p 3000:3000 subscription-manager
+docker run -p 3000:3000 myrenewly
 ```
 
 ## 🧪 Testing
@@ -295,7 +295,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 |----------|-------------|---------|----------|
 | `VITE_SUPABASE_URL` | Supabase project URL | - | ✅ |
 | `VITE_SUPABASE_ANON_KEY` | Supabase anonymous key | - | ✅ |
-| `VITE_APP_NAME` | Application name | Subscription Manager | ❌ |
+| `VITE_APP_NAME` | Application name | MyRenewly | ❌ |
 | `VITE_APP_URL` | Application URL | http://localhost:5173 | ❌ |
 | `VITE_ENABLE_GOOGLE_AUTH` | Enable Google OAuth | true | ❌ |
 | `VITE_ENABLE_EMAIL_REMINDERS` | Enable email notifications | true | ❌ |
@@ -325,7 +325,6 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 ### Getting Help
 - Check the [Issues](../../issues) page for similar problems
 - Create a new issue with detailed description and steps to reproduce
-- Join our [Discord community](https://discord.gg/your-discord) for real-time help
 
 ## 📊 Performance
 
@@ -356,8 +355,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 <div align="center">
-  <p>Made with ❤️ by the Subscription Manager team</p>
+  <p>Made with ❤️ by the MyRenewly team</p>
   <p>
-    <a href="#-subscription-manager">Back to Top</a>
+    <a href="#-myrenewly---subscription-manager">Back to Top</a>
   </p>
 </div>
