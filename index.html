@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <!-- Primary Meta Tags -->
+        <title>Subscription Manager - Track & Manage Your Subscriptions</title>
+        <meta
+            name="title"
+            content="Subscription Manager - Track & Manage Your Subscriptions"
+        />
+        <meta
+            name="description"
+            content="Take control of your subscription spending. Track, manage, and optimize all your subscription services in one secure dashboard."
+        />
+        <meta
+            name="keywords"
+            content="subscription manager, subscription tracker, recurring payments, budget tracker, subscription analytics"
+        />
+        <meta name="author" content="Subscription Manager" />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://subscription-manager.app/" />
+        <meta
+            property="og:title"
+            content="Subscription Manager - Track & Manage Your Subscriptions"
+        />
+        <meta
+            property="og:description"
+            content="Take control of your subscription spending. Track, manage, and optimize all your subscription services in one secure dashboard."
+        />
+        <meta property="og:image" content="/og-image.png" />
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta
+            property="twitter:url"
+            content="https://subscription-manager.app/"
+        />
+        <meta
+            property="twitter:title"
+            content="Subscription Manager - Track & Manage Your Subscriptions"
+        />
+        <meta
+            property="twitter:description"
+            content="Take control of your subscription spending. Track, manage, and optimize all your subscription services in one secure dashboard."
+        />
+        <meta property="twitter:image" content="/og-image.png" />
+
+        <!-- Theme and appearance -->
+        <meta name="theme-color" content="#3b82f6" />
+        <meta name="color-scheme" content="light dark" />
+
+        <!-- PWA Meta Tags -->
+        <meta name="application-name" content="Subscription Manager" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta
+            name="apple-mobile-web-app-title"
+            content="Subscription Manager"
+        />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-TileColor" content="#3b82f6" />
+        <meta name="msapplication-tap-highlight" content="no" />
+
+        <!-- Apple Touch Icons -->
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
+        />
+
+        <!-- Preload critical resources -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+        <!-- Prevent flash of unstyled content -->
+        <style>
+            /* Minimal loading styles */
+            #root {
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .loading-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .loading-spinner {
+                width: 2rem;
+                height: 2rem;
+                border: 2px solid #e5e7eb;
+                border-top: 2px solid #3b82f6;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+            }
+
+            .loading-text {
+                color: #6b7280;
+                font-family:
+                    system-ui,
+                    -apple-system,
+                    sans-serif;
+                font-size: 0.875rem;
+            }
+
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+
+            /* Hide loading once React hydrates */
+            #root:not(:empty) .loading-container {
+                display: none;
+            }
+
+            /* Dark mode support */
+            @media (prefers-color-scheme: dark) {
+                body {
+                    background-color: #0f172a;
+                    color: #f8fafc;
+                }
+                .loading-spinner {
+                    border-color: #374151;
+                    border-top-color: #60a5fa;
+                }
+                .loading-text {
+                    color: #9ca3af;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root">
+            <!-- Loading fallback -->
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">Loading Subscription Manager...</p>
+            </div>
+        </div>
+        <script type="module" src="/src/main.tsx"></script>
+    </body>
+</html>
