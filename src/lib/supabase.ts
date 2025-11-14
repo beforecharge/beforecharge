@@ -49,10 +49,26 @@ export const auth = {
 
   // Sign in with Google
   signInWithGoogle: async () => {
+    // Determine the correct redirect URL based on environment
+    const getRedirectUrl = () => {
+      const origin = window.location.origin;
+      
+      // For development
+      if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        return `${origin}/auth/callback`;
+      }
+      
+      // For production - use the actual domain
+      return `${origin}/auth/callback`;
+    };
+
+    const redirectUrl = getRedirectUrl();
+    console.log('OAuth redirect URL:', redirectUrl);
+
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: redirectUrl,
         queryParams: {
           access_type: 'offline',
           prompt: 'consent',
