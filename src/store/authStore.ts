@@ -359,19 +359,32 @@ export const useAuthStore = create<AuthState>()(
         try {
           console.log("checkSession called");
           
-          const {
-            data: { session },
-            error,
-          } = await auth.getCurrentSession();
+          // First, try to get the current session
+          let sessionResult = await auth.getCurrentSession();
+          
+          // If no session and we're on a callback page, wait a bit for Supabase to process
+          if (!sessionResult.data.session && window.location.pathname === '/auth/callback') {
+            console.log("No session on callback page, waiting for Supabase to process...");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            sessionResult = await auth.getCurrentSession();
+          }
 
-          console.log("Session check result:", { session: !!session, error });
+          const { session } = sessionResult.data;
+          const { error } = sessionResult;
+
+          console.log("Session check result:", { 
+            session: !!session, 
+            error,
+            userId: session?.user?.id,
+            email: session?.user?.email 
+          });
 
           if (error) {
             throw error;
           }
 
           if (session?.user) {
-            console.log("Session found, ensuring profile exists");
+            console.log("Session found, ensuring profile exists for user:", session.user.email);
             // Ensure profile exists
             const profile = await ensureProfileExists(session.user);
 

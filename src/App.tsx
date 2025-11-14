@@ -77,22 +77,36 @@ const AuthCallback: React.FC = () => {
       try {
         setIsProcessing(true);
         
-        // Check if we have auth tokens in the URL hash (implicit flow)
+        // Log current URL for debugging
+        console.log("AuthCallback - Current URL:", window.location.href);
+        
+        // Check if we have auth tokens in the URL hash (implicit flow fallback)
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const accessToken = hashParams.get('access_token');
         
+        // Check if we have auth code in URL params (PKCE flow)
+        const urlParams = new URLSearchParams(window.location.search);
+        const authCode = urlParams.get('code');
+        
         if (accessToken) {
-          console.log("Found access token in URL hash, processing...");
+          console.log("Found access token in URL hash (implicit flow), processing...");
           // Clear the hash from URL
           window.history.replaceState(null, '', window.location.pathname);
+        } else if (authCode) {
+          console.log("Found auth code in URL params (PKCE flow), processing...");
+          // Clear the search params from URL
+          window.history.replaceState(null, '', window.location.pathname);
+        } else {
+          console.log("No auth tokens found in URL, checking existing session...");
         }
         
+        // Let Supabase handle the session
         await checkSession();
 
-        // Add a small delay to ensure state is updated
+        // Add a delay to ensure state is updated
         setTimeout(() => {
           setIsProcessing(false);
-        }, 1000);
+        }, 2000); // Increased delay for better reliability
       } catch (error) {
         console.error("Auth callback error:", error);
         setIsProcessing(false);

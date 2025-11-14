@@ -11,6 +11,9 @@ export const supabase: SupabaseClient<Database> = createClient(
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: true,
+      flowType: 'pkce', // Force PKCE flow instead of implicit
+      storage: window.localStorage,
+      storageKey: 'supabase.auth.token',
     },
     realtime: {
       params: {
@@ -73,8 +76,11 @@ export const auth = {
           access_type: 'offline',
           prompt: 'consent',
         },
+        skipBrowserRedirect: false, // Ensure browser redirect happens
       },
     });
+    
+    console.log('OAuth initiation result:', { data, error });
     return { data, error };
   },
 
