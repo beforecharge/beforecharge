@@ -186,39 +186,46 @@ const Subscriptions: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Subscriptions</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Subscriptions</h1>
+          <p className="text-muted-foreground text-sm sm:text-base">
             Manage and track all your subscription services
           </p>
         </div>
-        <div className="flex gap-2">
-          <AutoFetchSubscriptions
-            trigger={
-              <Button variant="outline">
-                <Zap className="mr-2 h-4 w-4" />
-                Auto-Fetch
+        <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex gap-2">
+            <AutoFetchSubscriptions
+              trigger={
+                <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+                  <Zap className="mr-2 h-4 w-4" />
+                  <span className="hidden sm:inline">Auto-Fetch</span>
+                  <span className="sm:hidden">Fetch</span>
+                </Button>
+              }
+            />
+            {userPlan && userPlan.type !== "free" && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExportCSV}
+                disabled={isExporting || filteredSubscriptions.length === 0}
+                className="flex-1 sm:flex-none"
+              >
+                {isExporting ? (
+                  <LoadingSpinner size="sm" className="mr-2" />
+                ) : (
+                  <Download className="mr-2 h-4 w-4" />
+                )}
+                <span className="hidden sm:inline">Export CSV</span>
+                <span className="sm:hidden">Export</span>
               </Button>
-            }
-          />
-          {userPlan && userPlan.type !== "free" && (
-            <Button
-              variant="outline"
-              onClick={handleExportCSV}
-              disabled={isExporting || filteredSubscriptions.length === 0}
-            >
-              {isExporting ? (
-                <LoadingSpinner size="sm" className="mr-2" />
-              ) : (
-                <Download className="mr-2 h-4 w-4" />
-              )}
-              Export CSV
-            </Button>
-          )}
+            )}
+          </div>
           <AddSubscriptionModal
             trigger={
-              <Button>
+              <Button size="sm" className="w-full sm:w-auto">
                 <Plus className="mr-2 h-4 w-4" />
-                Add Subscription
+                <span className="sm:hidden">Add</span>
+                <span className="hidden sm:inline">Add Subscription</span>
               </Button>
             }
           />
@@ -226,18 +233,18 @@ const Subscriptions: React.FC = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardContent className="pt-6">
+      <div className="stats-mobile grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Card className="mobile-card-compact">
+          <CardContent className="mobile-card-content pt-4 sm:pt-6">
             <div className="flex items-center space-x-2">
               <div className="p-2 bg-primary/10 rounded-lg">
-                <Calendar className="h-5 w-5 text-primary" />
+                <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
               <div>
-                <p className="text-2xl font-bold">
+                <p className="text-xl sm:text-2xl font-bold">
                   {activeSubscriptions.length}
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   Active Subscriptions
                 </p>
               </div>
@@ -245,33 +252,33 @@ const Subscriptions: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="pt-6">
+        <Card className="mobile-card-compact">
+          <CardContent className="mobile-card-content pt-4 sm:pt-6">
             <div className="flex items-center space-x-2">
               <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
-                <DollarSign className="h-5 w-5 text-green-600 dark:text-green-400" />
+                <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold">
+                <p className="text-xl sm:text-2xl font-bold">
                   {formatCurrency(totalMonthlySpend)}
                 </p>
-                <p className="text-sm text-muted-foreground">Monthly Total</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Monthly Total</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="pt-6">
+        <Card className="mobile-card-compact">
+          <CardContent className="mobile-card-content pt-4 sm:pt-6">
             <div className="flex items-center space-x-2">
               <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                <DollarSign className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                <DollarSign className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold">
+                <p className="text-xl sm:text-2xl font-bold">
                   {formatCurrency(totalMonthlySpend * 12)}
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   Annual Projection
                 </p>
               </div>
@@ -281,58 +288,63 @@ const Subscriptions: React.FC = () => {
       </div>
 
       {/* Filters */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex flex-col sm:flex-row gap-4">
+      <Card className="mobile-card-compact">
+        <CardContent className="mobile-card-content pt-4 sm:pt-6">
+          <div className="flex flex-col gap-4">
             {/* Search */}
-            <div className="relative flex-1">
+            <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search subscriptions..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
+                className="pl-9 mobile-input"
               />
             </div>
 
-            {/* Status Filter */}
-            <div className="flex gap-2">
-              <Button
-                variant={filterActive === "all" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setFilterActive("all")}
-              >
-                All
-              </Button>
-              <Button
-                variant={filterActive === "active" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setFilterActive("active")}
-              >
-                Active
-              </Button>
-              <Button
-                variant={filterActive === "inactive" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setFilterActive("inactive")}
-              >
-                Inactive
-              </Button>
-            </div>
+            <div className="flex flex-col sm:flex-row gap-4">
+              {/* Status Filter */}
+              <div className="flex gap-2 flex-1">
+                <Button
+                  variant={filterActive === "all" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setFilterActive("all")}
+                  className="flex-1 sm:flex-none"
+                >
+                  All
+                </Button>
+                <Button
+                  variant={filterActive === "active" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setFilterActive("active")}
+                  className="flex-1 sm:flex-none"
+                >
+                  Active
+                </Button>
+                <Button
+                  variant={filterActive === "inactive" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setFilterActive("inactive")}
+                  className="flex-1 sm:flex-none"
+                >
+                  Inactive
+                </Button>
+              </div>
 
-            {/* Category Filter */}
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-3 py-2 rounded-md border border-input bg-background text-sm"
-            >
-              <option value="all">All Categories</option>
-              {uniqueCategories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
+              {/* Category Filter */}
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="px-3 py-2 rounded-md border border-input bg-background text-sm w-full sm:w-auto"
+              >
+                <option value="all">All Categories</option>
+                {uniqueCategories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -371,7 +383,7 @@ const Subscriptions: React.FC = () => {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredSubscriptions.map((subscription) => {
             const categoryName = getCategoryName(subscription.category_id);
             const daysUntilRenewal = getDaysUntilRenewal(
@@ -389,22 +401,22 @@ const Subscriptions: React.FC = () => {
             return (
               <Card
                 key={subscription.id}
-                className={`subscription-card ${!subscription.is_active ? "opacity-60" : ""}`}
+                className={`subscription-card mobile-card-compact ${!subscription.is_active ? "opacity-60" : ""}`}
               >
-                <CardHeader className="pb-2">
+                <CardHeader className="mobile-card-header pb-2">
                   <div className="flex items-start justify-between">
-                    <div className="flex items-center space-x-2">
-                      <div className="h-10 w-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                        <span className="text-sm font-medium text-primary">
+                    <div className="flex items-center space-x-2 min-w-0 flex-1">
+                      <div className="h-8 w-8 sm:h-10 sm:w-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-xs sm:text-sm font-medium text-primary">
                           {subscription.name.charAt(0)}
                         </span>
                       </div>
-                      <div>
-                        <CardTitle className="text-base">
+                      <div className="min-w-0 flex-1">
+                        <CardTitle className="text-sm sm:text-base truncate">
                           {subscription.name}
                         </CardTitle>
                         {subscription.description && (
-                          <CardDescription className="text-xs">
+                          <CardDescription className="text-xs truncate">
                             {subscription.description}
                           </CardDescription>
                         )}
@@ -427,7 +439,7 @@ const Subscriptions: React.FC = () => {
                   </div>
                 </CardHeader>
 
-                <CardContent className="space-y-4">
+                <CardContent className="mobile-card-content space-y-3 sm:space-y-4">
                   {/* Cost */}
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Cost</span>
@@ -480,11 +492,11 @@ const Subscriptions: React.FC = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="flex-1"
+                      className="flex-1 text-xs sm:text-sm"
                       onClick={() => handleEditSubscription(subscription.id)}
                     >
                       <Edit className="h-3 w-3 mr-1" />
-                      Edit
+                      <span className="hidden sm:inline">Edit</span>
                     </Button>
                     {subscription.website_url && (
                       <Button
@@ -493,6 +505,7 @@ const Subscriptions: React.FC = () => {
                         onClick={() =>
                           handleOpenWebsite(subscription.website_url!)
                         }
+                        className="px-2 sm:px-3"
                       >
                         <ExternalLink className="h-3 w-3" />
                       </Button>
@@ -506,7 +519,7 @@ const Subscriptions: React.FC = () => {
                           subscription.name,
                         )
                       }
-                      className="text-destructive hover:text-destructive"
+                      className="text-destructive hover:text-destructive px-2 sm:px-3"
                     >
                       <Trash2 className="h-3 w-3" />
                     </Button>

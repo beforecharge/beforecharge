@@ -3,6 +3,7 @@ import { useAuth } from './useAuth';
 import { db } from '@/lib/supabase';
 import { Subscription, Category, SubscriptionFormData } from '@/types/app.types';
 import { Database } from '@/types/database.types';
+import { cleanupDuplicateSubscriptions } from '@/utils/cleanupDuplicates';
 import toast from 'react-hot-toast';
 
 // Dummy data for new users
@@ -65,6 +66,7 @@ interface UseSubscriptionsReturn {
   // Data management
   refreshSubscriptions: () => Promise<void>;
   createDummyData: () => Promise<void>;
+  cleanupDuplicates: () => Promise<void>;
   clearError: () => void;
 }
 
@@ -150,9 +152,21 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
 
   // Create dummy data for new users
   const createDummyData = useCallback(async () => {
-    if (!user || !isAuthenticated || subscriptions.length > 0) return;
+    if (!user || !isAuthenticated) return;
 
     try {
+      // Double-check if user already has subscriptions
+      const { data: existingSubscriptions, error: checkError } = await db.subscriptions.getAll(user.id);
+      if (checkError) {
+        console.error('Error checking existing subscriptions:', checkError);
+        return;
+      }
+
+      if (existingSubscriptions && existingSubscriptions.length > 0) {
+        console.log('User already has subscriptions, skipping dummy data creation');
+        return;
+      }
+
       const streamingCategory = getCategoryByName('Streaming');
       const musicCategory = getCategoryByName('Music');
       const softwareCategory = getCategoryByName('Software');
@@ -161,6 +175,8 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
         console.warn('Required categories not found for dummy data');
         return;
       }
+
+      console.log('Creating sample subscriptions for new user');
 
       const dummyPromises = DUMMY_SUBSCRIPTIONS.map(async (dummy, index) => {
         let categoryId = streamingCategory.id;
@@ -201,7 +217,7 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
     } catch (err: any) {
       console.error('Error creating dummy data:', err);
     }
-  }, [user, isAuthenticated, subscriptions.length, categories, getCategoryByName, fetchSubscriptions]);
+  }, [user, isAuthenticated, categories, getCategoryByName, fetchSubscriptions]);
 
   // Add new subscription
   const addSubscription = useCallback(async (data: SubscriptionFormData): Promise<Subscription | null> => {
@@ -416,6 +432,31 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
     setError(null);
   }, []);
 
+  // Clean up duplicate subscriptions
+  const cleanupDuplicates = useCallback(async () => {
+    if (!user) {
+      toast.error('You must be logged in to clean up duplicates');
+      return;
+    }
+
+    try {
+      const result = await cleanupDuplicateSubscriptions(user.id);
+      
+      if (result.success) {
+        if (result.duplicatesRemoved > 0) {
+          toast.success(`Removed ${result.duplicatesRemoved} duplicate subscription(s)`);
+          await fetchSubscriptions(); // Refresh the list
+        } else {
+          toast.success('No duplicates found');
+        }
+      } else {
+        toast.error(`Failed to clean up duplicates: ${result.error}`);
+      }
+    } catch (error: any) {
+      toast.error(`Error cleaning up duplicates: ${error.message}`);
+    }
+  }, [user, fetchSubscriptions]);
+
   // Effects
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -429,16 +470,28 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
     }
   }, [isAuthenticated, user, categories.length, fetchSubscriptions]);
 
+  // Track if we've already tried to create dummy data for this user
+  const [hasTriedDummyData, setHasTriedDummyData] = useState(false);
+
   useEffect(() => {
-    if (isAuthenticated && user && categories.length > 0 && !isLoading && subscriptions.length === 0) {
+    // Only create dummy data in development or if explicitly enabled
+    const shouldCreateDummyData = process.env.NODE_ENV === 'development' || process.env.VITE_CREATE_DUMMY_DATA === 'true';
+    
+    if (shouldCreateDummyData && isAuthenticated && user && categories.length > 0 && !isLoading && subscriptions.length === 0 && !hasTriedDummyData) {
       // Create dummy data for new users after a short delay
       const timer = setTimeout(() => {
         createDummyData();
+        setHasTriedDummyData(true);
       }, 1000);
 
       return () => clearTimeout(timer);
     }
-  }, [isAuthenticated, user, categories.length, isLoading, subscriptions.length, createDummyData]);
+  }, [isAuthenticated, user, categories.length, isLoading, subscriptions.length, createDummyData, hasTriedDummyData]);
+
+  // Reset the flag when user changes
+  useEffect(() => {
+    setHasTriedDummyData(false);
+  }, [user?.id]);
 
   return {
     subscriptions,
@@ -463,6 +516,7 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
     // Data management
     refreshSubscriptions,
     createDummyData,
+    cleanupDuplicates,
     clearError
   };
 };

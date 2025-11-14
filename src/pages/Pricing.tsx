@@ -42,15 +42,23 @@ const Pricing: React.FC = () => {
     useState<PlanType | null>(null);
 
   useEffect(() => {
-    // Set currency based on user location or preference
-    const userIsIndian =
-      profile?.default_currency === "INR" ||
-      paymentConfig?.provider === "razorpay";
-    setIsIndianUser(userIsIndian);
+    // Detect user location and set currency accordingly
+    const detectUserLocation = () => {
+      // Check if user is from India based on timezone or other indicators
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const isIndianTimezone = timezone.includes('Asia/Kolkata') || timezone.includes('Asia/Calcutta');
+      
+      // Also check user profile or payment config
+      const userIsIndian =
+        profile?.default_currency === "INR" ||
+        paymentConfig?.provider === "razorpay" ||
+        isIndianTimezone;
+      
+      setIsIndianUser(userIsIndian);
+      setCurrency(userIsIndian ? "INR" : "USD");
+    };
 
-    if (userIsIndian) {
-      setCurrency("INR");
-    }
+    detectUserLocation();
   }, [profile, paymentConfig]);
 
   useEffect(() => {
@@ -153,6 +161,13 @@ const Pricing: React.FC = () => {
           Upgrade your subscription management with powerful features and
           unlimited tracking.
         </p>
+        
+        {/* Currency Display */}
+        <div className="flex items-center justify-center gap-2">
+          <span className="text-sm text-muted-foreground">
+            Prices shown in: <span className="font-medium">{currency === "INR" ? "Indian Rupees (₹)" : "US Dollars ($)"}</span>
+          </span>
+        </div>
 
         {/* Billing Interval Toggle */}
         <div className="flex items-center justify-center gap-4 mb-4">
@@ -186,37 +201,11 @@ const Pricing: React.FC = () => {
           </div>
         </div>
 
-        {!isIndianUser && (
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-sm text-muted-foreground">Currency:</span>
-            <div className="flex bg-muted rounded-lg p-1">
-              <button
-                onClick={() => setCurrency("USD")}
-                className={`px-3 py-1 rounded text-sm font-medium transition-all ${
-                  currency === "USD"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                USD
-              </button>
-              <button
-                onClick={() => setCurrency("INR")}
-                className={`px-3 py-1 rounded text-sm font-medium transition-all ${
-                  currency === "INR"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                INR
-              </button>
-            </div>
-          </div>
-        )}
+
       </div>
 
       {/* Pricing Cards */}
-      <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
         {getCurrentPlans().map((plan) => {
           const features = PLAN_FEATURES[plan.type] || [];
           const price = getPlanPrice(plan);
@@ -389,7 +378,7 @@ const Pricing: React.FC = () => {
           <h2 className="text-3xl font-bold">Frequently Asked Questions</h2>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-2 gap-6 sm:gap-8">
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">
               Can I change plans anytime?

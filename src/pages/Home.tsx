@@ -10,6 +10,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Footer from "@/components/layout/Footer";
 import {
   CreditCard,
   TrendingUp,
@@ -139,40 +140,44 @@ const Home: React.FC = () => {
       {/* Navigation Header */}
       <header className="sticky top-0 z-50 backdrop-blur-lg bg-background/80 border-b">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-14 sm:h-16">
             <div className="flex items-center space-x-2">
-              <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">
+              <div className="h-6 w-6 sm:h-8 sm:w-8 bg-primary rounded-lg flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-xs sm:text-sm">
                   S
                 </span>
               </div>
-              <span className="text-xl font-bold">Subscription Manager</span>
+              <span className="text-lg sm:text-xl font-bold">
+                <span className="hidden sm:inline">Subscription Manager</span>
+                <span className="sm:hidden">SubManager</span>
+              </span>
             </div>
-            <nav className="hidden md:flex items-center space-x-6">
-              <Link
-                to="#features"
+            <nav className="hidden lg:flex items-center space-x-6">
+              <button
+                onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 Features
-              </Link>
-              <Link
-                to="#pricing"
+              </button>
+              <button
+                onClick={() => navigate('/pricing')}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 Pricing
-              </Link>
-              <Link
-                to="#testimonials"
+              </button>
+              <button
+                onClick={() => document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' })}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 Testimonials
-              </Link>
+              </button>
             </nav>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               {user ? (
                 <Button onClick={() => navigate("/subscriptions")} size="sm">
-                  Go to Dashboard
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <span className="hidden sm:inline">Go to Dashboard</span>
+                  <span className="sm:hidden">Dashboard</span>
+                  <ArrowRight className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
               ) : (
                 <>
@@ -180,12 +185,14 @@ const Home: React.FC = () => {
                     variant="ghost"
                     onClick={() => navigate("/login")}
                     size="sm"
+                    className="hidden sm:inline-flex"
                   >
                     Sign In
                   </Button>
                   <Button onClick={() => navigate("/signup")} size="sm">
-                    Get Started Free
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                    <span className="hidden sm:inline">Get Started Free</span>
+                    <span className="sm:hidden">Sign Up</span>
+                    <ArrowRight className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
                 </>
               )}
@@ -195,49 +202,49 @@ const Home: React.FC = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-20 pb-32 px-4">
+      <section className="pt-12 sm:pt-20 pb-16 sm:pb-32 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center space-y-8">
-            <Badge className="bg-primary/10 text-primary border-primary/20 px-4 py-1">
+          <div className="text-center space-y-6 sm:space-y-8">
+            <Badge className="bg-primary/10 text-primary border-primary/20 px-3 sm:px-4 py-1 text-xs sm:text-sm">
               <Sparkles className="h-3 w-3 mr-1" />
               Trusted by 10,000+ users worldwide
             </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
+            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight">
               Take Control of Your
               <span className="text-primary block mt-2">
                 Subscription Chaos
               </span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
               Stop wasting money on forgotten subscriptions. Track, manage, and
               optimize all your recurring payments in one intelligent dashboard.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4">
               <Button
                 size="lg"
                 onClick={() => navigate(user ? "/subscriptions" : "/signup")}
-                className="text-lg px-8 py-6"
+                className="text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 w-full sm:w-auto"
               >
                 {user ? "Go to Dashboard" : "Start Free Trial"}
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
               <Button
                 size="lg"
                 variant="outline"
                 onClick={() => navigate("/pricing")}
-                className="text-lg px-8 py-6"
+                className="text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 w-full sm:w-auto"
               >
                 View Pricing
-                <ChevronRight className="ml-2 h-5 w-5" />
+                <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </div>
-            <div className="flex items-center justify-center space-x-8 pt-8">
+            <div className="grid grid-cols-2 sm:flex sm:items-center sm:justify-center gap-4 sm:gap-8 pt-6 sm:pt-8 px-4">
               {stats.map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className="text-3xl font-bold text-primary">
+                  <div className="text-xl sm:text-3xl font-bold text-primary">
                     {stat.value}
                   </div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-xs sm:text-sm text-muted-foreground">
                     {stat.label}
                   </div>
                 </div>
@@ -248,30 +255,30 @@ const Home: React.FC = () => {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-4 bg-muted/30">
+      <section id="features" className="py-12 sm:py-20 px-4 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center space-y-4 mb-12">
-            <h2 className="text-4xl font-bold">Everything You Need</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <div className="text-center space-y-4 mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-4xl font-bold">Everything You Need</h2>
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
               Powerful features to help you manage subscriptions like a pro
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
                 <Card
                   key={index}
-                  className="group hover:shadow-lg transition-all duration-300 hover:scale-105"
+                  className="group hover:shadow-lg transition-all duration-300 hover:scale-105 mobile-card-compact"
                 >
-                  <CardHeader>
+                  <CardHeader className="mobile-card-header">
                     <div
-                      className={`h-12 w-12 rounded-lg ${feature.color} bg-current/10 flex items-center justify-center mb-4`}
+                      className={`h-10 w-10 sm:h-12 sm:w-12 rounded-lg ${feature.color} bg-current/10 flex items-center justify-center mb-3 sm:mb-4`}
                     >
-                      <Icon className={`h-6 w-6 ${feature.color}`} />
+                      <Icon className={`h-5 w-5 sm:h-6 sm:w-6 ${feature.color}`} />
                     </div>
-                    <CardTitle>{feature.title}</CardTitle>
-                    <CardDescription>{feature.description}</CardDescription>
+                    <CardTitle className="text-lg sm:text-xl">{feature.title}</CardTitle>
+                    <CardDescription className="text-sm sm:text-base">{feature.description}</CardDescription>
                   </CardHeader>
                 </Card>
               );
@@ -436,42 +443,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t py-8 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-            <div className="flex items-center space-x-4">
-              <p className="text-sm text-muted-foreground">
-                © 2024 Subscription Manager. All rights reserved.
-              </p>
-            </div>
-            <div className="flex items-center space-x-6">
-              <Link
-                to="/privacy"
-                className="text-sm text-muted-foreground hover:text-foreground"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                to="/terms"
-                className="text-sm text-muted-foreground hover:text-foreground"
-              >
-                Terms of Service
-              </Link>
-              <Link
-                to="/support"
-                className="text-sm text-muted-foreground hover:text-foreground"
-              >
-                Support
-              </Link>
-            </div>
-            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-              <Zap className="h-4 w-4" />
-              <span>Powered by</span>
-              <span className="font-semibold text-foreground">ZodeNexus</span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

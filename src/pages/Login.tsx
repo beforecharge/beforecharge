@@ -102,38 +102,41 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-secondary/5 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-secondary/5 px-4 py-8">
       <div className="w-full max-w-md space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center space-x-2">
-            <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">
+            <div className="h-6 w-6 sm:h-8 sm:w-8 bg-primary rounded-lg flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-xs sm:text-sm">
                 S
               </span>
             </div>
-            <h1 className="text-2xl font-bold">Subscription Manager</h1>
+            <h1 className="text-xl sm:text-2xl font-bold">
+              <span className="hidden sm:inline">Subscription Manager</span>
+              <span className="sm:hidden">SubManager</span>
+            </h1>
           </div>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm sm:text-base">
             Track and manage all your subscriptions in one place
           </p>
         </div>
 
         {/* Login Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Welcome back</CardTitle>
-            <CardDescription>
+        <Card className="mobile-card-compact">
+          <CardHeader className="mobile-card-header">
+            <CardTitle className="text-xl sm:text-2xl">Welcome back</CardTitle>
+            <CardDescription className="text-sm sm:text-base">
               Sign in to your account to continue
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="space-y-4">
+          <CardContent className="mobile-card-content space-y-4">
             {/* Google Sign In */}
             {FEATURES.googleAuth && (
               <Button
                 variant="outline"
-                className="w-full"
+                className="mobile-button-full w-full h-11 sm:h-10"
                 onClick={handleGoogleSignIn}
                 disabled={isGoogleLoading || isLoading || isSubmitting}
               >
@@ -171,7 +174,7 @@ const Login: React.FC = () => {
                     id="email"
                     type="email"
                     placeholder="Enter your email"
-                    className="pl-9"
+                    className="pl-9 mobile-input h-11 sm:h-10"
                     {...register("email")}
                     disabled={isLoading || isSubmitting}
                   />
@@ -192,7 +195,7 @@ const Login: React.FC = () => {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
-                    className="pl-9 pr-9"
+                    className="pl-9 pr-9 mobile-input h-11 sm:h-10"
                     {...register("password")}
                     disabled={isLoading || isSubmitting}
                   />
@@ -236,7 +239,7 @@ const Login: React.FC = () => {
               {/* Submit Button */}
               <Button
                 type="submit"
-                className="w-full"
+                className="mobile-button-full w-full h-11 sm:h-10"
                 disabled={isLoading || isSubmitting}
               >
                 {isLoading || isSubmitting ? (

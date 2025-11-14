@@ -69,25 +69,51 @@ const AuthRoute: React.FC<AuthRouteProps> = ({ children }) => {
 
 // Auth Callback Component
 const AuthCallback: React.FC = () => {
-  const { checkSession } = useAuthStore();
+  const { checkSession, user, isLoading } = useAuthStore();
+  const [isProcessing, setIsProcessing] = React.useState(true);
 
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
+        setIsProcessing(true);
         await checkSession();
+
+        // Add a small delay to ensure state is updated
+        setTimeout(() => {
+          setIsProcessing(false);
+        }, 1000);
       } catch (error) {
         console.error("Auth callback error:", error);
+        setIsProcessing(false);
       }
     };
 
     handleAuthCallback();
   }, [checkSession]);
 
+  // Redirect after successful authentication
+  useEffect(() => {
+    if (!isProcessing && !isLoading && user) {
+      console.log("Auth callback successful, redirecting to dashboard");
+      window.location.href = "/dashboard";
+    } else if (!isProcessing && !isLoading && !user) {
+      console.log("Auth callback failed, redirecting to login");
+      window.location.href = "/login";
+    }
+  }, [isProcessing, isLoading, user]);
+
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center space-y-4">
         <LoadingSpinner size="lg" />
         <p className="text-muted-foreground">Completing sign in...</p>
+        {process.env.NODE_ENV === "development" && (
+          <div className="text-xs text-muted-foreground">
+            <p>Processing: {isProcessing.toString()}</p>
+            <p>Loading: {isLoading.toString()}</p>
+            <p>User: {user ? "exists" : "null"}</p>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -229,7 +255,14 @@ const App: React.FC = () => {
 
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
-          <Route path="/pricing" element={<Pricing />} />
+          <Route 
+            path="/pricing" 
+            element={
+              <MainLayout>
+                <Pricing />
+              </MainLayout>
+            } 
+          />
 
           {/* Protected Routes with Layout */}
           <Route

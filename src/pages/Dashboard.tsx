@@ -59,34 +59,35 @@ const Dashboard: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
             Welcome back, {getDisplayName()}!
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm sm:text-base">
             Here's what's happening with your subscriptions today.
           </p>
         </div>
         <AddSubscriptionModal
           trigger={
-            <Button>
+            <Button className="w-full sm:w-auto">
               <Plus className="mr-2 h-4 w-4" />
-              Add Subscription
+              <span className="sm:hidden">Add</span>
+              <span className="hidden sm:inline">Add Subscription</span>
             </Button>
           }
         />
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <div className="stats-mobile grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <Card className="mobile-card-compact">
+          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Monthly</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="mobile-card-content">
+            <div className="text-xl sm:text-2xl font-bold">
               ${totalMonthlySpend.toFixed(2)}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -95,13 +96,13 @@ const Dashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="mobile-card-compact">
+          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Annual Spend</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="mobile-card-content">
+            <div className="text-xl sm:text-2xl font-bold">
               ${totalAnnualSpend.toFixed(2)}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -110,21 +111,21 @@ const Dashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="mobile-card-compact">
+          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Active Subscriptions
             </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{activeSubscriptionCount}</div>
+          <CardContent className="mobile-card-content">
+            <div className="text-xl sm:text-2xl font-bold">{activeSubscriptionCount}</div>
             <p className="text-xs text-muted-foreground">Currently active</p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="mobile-card-compact">
+          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Subscription Limit
             </CardTitle>
@@ -134,8 +135,8 @@ const Dashboard: React.FC = () => {
               <AlertCircle className="h-4 w-4 text-orange-500" />
             )}
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="mobile-card-content">
+            <div className="text-xl sm:text-2xl font-bold">
               {limitInfo.current}/
               {limitInfo.limit === "unlimited" ? "∞" : limitInfo.limit}
             </div>
@@ -168,22 +169,22 @@ const Dashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="mobile-card-compact">
+          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Upcoming Renewals
             </CardTitle>
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{upcomingRenewalsCount}</div>
+          <CardContent className="mobile-card-content">
+            <div className="text-xl sm:text-2xl font-bold">{upcomingRenewalsCount}</div>
             <p className="text-xs text-muted-foreground">Next 7 days</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Recent Subscriptions */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Recent Subscriptions</CardTitle>
@@ -309,29 +310,29 @@ const Dashboard: React.FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <AddSubscriptionModal
               trigger={
-                <Button variant="outline" className="h-20 flex-col">
-                  <Plus className="h-6 w-6 mb-2" />
+                <Button variant="outline" className="h-16 sm:h-20 flex-col text-xs sm:text-sm">
+                  <Plus className="h-4 w-4 sm:h-6 sm:w-6 mb-1 sm:mb-2" />
                   Add New Subscription
                 </Button>
               }
             />
             <Button
               variant="outline"
-              className="h-20 flex-col"
+              className="h-16 sm:h-20 flex-col text-xs sm:text-sm"
               onClick={() => navigate("/analytics")}
             >
-              <TrendingUp className="h-6 w-6 mb-2" />
+              <TrendingUp className="h-4 w-4 sm:h-6 sm:w-6 mb-1 sm:mb-2" />
               View Analytics
             </Button>
             <Button
               variant="outline"
-              className="h-20 flex-col"
+              className="h-16 sm:h-20 flex-col text-xs sm:text-sm sm:col-span-2 lg:col-span-1"
               onClick={handleReviewRenewals}
             >
-              <AlertCircle className="h-6 w-6 mb-2" />
+              <AlertCircle className="h-4 w-4 sm:h-6 sm:w-6 mb-1 sm:mb-2" />
               Review Renewals
             </Button>
           </div>

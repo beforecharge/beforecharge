@@ -35,6 +35,77 @@ interface AuthState {
   initialize: () => Promise<void>;
 }
 
+// Helper function to ensure profile exists
+const ensureProfileExists = async (user: User): Promise<UserProfile | null> => {
+  try {
+    console.log("ensureProfileExists called for user:", user.id);
+    
+    // First try to get existing profile
+    const { data: existingProfile, error: fetchError } = await db.profiles.get(user.id);
+    
+    console.log("Profile fetch result:", { existingProfile, fetchError });
+    
+    if (existingProfile) {
+      console.log("Profile found, returning existing profile");
+      return {
+        ...existingProfile,
+        full_name: existingProfile.full_name || undefined,
+        avatar_url: existingProfile.avatar_url || undefined,
+        notification_preferences: existingProfile.notification_preferences as unknown as NotificationPreferences,
+      } as UserProfile;
+    }
+
+    // If profile doesn't exist (404 or PGRST116 error), create it
+    if (fetchError && (fetchError.code === 'PGRST116' || fetchError.message?.includes('0 rows'))) {
+      console.log("Profile not found, creating new profile for user:", user.id);
+      console.log("User metadata:", user.user_metadata);
+      
+      const newProfile: UserProfile = {
+        id: user.id,
+        email: user.email!,
+        full_name: user.user_metadata?.full_name || user.user_metadata?.name || undefined,
+        avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || undefined,
+        default_currency: "USD",
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        notification_preferences: DEFAULT_NOTIFICATION_PREFERENCES,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      console.log("Creating profile with data:", newProfile);
+
+      const { data: createdProfile, error: createError } = await db.profiles.upsert({
+        ...newProfile,
+        notification_preferences: newProfile.notification_preferences as any,
+      });
+
+      console.log("Profile creation result:", { createdProfile, createError });
+
+      if (createError) {
+        console.error("Error creating profile:", createError);
+        return null;
+      }
+
+      if (createdProfile) {
+        console.log("Profile created successfully");
+        return {
+          ...createdProfile,
+          full_name: createdProfile.full_name || undefined,
+          avatar_url: createdProfile.avatar_url || undefined,
+          notification_preferences: createdProfile.notification_preferences as unknown as NotificationPreferences,
+        } as UserProfile;
+      }
+    }
+
+    // Other errors
+    console.error("Error fetching profile:", fetchError);
+    return null;
+  } catch (error) {
+    console.error("Error in ensureProfileExists:", error);
+    return null;
+  }
+};
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
@@ -122,26 +193,13 @@ export const useAuthStore = create<AuthState>()(
           }
 
           if (data.user && data.session) {
-            // Fetch user profile
-            const { data: profileData, error: profileError } =
-              await db.profiles.get(data.user.id);
-
-            if (profileError) {
-              console.error("Error fetching profile:", profileError);
-            }
+            // Ensure profile exists
+            const profile = await ensureProfileExists(data.user);
 
             set({
               user: data.user,
               session: data.session,
-              profile: profileData
-                ? ({
-                    ...profileData,
-                    full_name: profileData.full_name || undefined,
-                    avatar_url: profileData.avatar_url || undefined,
-                    notification_preferences:
-                      profileData.notification_preferences as unknown as NotificationPreferences,
-                  } as UserProfile)
-                : null,
+              profile,
               isLoading: false,
               error: null,
             });
@@ -169,6 +227,7 @@ export const useAuthStore = create<AuthState>()(
 
           // Note: The actual sign-in happens in the OAuth callback
           // The session will be set when the user returns from Google
+          set({ isLoading: false });
         } catch (error: any) {
           const errorMessage = handleSupabaseError(error);
           set({ error: errorMessage, isLoading: false });
@@ -299,38 +358,32 @@ export const useAuthStore = create<AuthState>()(
       // Check current session
       checkSession: async () => {
         try {
+          console.log("checkSession called");
+          
           const {
             data: { session },
             error,
           } = await auth.getCurrentSession();
+
+          console.log("Session check result:", { session: !!session, error });
 
           if (error) {
             throw error;
           }
 
           if (session?.user) {
-            // Fetch user profile
-            const { data: profileData, error: profileError } =
-              await db.profiles.get(session.user.id);
+            console.log("Session found, ensuring profile exists");
+            // Ensure profile exists
+            const profile = await ensureProfileExists(session.user);
 
-            if (profileError) {
-              console.error("Error fetching profile:", profileError);
-            }
-
+            console.log("Setting auth state with profile:", !!profile);
             set({
               user: session.user,
               session,
-              profile: profileData
-                ? ({
-                    ...profileData,
-                    full_name: profileData.full_name || undefined,
-                    avatar_url: profileData.avatar_url || undefined,
-                    notification_preferences:
-                      profileData.notification_preferences as unknown as NotificationPreferences,
-                  } as UserProfile)
-                : null,
+              profile,
             });
           } else {
+            console.log("No session found, clearing auth state");
             set({
               user: null,
               session: null,
@@ -368,29 +421,13 @@ export const useAuthStore = create<AuthState>()(
             console.log("Auth state changed:", event, session);
 
             if (event === "SIGNED_IN" && session?.user) {
-              // Fetch user profile
-              const { data: profileData, error: profileError } =
-                await db.profiles.get(session.user.id);
-
-              if (profileError) {
-                console.error(
-                  "Error fetching profile after sign in:",
-                  profileError,
-                );
-              }
+              // Ensure profile exists
+              const profile = await ensureProfileExists(session.user);
 
               set({
                 user: session.user,
                 session,
-                profile: profileData
-                  ? ({
-                      ...profileData,
-                      full_name: profileData.full_name || undefined,
-                      avatar_url: profileData.avatar_url || undefined,
-                      notification_preferences:
-                        profileData.notification_preferences as unknown as NotificationPreferences,
-                    } as UserProfile)
-                  : null,
+                profile,
                 isLoading: false,
                 error: null,
               });
@@ -427,7 +464,7 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: STORAGE_KEYS.theme, // We'll use a different key for auth
+      name: 'auth-storage', // Use proper auth storage key
       partialize: (state) => ({
         // Only persist user and session data, not loading states
         user: state.user,

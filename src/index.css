@@ -149,6 +149,103 @@
   .container {
     @apply px-4;
   }
+  
+  /* Mobile typography adjustments */
+  h1 {
+    @apply text-2xl;
+  }
+  
+  h2 {
+    @apply text-xl;
+  }
+  
+  h3 {
+    @apply text-lg;
+  }
+  
+  /* Mobile card adjustments */
+  .card-mobile {
+    @apply p-4;
+  }
+  
+  /* Mobile button adjustments */
+  .btn-mobile {
+    @apply text-sm px-3 py-2;
+  }
+  
+  /* Mobile grid adjustments */
+  .grid-mobile-1 {
+    @apply grid-cols-1;
+  }
+  
+  .grid-mobile-2 {
+    @apply grid-cols-2;
+  }
+}
+
+/* Tablet responsive design */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    @apply px-6;
+  }
+}
+
+/* Mobile navigation improvements */
+@media (max-width: 768px) {
+  .mobile-nav-overlay {
+    @apply fixed inset-0 z-50 bg-background/80 backdrop-blur-sm;
+  }
+  
+  .mobile-nav-sidebar {
+    @apply fixed left-0 top-0 z-50 h-full w-64 border-r bg-background shadow-lg;
+  }
+  
+  .mobile-header {
+    @apply sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60;
+  }
+}
+
+/* Mobile form improvements */
+@media (max-width: 768px) {
+  .mobile-form-stack {
+    @apply flex-col space-y-4 space-x-0;
+  }
+  
+  .mobile-input {
+    @apply text-base; /* Prevents zoom on iOS */
+  }
+  
+  .mobile-button-full {
+    @apply w-full;
+  }
+}
+
+/* Mobile card improvements */
+@media (max-width: 768px) {
+  .mobile-card-compact {
+    @apply p-4 space-y-3;
+  }
+  
+  .mobile-card-header {
+    @apply pb-3;
+  }
+  
+  .mobile-card-content {
+    @apply p-4 pt-0;
+  }
+}
+
+/* Mobile stats grid */
+@media (max-width: 640px) {
+  .stats-mobile {
+    @apply grid-cols-1 gap-3;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .stats-mobile {
+    @apply grid-cols-2 gap-4;
+  }
 }
 
 /* Print styles */
@@ -172,5 +269,124 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mobile touch improvements */
+@media (max-width: 768px) {
+  /* Improve touch targets */
+  button, 
+  [role="button"], 
+  input[type="submit"], 
+  input[type="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improve tap highlighting */
+  button, 
+  [role="button"], 
+  a {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Prevent zoom on input focus */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  textarea,
+  select {
+    font-size: 16px;
+  }
+  
+  /* Mobile-friendly scrollbars */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  /* Better mobile spacing */
+  .mobile-spacing {
+    @apply space-y-3;
+  }
+  
+  /* Mobile-friendly modals */
+  .mobile-modal {
+    @apply mx-4 my-8;
+  }
+}
+
+/* Landscape mobile adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  .mobile-landscape-adjust {
+    @apply py-2;
+  }
+}
+
+/* Safe area adjustments for mobile devices */
+@supports (padding: max(0px)) {
+  .safe-area-inset {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* Mobile-specific utility classes */
+@layer utilities {
+  .mobile-container {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  
+  .mobile-text-responsive {
+    @apply text-sm sm:text-base;
+  }
+  
+  .mobile-heading-responsive {
+    @apply text-xl sm:text-2xl lg:text-3xl;
+  }
+  
+  .mobile-grid-responsive {
+    @apply grid-cols-1 sm:grid-cols-2 lg:grid-cols-3;
+  }
+  
+  .mobile-flex-responsive {
+    @apply flex-col sm:flex-row;
+  }
+  
+  .mobile-gap-responsive {
+    @apply gap-3 sm:gap-4 lg:gap-6;
+  }
+  
+  .mobile-padding-responsive {
+    @apply p-4 sm:p-6;
+  }
+  
+  .mobile-margin-responsive {
+    @apply m-4 sm:m-6;
+  }
+}
+
+/* Mobile-first breakpoint helpers */
+@media (max-width: 640px) {
+  .mobile-only {
+    display: block;
+  }
+  
+  .desktop-only {
+    display: none;
+  }
+}
+
+@media (min-width: 641px) {
+  .mobile-only {
+    display: none;
+  }
+  
+  .desktop-only {
+    display: block;
   }
 }

@@ -87,24 +87,24 @@ const Analytics: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Analytics</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Analytics</h1>
+          <p className="text-muted-foreground text-sm sm:text-base">
             Insights and trends for your subscription spending
           </p>
         </div>
       </div>
 
       {/* Key Metrics */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <div className="stats-mobile grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Card className="mobile-card-compact">
+          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Monthly Spending
             </CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="mobile-card-content">
+            <div className="text-xl sm:text-2xl font-bold">
               ${totalMonthlySpend.toFixed(2)}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -113,15 +113,15 @@ const Analytics: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="mobile-card-compact">
+          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Annual Projection
             </CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="mobile-card-content">
+            <div className="text-xl sm:text-2xl font-bold">
               ${totalAnnualSpend.toFixed(2)}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -130,15 +130,15 @@ const Analytics: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="mobile-card-compact">
+          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Average per Service
             </CardTitle>
             <PieChart className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="mobile-card-content">
+            <div className="text-xl sm:text-2xl font-bold">
               ${averagePerService.toFixed(2)}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -147,15 +147,15 @@ const Analytics: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="mobile-card-compact">
+          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Most Expensive
             </CardTitle>
             <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="mobile-card-content">
+            <div className="text-xl sm:text-2xl font-bold">
               ${mostExpensive.cost.toFixed(2)}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -166,20 +166,20 @@ const Analytics: React.FC = () => {
       </div>
 
       {/* Charts Section */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
         {/* Spending Trend */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Spending Trend</CardTitle>
-            <CardDescription>
+        <Card className="mobile-card-compact">
+          <CardHeader className="mobile-card-header">
+            <CardTitle className="text-lg sm:text-xl">Spending Trend</CardTitle>
+            <CardDescription className="text-sm">
               Monthly subscription costs over time
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="h-[300px] flex items-center justify-center bg-muted/20 rounded-lg">
+          <CardContent className="mobile-card-content">
+            <div className="h-[200px] sm:h-[300px] flex items-center justify-center bg-muted/20 rounded-lg">
               <div className="text-center space-y-2">
-                <TrendingUp className="h-12 w-12 mx-auto text-muted-foreground" />
-                <p className="text-sm text-muted-foreground">
+                <TrendingUp className="h-8 w-8 sm:h-12 sm:w-12 mx-auto text-muted-foreground" />
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   Line chart coming soon
                 </p>
                 <p className="text-xs text-muted-foreground">
@@ -191,16 +191,16 @@ const Analytics: React.FC = () => {
         </Card>
 
         {/* Category Breakdown */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Category Breakdown</CardTitle>
-            <CardDescription>Spending distribution by category</CardDescription>
+        <Card className="mobile-card-compact">
+          <CardHeader className="mobile-card-header">
+            <CardTitle className="text-lg sm:text-xl">Category Breakdown</CardTitle>
+            <CardDescription className="text-sm">Spending distribution by category</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="h-[300px] flex items-center justify-center bg-muted/20 rounded-lg">
+          <CardContent className="mobile-card-content">
+            <div className="h-[200px] sm:h-[300px] flex items-center justify-center bg-muted/20 rounded-lg">
               <div className="text-center space-y-2">
-                <PieChart className="h-12 w-12 mx-auto text-muted-foreground" />
-                <p className="text-sm text-muted-foreground">
+                <PieChart className="h-8 w-8 sm:h-12 sm:w-12 mx-auto text-muted-foreground" />
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   Pie chart coming soon
                 </p>
                 <p className="text-xs text-muted-foreground">

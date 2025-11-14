@@ -38,7 +38,7 @@ A comprehensive web application to track, manage, and optimize your subscription
 - **Profile Management**: Customize preferences and settings
 - **Data Export**: Export your data to CSV format
 - **Dark/Light Theme**: Choose your preferred appearance
-- **Responsive Design**: Works perfectly on all devices
+- **Mobile-First Responsive Design**: Optimized for all screen sizes with touch-friendly interfaces
 
 ## 🛠 Tech Stack
 

@@ -15,6 +15,7 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { useUIStore } from "@/store/uiStore";
 import { Button } from "@/components/ui/button";
+import Footer from "./Footer";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -41,36 +42,32 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center">
-          <div className="mr-4 flex">
+      <header className="mobile-header sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14 items-center px-4">
+          <div className="mr-2 flex items-center">
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden mr-2"
               onClick={toggleSidebar}
             >
               <Menu className="h-5 w-5" />
             </Button>
-            <Link to="/" className="mr-6 flex items-center space-x-2">
+            <Link to="/" className="flex items-center space-x-2">
               <div className="h-6 w-6 bg-primary rounded flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-xs">
                   S
                 </span>
               </div>
-              <span className="hidden font-bold sm:inline-block">
+              <span className="hidden font-bold sm:inline-block text-sm sm:text-base">
                 Subscription Manager
               </span>
             </Link>
           </div>
 
-          <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-            <div className="w-full flex-1 md:w-auto md:flex-none">
-              {/* Search could go here */}
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <Button variant="ghost" size="icon">
+          <div className="flex flex-1 items-center justify-end space-x-1 sm:space-x-2">
+            <div className="flex items-center space-x-1 sm:space-x-2">
+              <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
                 <Bell className="h-4 w-4" />
               </Button>
 
@@ -79,17 +76,18 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 size="icon"
                 onClick={toggleTheme}
                 title="Toggle theme"
+                className="h-8 w-8 sm:h-10 sm:w-10"
               >
                 {theme === "dark" ? "🌙" : "🌞"}
               </Button>
 
               <div className="flex items-center space-x-2">
-                <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
+                <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-primary flex items-center justify-center">
                   <span className="text-xs font-medium text-primary-foreground">
                     {getInitials()}
                   </span>
                 </div>
-                <div className="hidden md:block">
+                <div className="hidden lg:block">
                   <p className="text-sm font-medium">{getDisplayName()}</p>
                   <p className="text-xs text-muted-foreground">{user?.email}</p>
                 </div>
@@ -98,6 +96,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                   size="icon"
                   onClick={handleSignOut}
                   title="Sign out"
+                  className="h-8 w-8 sm:h-10 sm:w-10"
                 >
                   <LogOut className="h-4 w-4" />
                 </Button>
@@ -110,9 +109,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       <div className="flex">
         {/* Sidebar */}
         <aside
-          className={`${
-            sidebarCollapsed ? "w-16" : "w-64"
-          } hidden border-r bg-background md:block transition-all duration-200`}
+          className={`${sidebarCollapsed ? "w-16" : "w-64"
+            } hidden border-r bg-background md:block transition-all duration-200`}
         >
           <div className="space-y-4 py-4">
             <div className="px-3 py-2">
@@ -125,11 +123,10 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                     <Link
                       key={item.name}
                       to={item.href}
-                      className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground ${
-                        isActive
-                          ? "bg-accent text-accent-foreground"
-                          : "text-muted-foreground"
-                      }`}
+                      className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground ${isActive
+                        ? "bg-accent text-accent-foreground"
+                        : "text-muted-foreground"
+                        }`}
                     >
                       <Icon className="h-4 w-4" />
                       {!sidebarCollapsed && (
@@ -146,12 +143,20 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         {/* Mobile sidebar overlay */}
         {!sidebarCollapsed && (
           <div
-            className="fixed inset-0 z-50 md:hidden bg-background/80 backdrop-blur-sm"
+            className="mobile-nav-overlay fixed inset-0 z-50 md:hidden bg-background/80 backdrop-blur-sm"
             onClick={toggleSidebar}
           >
-            <aside className="fixed left-0 top-0 z-50 h-full w-64 border-r bg-background">
+            <aside className="mobile-nav-sidebar fixed left-0 top-0 z-50 h-full w-64 border-r bg-background shadow-lg">
               <div className="space-y-4 py-4">
                 <div className="px-3 py-2">
+                  <div className="flex items-center space-x-2 mb-4 px-3">
+                    <div className="h-6 w-6 bg-primary rounded flex items-center justify-center">
+                      <span className="text-primary-foreground font-bold text-xs">
+                        S
+                      </span>
+                    </div>
+                    <span className="font-bold text-sm">Subscription Manager</span>
+                  </div>
                   <div className="space-y-1">
                     {navigation.map((item) => {
                       const Icon = item.icon;
@@ -162,11 +167,10 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                           key={item.name}
                           to={item.href}
                           onClick={toggleSidebar}
-                          className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground ${
-                            isActive
-                              ? "bg-accent text-accent-foreground"
-                              : "text-muted-foreground"
-                          }`}
+                          className={`flex items-center rounded-lg px-3 py-3 text-sm transition-all hover:bg-accent hover:text-accent-foreground ${isActive
+                            ? "bg-accent text-accent-foreground"
+                            : "text-muted-foreground"
+                            }`}
                         >
                           <Icon className="h-4 w-4" />
                           <span className="ml-3">{item.name}</span>
@@ -181,8 +185,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         )}
 
         {/* Main content */}
-        <main className="flex-1">
-          <div className="container py-6">{children}</div>
+        <main className="flex-1 flex flex-col">
+          <div className="container py-4 sm:py-6 px-4 flex-1">{children}</div>
+          <Footer />
         </main>
       </div>
     </div>
