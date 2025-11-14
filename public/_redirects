@@ -1,0 +1,5 @@
+# Netlify redirects for SPA routing
+/*    /index.html   200
+
+# Specific handling for auth callback
+/auth/callback    /index.html   200

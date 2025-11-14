@@ -61,12 +61,20 @@ export const auth = {
         return `${origin}/auth/callback`;
       }
       
-      // For production - use the actual domain
+      // For production - ensure we use the correct domain
+      if (origin.includes('myrenewly.com')) {
+        // Use the same subdomain (www or non-www) as current origin
+        return `${origin}/auth/callback`;
+      }
+      
+      // Fallback to current origin
       return `${origin}/auth/callback`;
     };
 
     const redirectUrl = getRedirectUrl();
     console.log('OAuth redirect URL:', redirectUrl);
+    console.log('Current origin:', window.location.origin);
+    console.log('Environment:', window.location.origin.includes('localhost') ? 'development' : 'production');
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -76,7 +84,7 @@ export const auth = {
           access_type: 'offline',
           prompt: 'consent',
         },
-        skipBrowserRedirect: false, // Ensure browser redirect happens
+        skipBrowserRedirect: false,
       },
     });
     

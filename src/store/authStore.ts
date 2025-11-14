@@ -38,12 +38,12 @@ interface AuthState {
 const ensureProfileExists = async (user: User): Promise<UserProfile | null> => {
   try {
     console.log("ensureProfileExists called for user:", user.id);
-    
+
     // First try to get existing profile
     const { data: existingProfile, error: fetchError } = await db.profiles.get(user.id);
-    
+
     console.log("Profile fetch result:", { existingProfile, fetchError });
-    
+
     if (existingProfile) {
       console.log("Profile found, returning existing profile");
       return {
@@ -58,7 +58,7 @@ const ensureProfileExists = async (user: User): Promise<UserProfile | null> => {
     if (fetchError && (fetchError.code === 'PGRST116' || fetchError.message?.includes('0 rows'))) {
       console.log("Profile not found, creating new profile for user:", user.id);
       console.log("User metadata:", user.user_metadata);
-      
+
       const newProfile: UserProfile = {
         id: user.id,
         email: user.email!,
@@ -334,12 +334,12 @@ export const useAuthStore = create<AuthState>()(
           set({
             profile: data
               ? ({
-                  ...data,
-                  full_name: data.full_name || undefined,
-                  avatar_url: data.avatar_url || undefined,
-                  notification_preferences:
-                    data.notification_preferences as unknown as NotificationPreferences,
-                } as UserProfile)
+                ...data,
+                full_name: data.full_name || undefined,
+                avatar_url: data.avatar_url || undefined,
+                notification_preferences:
+                  data.notification_preferences as unknown as NotificationPreferences,
+              } as UserProfile)
               : null,
             isLoading: false,
             error: null,
@@ -358,10 +358,10 @@ export const useAuthStore = create<AuthState>()(
       checkSession: async () => {
         try {
           console.log("checkSession called");
-          
+
           // First, try to get the current session
           let sessionResult = await auth.getCurrentSession();
-          
+
           // If no session and we're on a callback page, wait a bit for Supabase to process
           if (!sessionResult.data.session && window.location.pathname === '/auth/callback') {
             console.log("No session on callback page, waiting for Supabase to process...");
@@ -372,11 +372,11 @@ export const useAuthStore = create<AuthState>()(
           const { session } = sessionResult.data;
           const { error } = sessionResult;
 
-          console.log("Session check result:", { 
-            session: !!session, 
+          console.log("Session check result:", {
+            session: !!session,
             error,
             userId: session?.user?.id,
-            email: session?.user?.email 
+            email: session?.user?.email
           });
 
           if (error) {
