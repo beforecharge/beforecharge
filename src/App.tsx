@@ -76,6 +76,17 @@ const AuthCallback: React.FC = () => {
     const handleAuthCallback = async () => {
       try {
         setIsProcessing(true);
+        
+        // Check if we have auth tokens in the URL hash (implicit flow)
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const accessToken = hashParams.get('access_token');
+        
+        if (accessToken) {
+          console.log("Found access token in URL hash, processing...");
+          // Clear the hash from URL
+          window.history.replaceState(null, '', window.location.pathname);
+        }
+        
         await checkSession();
 
         // Add a small delay to ensure state is updated
@@ -184,6 +195,22 @@ class ErrorBoundary extends React.Component<
 const App: React.FC = () => {
   const { initialize, isInitialized } = useAuthStore();
   const { setTheme, theme } = useUIStore();
+
+  // Handle OAuth redirects that might land on any page
+  useEffect(() => {
+    const handleOAuthRedirect = () => {
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const accessToken = hashParams.get('access_token');
+      
+      if (accessToken) {
+        console.log("OAuth redirect detected, redirecting to callback...");
+        // Redirect to the proper callback route
+        window.location.href = '/auth/callback' + window.location.hash;
+      }
+    };
+
+    handleOAuthRedirect();
+  }, []);
 
   // Initialize the app
   useEffect(() => {
