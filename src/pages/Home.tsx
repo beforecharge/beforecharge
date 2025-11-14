@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,7 +20,6 @@ import {
   BarChart3,
   ArrowRight,
   CheckCircle2,
-  Zap,
   Star,
   RefreshCw,
   PieChart,

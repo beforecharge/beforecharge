@@ -5,7 +5,6 @@ import { auth, db, handleSupabaseError } from "@/lib/supabase";
 import { UserProfile, NotificationPreferences } from "@/types/app.types";
 import {
   DEFAULT_NOTIFICATION_PREFERENCES,
-  STORAGE_KEYS,
 } from "@/lib/constants";
 import toast from "react-hot-toast";
 

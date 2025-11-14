@@ -35,7 +35,6 @@ const Pricing: React.FC = () => {
   const [billingInterval, setBillingInterval] = useState<"monthly" | "yearly">(
     "monthly",
   );
-  const [isIndianUser, setIsIndianUser] = useState(false);
   const [showStripeModal, setShowStripeModal] = useState(false);
   const [showRazorpayModal, setShowRazorpayModal] = useState(false);
   const [selectedPlanForPayment, setSelectedPlanForPayment] =
@@ -54,7 +53,6 @@ const Pricing: React.FC = () => {
         paymentConfig?.provider === "razorpay" ||
         isIndianTimezone;
       
-      setIsIndianUser(userIsIndian);
       setCurrency(userIsIndian ? "INR" : "USD");
     };
 
