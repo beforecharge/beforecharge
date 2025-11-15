@@ -237,7 +237,7 @@ const Home: React.FC = () => {
                 <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </div>
-            <div className="grid grid-cols-2 sm:flex sm:items-center sm:justify-center gap-4 sm:gap-8 pt-6 sm:pt-8 px-4">
+            {/* <div className="grid grid-cols-2 sm:flex sm:items-center sm:justify-center gap-4 sm:gap-8 pt-6 sm:pt-8 px-4">
               {stats.map((stat, index) => (
                 <div key={index} className="text-center">
                   <div className="text-xl sm:text-3xl font-bold text-primary">
@@ -248,7 +248,7 @@ const Home: React.FC = () => {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
