@@ -127,12 +127,12 @@ const Home: React.FC = () => {
     },
   ];
 
-  const stats = [
-    { label: "Active Users", value: "10,000+" },
-    { label: "Subscriptions Tracked", value: "50,000+" },
-    { label: "Money Saved", value: "$2M+" },
-    { label: "Customer Satisfaction", value: "98%" },
-  ];
+  // const stats = [
+  //   { label: "Active Users", value: "10,000+" },
+  //   { label: "Subscriptions Tracked", value: "50,000+" },
+  //   { label: "Money Saved", value: "$2M+" },
+  //   { label: "Customer Satisfaction", value: "98%" },
+  // ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
