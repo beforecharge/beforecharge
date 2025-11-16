@@ -8,6 +8,13 @@ const GMAIL_SCOPES = [
   'https://www.googleapis.com/auth/userinfo.profile'
 ];
 
+/**
+ * Get the required Gmail API scopes
+ */
+export function getRequiredScopes(): string[] {
+  return [...GMAIL_SCOPES];
+}
+
 export interface EmailSubscription {
   serviceName: string;
   amount: number;
@@ -44,6 +51,9 @@ class GmailService {
       if (!session?.provider_token) {
         throw new Error('No Google OAuth token found. Please sign in with Google first.');
       }
+
+      // Validate that we have the required scopes (informational)
+      console.log('Required Gmail scopes:', GMAIL_SCOPES);
 
       this.accessToken = session.provider_token;
 
