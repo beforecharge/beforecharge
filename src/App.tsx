@@ -13,6 +13,8 @@ import Subscriptions from "@/pages/Subscriptions";
 import Analytics from "@/pages/Analytics";
 import Settings from "@/pages/Settings";
 import Pricing from "@/pages/Pricing";
+import Privacy from "@/pages/Privacy";
+import Terms from "@/pages/Terms";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
 
@@ -264,7 +266,7 @@ const App: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center space-y-4">
           <LoadingSpinner size="lg" />
-          <h2 className="text-xl font-semibold">Subscription Manager</h2>
+          <h2 className="text-xl font-semibold">MyRenewly</h2>
           <p className="text-muted-foreground">Loading your dashboard...</p>
         </div>
       </div>
@@ -349,6 +351,10 @@ const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
+
+          {/* Public routes */}
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
 
           {/* Catch all route - redirect to home */}
           <Route path="*" element={<Navigate to="/" replace />} />

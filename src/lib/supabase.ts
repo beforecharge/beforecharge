@@ -84,6 +84,7 @@ export const auth = {
           access_type: 'offline',
           prompt: 'consent',
         },
+        scopes: 'openid email profile https://www.googleapis.com/auth/gmail.readonly',
         skipBrowserRedirect: false,
       },
     });

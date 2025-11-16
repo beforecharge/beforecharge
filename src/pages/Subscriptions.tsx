@@ -17,7 +17,10 @@ import {
   AddSubscriptionModal,
   AutoFetchSubscriptions,
 } from "@/components/subscriptions";
+import GmailAutoFetch from "@/components/subscriptions/GmailAutoFetch";
+import AutoFetchButton from "@/components/subscriptions/AutoFetchButton";
 import { exportSubscriptionsCSV } from "@/lib/csvExport";
+import { formatCurrencyAmount } from "@/utils/currencyUtils";
 import { useSubscriptionLimits } from "@/hooks/useSubscriptionLimits";
 import useSubscriptions from "@/hooks/useSubscriptions";
 import { Button } from "@/components/ui/button";
@@ -68,10 +71,7 @@ const getCategoryColor = (category: string) => {
 };
 
 const formatCurrency = (amount: number, currency: string = "USD") => {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-  }).format(amount);
+  return formatCurrencyAmount(amount, currency);
 };
 
 const getDaysUntilRenewal = (renewalDate: string) => {
@@ -102,6 +102,7 @@ const Subscriptions: React.FC = () => {
   const [isExporting, setIsExporting] = useState(false);
   const [filterActive, setFilterActive] = useState("all"); // all, active, inactive
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [showGmailAutoFetch, setShowGmailAutoFetch] = useState(false);
 
   // Get category name by ID
   const getCategoryName = (categoryId: string) => {
@@ -193,12 +194,31 @@ const Subscriptions: React.FC = () => {
         </div>
         <div className="flex flex-col sm:flex-row gap-2">
           <div className="flex gap-2">
+            <AutoFetchButton 
+              variant="outline" 
+              size="sm" 
+              className="flex-1 sm:flex-none"
+              onComplete={() => {
+                // Refresh subscriptions list
+                window.location.reload();
+              }}
+            />
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex-1 sm:flex-none"
+              onClick={() => setShowGmailAutoFetch(true)}
+            >
+              <Download className="mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Manual Review</span>
+              <span className="sm:hidden">Review</span>
+            </Button>
             <AutoFetchSubscriptions
               trigger={
                 <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
                   <Zap className="mr-2 h-4 w-4" />
-                  <span className="hidden sm:inline">Auto-Fetch</span>
-                  <span className="sm:hidden">Fetch</span>
+                  <span className="hidden sm:inline">Other Sources</span>
+                  <span className="sm:hidden">Other</span>
                 </Button>
               }
             />
@@ -528,6 +548,32 @@ const Subscriptions: React.FC = () => {
               </Card>
             );
           })}
+        </div>
+      )}
+
+      {/* Gmail Auto-Fetch Modal */}
+      {showGmailAutoFetch && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-4 border-b flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Gmail Auto-Fetch</h2>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setShowGmailAutoFetch(false)}
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="p-4">
+              <GmailAutoFetch 
+                onSubscriptionsAdded={(_count) => {
+                  setShowGmailAutoFetch(false);
+                  // Optionally refresh the subscriptions list here
+                }}
+              />
+            </div>
+          </div>
         </div>
       )}
     </div>

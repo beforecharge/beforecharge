@@ -134,18 +134,14 @@ export const useSubscriptionLimits = (): UseSubscriptionLimitsReturn => {
         "Advanced analytics & insights",
         "Smart reminders",
         "Receipt upload",
-        "Data export (CSV)",
-        "Priority support",
       ];
     } else if (userPlan.type === "premium") {
       suggestedPlan = "enterprise";
       benefits = [
-        "Unlimited subscriptions",
-        "Team collaboration",
-        "API access",
+        "Unlimited subscriptions",  
+        "Everything in Premium",
         "Custom integrations",
         "Advanced reporting",
-        "Dedicated support",
       ];
     }
 

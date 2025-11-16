@@ -9,7 +9,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+
 import Footer from "@/components/layout/Footer";
 import {
   CreditCard,
@@ -26,7 +26,7 @@ import {
   DollarSign,
   BellRing,
   FileText,
-  Sparkles,
+
   ChevronRight,
 } from "lucide-react";
 
@@ -147,8 +147,8 @@ const Home: React.FC = () => {
                 </span>
               </div>
               <span className="text-lg sm:text-xl font-bold">
-                <span className="hidden sm:inline">Subscription Manager</span>
-                <span className="sm:hidden">SubManager</span>
+                <span className="hidden sm:inline">MyRenewly</span>
+                <span className="sm:hidden">MyRenewly</span>
               </span>
             </div>
             <nav className="hidden lg:flex items-center space-x-6">
@@ -204,10 +204,10 @@ const Home: React.FC = () => {
       <section className="pt-12 sm:pt-20 pb-16 sm:pb-32 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center space-y-6 sm:space-y-8">
-            <Badge className="bg-primary/10 text-primary border-primary/20 px-3 sm:px-4 py-1 text-xs sm:text-sm">
+            {/* <Badge className="bg-primary/10 text-primary border-primary/20 px-3 sm:px-4 py-1 text-xs sm:text-sm">
               <Sparkles className="h-3 w-3 mr-1" />
               Trusted by 10,000+ users worldwide
-            </Badge>
+            </Badge> */}
             <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight">
               Take Control of Your
               <span className="text-primary block mt-2">
@@ -293,7 +293,7 @@ const Home: React.FC = () => {
             <div>
               <h2 className="text-4xl font-bold mb-6">
                 Why Choose Our
-                <span className="text-primary"> Subscription Manager?</span>
+                <span className="text-primary"> MyRenewly?</span>
               </h2>
               <p className="text-lg text-muted-foreground mb-8">
                 Join thousands of users who have already taken control of their
@@ -402,7 +402,7 @@ const Home: React.FC = () => {
               <h2 className="text-3xl font-bold">Ready to Take Control?</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 Join thousands of users who are already saving money and time
-                with our subscription manager.
+                with MyRenewly.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Button

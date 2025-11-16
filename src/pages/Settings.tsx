@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { User, Bell, Palette, Shield, Save, Eye, EyeOff } from "lucide-react";
+import { User, Bell, Palette, Shield, Save, Eye, EyeOff, Globe } from "lucide-react";
 
 import { useAuth } from "@/hooks/useAuth";
 import { useUIStore } from "@/store/uiStore";
 import { Currency } from "@/types/app.types";
+import { 
+  SUPPORTED_CURRENCIES, 
+  getUserPreferredCurrency, 
+  setUserPreferredCurrency,
+  getUserCountry,
+  getCurrencyForCountry 
+} from "@/utils/currencyUtils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +22,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import LoadingSpinner from "@/components/ui/loading-spinner";
+import CurrencyPreview from "@/components/ui/currency-preview";
 
 const Settings: React.FC = () => {
   const { user, profile, updateProfile } = useAuth();
@@ -24,6 +32,8 @@ const Settings: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [detectedCountry, setDetectedCountry] = useState<string>('');
+  const [recommendedCurrency, setRecommendedCurrency] = useState<string>('');
 
   // Form states
   const [profileData, setProfileData] = useState({
@@ -52,10 +62,34 @@ const Settings: React.FC = () => {
   });
 
   useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => setIsLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, []);
+    const initializeSettings = async () => {
+      try {
+        // Get user's location and recommended currency
+        const [country] = await Promise.all([
+          getUserCountry(),
+          getUserPreferredCurrency()
+        ]);
+        
+        setDetectedCountry(country);
+        const recommended = getCurrencyForCountry(country);
+        setRecommendedCurrency(recommended);
+        
+        // Update profile data with detected currency if not set
+        if (!profile?.default_currency && recommended) {
+          setProfileData(prev => ({
+            ...prev,
+            default_currency: recommended as Currency
+          }));
+        }
+      } catch (error) {
+        console.error('Error initializing settings:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeSettings();
+  }, [profile]);
 
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,6 +102,9 @@ const Settings: React.FC = () => {
         timezone: profileData.timezone,
         notification_preferences: notificationSettings,
       });
+      
+      // Also update the local currency preference
+      setUserPreferredCurrency(profileData.default_currency);
     } catch (error) {
       console.error("Failed to update profile:", error);
     } finally {
@@ -164,7 +201,15 @@ const Settings: React.FC = () => {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="currency">Default Currency</Label>
+                    <Label htmlFor="currency" className="flex items-center gap-2">
+                      <Globe className="h-4 w-4" />
+                      Default Currency
+                      {detectedCountry && (
+                        <span className="text-xs text-muted-foreground">
+                          (Detected: {detectedCountry})
+                        </span>
+                      )}
+                    </Label>
                     <select
                       id="currency"
                       value={profileData.default_currency}
@@ -176,13 +221,22 @@ const Settings: React.FC = () => {
                       }
                       className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     >
-                      <option value="USD">USD ($)</option>
-                      <option value="EUR">EUR (€)</option>
-                      <option value="GBP">GBP (£)</option>
-                      <option value="CAD">CAD (C$)</option>
-                      <option value="AUD">AUD (A$)</option>
-                      <option value="JPY">JPY (¥)</option>
+                      {Object.entries(SUPPORTED_CURRENCIES).map(([code, info]) => (
+                        <option key={code} value={code}>
+                          {code} ({info.symbol}) - {info.name}
+                          {code === recommendedCurrency && ' (Recommended)'}
+                        </option>
+                      ))}
                     </select>
+                    {recommendedCurrency && recommendedCurrency !== profileData.default_currency && (
+                      <p className="text-xs text-blue-600">
+                        💡 Based on your location, we recommend {SUPPORTED_CURRENCIES[recommendedCurrency].name} ({SUPPORTED_CURRENCIES[recommendedCurrency].symbol})
+                      </p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      This currency will be used for displaying all subscription costs and when auto-fetching from Gmail.
+                    </p>
+                    <CurrencyPreview selectedCurrency={profileData.default_currency} className="mt-2" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="timezone">Timezone</Label>
@@ -198,13 +252,16 @@ const Settings: React.FC = () => {
                       className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     >
                       <option value="UTC">UTC</option>
-                      <option value="America/New_York">Eastern Time</option>
-                      <option value="America/Chicago">Central Time</option>
-                      <option value="America/Denver">Mountain Time</option>
-                      <option value="America/Los_Angeles">Pacific Time</option>
-                      <option value="Europe/London">London</option>
-                      <option value="Europe/Paris">Paris</option>
-                      <option value="Asia/Tokyo">Tokyo</option>
+                      <option value="Asia/Kolkata">India Standard Time (IST)</option>
+                      <option value="America/New_York">Eastern Time (US)</option>
+                      <option value="America/Chicago">Central Time (US)</option>
+                      <option value="America/Denver">Mountain Time (US)</option>
+                      <option value="America/Los_Angeles">Pacific Time (US)</option>
+                      <option value="Europe/London">London (GMT/BST)</option>
+                      <option value="Europe/Paris">Paris (CET/CEST)</option>
+                      <option value="Asia/Tokyo">Tokyo (JST)</option>
+                      <option value="Asia/Shanghai">Shanghai (CST)</option>
+                      <option value="Australia/Sydney">Sydney (AEST/AEDT)</option>
                     </select>
                   </div>
                 </div>

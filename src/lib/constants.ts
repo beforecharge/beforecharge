@@ -11,7 +11,7 @@ import { Plan, PlanType, PlanFeatures } from "@/types/payment.types";
 
 // App Configuration
 export const APP_CONFIG = {
-  name: import.meta.env.VITE_APP_NAME || "Subscription Manager",
+  name: import.meta.env.VITE_APP_NAME || "MyRenewly",
   version: "1.0.0",
   description: "Track and manage your subscriptions",
   url: import.meta.env.VITE_APP_URL || "http://localhost:5173",

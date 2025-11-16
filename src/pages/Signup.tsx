@@ -119,7 +119,7 @@ const Signup: React.FC = () => {
             <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-sm">S</span>
             </div>
-            <h1 className="text-2xl font-bold">Subscription Manager</h1>
+            <h1 className="text-2xl font-bold">MyRenewly</h1>
           </div>
           <p className="text-muted-foreground">
             Start tracking your subscriptions today
