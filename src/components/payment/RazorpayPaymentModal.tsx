@@ -129,6 +129,10 @@ const RazorpayPaymentModal: React.FC<RazorpayPaymentModalProps> = ({
             const isVerified = await verifyPayment(
               response.razorpay_payment_id,
               "razorpay",
+              {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+              },
             );
 
             if (isVerified) {

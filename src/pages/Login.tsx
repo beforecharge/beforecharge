@@ -7,6 +7,7 @@ import { Eye, EyeOff, Mail, Lock, Chrome } from "lucide-react";
 
 import { useAuth } from "@/hooks/useAuth";
 import { FEATURES } from "@/lib/constants";
+import { isSupabaseConfigured } from "@/lib/supabase";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -132,13 +133,28 @@ const Login: React.FC = () => {
           </CardHeader>
 
           <CardContent className="mobile-card-content space-y-4">
+            {!isSupabaseConfigured && (
+              <div className="p-3 rounded-md border border-destructive/30 bg-destructive/10">
+                <p className="text-sm text-destructive">
+                  Authentication is currently unavailable due to a configuration
+                  issue. Please check your Supabase URL/key environment variables
+                  and redeploy.
+                </p>
+              </div>
+            )}
+
             {/* Google Sign In */}
             {FEATURES.googleAuth && (
               <Button
                 variant="outline"
                 className="mobile-button-full w-full h-11 sm:h-10"
                 onClick={handleGoogleSignIn}
-                disabled={isGoogleLoading || isLoading || isSubmitting}
+                disabled={
+                  !isSupabaseConfigured ||
+                  isGoogleLoading ||
+                  isLoading ||
+                  isSubmitting
+                }
               >
                 {isGoogleLoading ? (
                   <LoadingSpinner size="sm" className="mr-2" />
@@ -240,7 +256,7 @@ const Login: React.FC = () => {
               <Button
                 type="submit"
                 className="mobile-button-full w-full h-11 sm:h-10"
-                disabled={isLoading || isSubmitting}
+                disabled={!isSupabaseConfigured || isLoading || isSubmitting}
               >
                 {isLoading || isSubmitting ? (
                   <>

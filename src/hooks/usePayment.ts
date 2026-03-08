@@ -26,6 +26,7 @@ interface UsePaymentReturn {
   verifyPayment: (
     paymentId: string,
     provider: PaymentProvider,
+    payload?: Record<string, unknown>,
   ) => Promise<boolean>;
   getUserPlan: () => Promise<{ type: PlanType; expires_at?: string } | null>;
 }
@@ -95,6 +96,8 @@ export const usePayment = (): UsePaymentReturn => {
             planType: request.planType,
             currency: request.currency,
             userId: request.userId,
+            billingInterval: request.billingInterval,
+            metadata: request.metadata,
           },
         },
       );
@@ -126,6 +129,8 @@ export const usePayment = (): UsePaymentReturn => {
             planType: request.planType,
             currency: request.currency,
             userId: request.userId,
+            billingInterval: request.billingInterval,
+            notes: request.notes,
           },
         },
       );
@@ -147,6 +152,7 @@ export const usePayment = (): UsePaymentReturn => {
   const verifyPayment = async (
     paymentId: string,
     provider: PaymentProvider,
+    payload: Record<string, unknown> = {},
   ): Promise<boolean> => {
     setIsProcessing(true);
 
@@ -159,7 +165,7 @@ export const usePayment = (): UsePaymentReturn => {
       const { data, error } = await supabase.functions.invoke(functionName, {
         body: {
           paymentId,
-          userId: user?.id,
+          ...payload,
         },
       });
 
@@ -193,9 +199,32 @@ export const usePayment = (): UsePaymentReturn => {
   } | null> => {
     if (!user) return null;
 
-    // Stub implementation - always return free plan for now
-    // TODO: Implement proper plan checking once payment tables are set up
-    return { type: "free" };
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("plan_type, plan_expires_at")
+        .eq("id", user.id)
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      const planType = (data?.plan_type as PlanType | undefined) || "free";
+      const expiresAt = data?.plan_expires_at || undefined;
+
+      if (expiresAt) {
+        const expiresMs = new Date(expiresAt).getTime();
+        if (!Number.isNaN(expiresMs) && expiresMs <= Date.now()) {
+          return { type: "free" };
+        }
+      }
+
+      return expiresAt ? { type: planType, expires_at: expiresAt } : { type: planType };
+    } catch (error) {
+      console.error("Error fetching user plan:", error);
+      return { type: "free" };
+    }
   };
 
   return {

@@ -2,10 +2,29 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/types/database.types';
 import { SUPABASE_CONFIG } from './constants';
 
+const isValidSupabaseUrl = (url: string | undefined) =>
+  !!url && /^https?:\/\//.test(url);
+
+export const isSupabaseConfigured =
+  isValidSupabaseUrl(SUPABASE_CONFIG.url) && !!SUPABASE_CONFIG.anonKey;
+
+if (!isSupabaseConfigured) {
+  // Don't crash the whole app (we want the marketing pages to render),
+  // but do surface an actionable error in the console.
+  // Common cause: wrong/missing `VITE_SUPABASE_URL` or missing `https://`.
+  console.error(
+    "[MyRenewly] Supabase is not configured correctly. Check VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.",
+    {
+      url: SUPABASE_CONFIG.url,
+      hasAnonKey: !!SUPABASE_CONFIG.anonKey,
+    },
+  );
+}
+
 // Initialize Supabase client
 export const supabase: SupabaseClient<Database> = createClient(
-  SUPABASE_CONFIG.url!,
-  SUPABASE_CONFIG.anonKey!,
+  SUPABASE_CONFIG.url || "http://localhost:54321",
+  SUPABASE_CONFIG.anonKey || "invalid-anon-key",
   {
     auth: {
       autoRefreshToken: true,

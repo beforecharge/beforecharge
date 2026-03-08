@@ -40,7 +40,7 @@ import { useSubscriptions } from "@/hooks/useSubscriptions";
 import { useSubscriptionLimits } from "@/hooks/useSubscriptionLimits";
 
 import { BillingCycle, Currency } from "@/types/app.types";
-import { CURRENCY_CONFIG } from "@/lib/constants";
+import { CURRENCY_CONFIG, PLAN_DISPLAY_NAMES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
 
@@ -245,7 +245,7 @@ const AddSubscriptionModal: React.FC<AddSubscriptionModalProps> = ({
           <p className="text-sm text-orange-700 dark:text-orange-300">
             {upgradeInfo.message} Upgrade to{" "}
             <span className="font-medium capitalize">
-              {upgradeInfo.suggestedPlan}
+              {PLAN_DISPLAY_NAMES[upgradeInfo.suggestedPlan]}
             </span>{" "}
             to add more subscriptions!
           </p>
@@ -271,7 +271,7 @@ const AddSubscriptionModal: React.FC<AddSubscriptionModalProps> = ({
           {upgradeInfo.benefits.length > 0 && (
             <div className="space-y-2">
               <p className="text-xs font-medium text-orange-800 dark:text-orange-200">
-                {upgradeInfo.suggestedPlan} plan benefits:
+                {PLAN_DISPLAY_NAMES[upgradeInfo.suggestedPlan]} plan benefits:
               </p>
               <ul className="text-xs text-orange-700 dark:text-orange-300 space-y-1">
                 {upgradeInfo.benefits.slice(0, 3).map((benefit, index) => (

@@ -87,8 +87,8 @@ const PaymentForm: React.FC<{
           planType,
           currency: currency.toLowerCase() as "usd" | "inr",
           userId: user.id,
+          billingInterval,
           metadata: {
-            billingInterval,
             planName: plan.name,
           },
         });

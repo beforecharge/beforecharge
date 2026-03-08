@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { isSupabaseConfigured, supabase } from "./supabase";
 import { DEFAULT_CATEGORIES } from "./constants";
 import { Database } from "@/types/database.types";
 
@@ -177,7 +177,7 @@ export async function checkDatabaseHealth(): Promise<{
  * WARNING: This will delete all user data!
  */
 export async function resetDatabase(): Promise<DatabaseInitResult> {
-  if (process.env.NODE_ENV === "production") {
+  if (import.meta.env.PROD) {
     return {
       success: false,
       message: "Database reset is not allowed in production",
@@ -242,7 +242,7 @@ export async function resetDatabase(): Promise<DatabaseInitResult> {
 export async function autoInitializeDatabase(): Promise<void> {
   try {
     // Only auto-initialize if we have a valid Supabase configuration
-    if (!supabase || !process.env.NODE_ENV) {
+    if (!isSupabaseConfigured) {
       console.log(
         "⚠️  Skipping database initialization - Supabase not configured",
       );

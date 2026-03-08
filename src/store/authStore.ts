@@ -67,6 +67,9 @@ const ensureProfileExists = async (user: User): Promise<UserProfile | null> => {
         default_currency: "USD",
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         notification_preferences: DEFAULT_NOTIFICATION_PREFERENCES,
+        plan_type: "free",
+        plan_expires_at: null,
+        plan_provider: null,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
@@ -141,6 +144,9 @@ export const useAuthStore = create<AuthState>()(
               default_currency: "USD",
               timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
               notification_preferences: DEFAULT_NOTIFICATION_PREFERENCES,
+              plan_type: "free",
+              plan_expires_at: null,
+              plan_provider: null,
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
             };

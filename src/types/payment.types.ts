@@ -2,7 +2,15 @@ export type PaymentProvider = "stripe" | "razorpay";
 
 export type PlanType = "free" | "premium" | "enterprise";
 
-export type Currency = "USD" | "INR" | "EUR" | "GBP" | "CAD" | "AUD" | "JPY";
+export type Currency =
+  | "USD"
+  | "INR"
+  | "EUR"
+  | "GBP"
+  | "AED"
+  | "CAD"
+  | "AUD"
+  | "JPY";
 
 export interface PaymentConfig {
   provider: PaymentProvider;
@@ -48,6 +56,7 @@ export interface StripePaymentIntentRequest {
   planType: PlanType;
   currency: "usd" | "inr";
   userId: string;
+  billingInterval?: "monthly" | "yearly";
   metadata?: Record<string, string>;
 }
 

@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
         <!-- Primary Meta Tags -->
-        <title>Subscription Manager - Track & Manage Your Subscriptions</title>
+        <title>MyRenewly - Track & Manage Your Subscriptions</title>
         <meta
             name="title"
-            content="Subscription Manager - Track & Manage Your Subscriptions"
+            content="MyRenewly - Track & Manage Your Subscriptions"
         />
         <meta
             name="description"
@@ -17,16 +17,16 @@
         />
         <meta
             name="keywords"
-            content="subscription manager, subscription tracker, recurring payments, budget tracker, subscription analytics"
+            content="myrenewly, subscription manager, subscription tracker, recurring payments, budget tracker, subscription analytics"
         />
-        <meta name="author" content="Subscription Manager" />
+        <meta name="author" content="MyRenewly" />
 
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://subscription-manager.app/" />
         <meta
             property="og:title"
-            content="Subscription Manager - Track & Manage Your Subscriptions"
+            content="MyRenewly - Track & Manage Your Subscriptions"
         />
         <meta
             property="og:description"
@@ -42,7 +42,7 @@
         />
         <meta
             property="twitter:title"
-            content="Subscription Manager - Track & Manage Your Subscriptions"
+            content="MyRenewly - Track & Manage Your Subscriptions"
         />
         <meta
             property="twitter:description"
@@ -55,12 +55,12 @@
         <meta name="color-scheme" content="light dark" />
 
         <!-- PWA Meta Tags -->
-        <meta name="application-name" content="Subscription Manager" />
+        <meta name="application-name" content="MyRenewly" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta
             name="apple-mobile-web-app-title"
-            content="Subscription Manager"
+            content="MyRenewly"
         />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
@@ -92,19 +92,215 @@
 
         <!-- Prevent flash of unstyled content -->
         <style>
-            /* Minimal loading styles */
+            /* Minimal loading / no-JS shell styles */
+            html,
+            body {
+                height: 100%;
+            }
+
+            body {
+                margin: 0;
+                font-family:
+                    system-ui,
+                    -apple-system,
+                    Segoe UI,
+                    Roboto,
+                    sans-serif;
+                background: #ffffff;
+                color: #0f172a;
+            }
+
             #root {
                 min-height: 100vh;
                 display: flex;
-                align-items: center;
+                align-items: stretch;
+                justify-content: stretch;
+            }
+
+            .shell {
+                width: 100%;
+                padding: 40px 16px 64px;
+                display: flex;
                 justify-content: center;
             }
 
-            .loading-container {
+            .shell-inner {
+                width: 100%;
+                max-width: 960px;
+            }
+
+            .shell-header {
                 display: flex;
-                flex-direction: column;
                 align-items: center;
-                gap: 1rem;
+                justify-content: space-between;
+                gap: 12px;
+                margin-bottom: 32px;
+            }
+
+            .brand {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 800;
+            }
+
+            .logo {
+                width: 36px;
+                height: 36px;
+                border-radius: 10px;
+                background: #2563eb;
+                color: #ffffff;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+                font-weight: 800;
+                letter-spacing: 0.02em;
+            }
+
+            .header-actions {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap;
+                justify-content: flex-end;
+            }
+
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                height: 40px;
+                padding: 0 14px;
+                border-radius: 10px;
+                border: 1px solid #e2e8f0;
+                text-decoration: none;
+                color: #0f172a;
+                background: #ffffff;
+                font-weight: 600;
+                font-size: 14px;
+            }
+
+            .btn-primary {
+                background: #2563eb;
+                border-color: #2563eb;
+                color: #ffffff;
+            }
+
+            .hero {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 18px;
+                padding: 28px 0 10px;
+            }
+
+            .kicker {
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 13px;
+                color: #334155;
+            }
+
+            .pill {
+                display: inline-flex;
+                align-items: center;
+                padding: 4px 10px;
+                border-radius: 999px;
+                background: #eff6ff;
+                color: #1d4ed8;
+                border: 1px solid #dbeafe;
+                font-weight: 700;
+            }
+
+            .hero h1 {
+                margin: 0;
+                font-size: 36px;
+                line-height: 1.08;
+                letter-spacing: -0.03em;
+            }
+
+            .hero p {
+                margin: 0;
+                font-size: 18px;
+                line-height: 1.5;
+                color: #475569;
+                max-width: 60ch;
+            }
+
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+                gap: 14px;
+                margin-top: 22px;
+            }
+
+            .card {
+                border: 1px solid #e2e8f0;
+                border-radius: 14px;
+                padding: 16px;
+                background: #ffffff;
+            }
+
+            .card h3 {
+                margin: 0 0 6px;
+                font-size: 14px;
+                color: #0f172a;
+            }
+
+            .card p {
+                margin: 0;
+                font-size: 13px;
+                line-height: 1.5;
+                color: #475569;
+            }
+
+            .pricing {
+                margin-top: 28px;
+            }
+
+            .pricing h2 {
+                margin: 0 0 10px;
+                font-size: 18px;
+            }
+
+            .tiers {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .tier {
+                border: 1px solid #e2e8f0;
+                border-radius: 14px;
+                padding: 16px;
+                background: #ffffff;
+            }
+
+            .tier strong {
+                display: block;
+                font-size: 14px;
+                margin-bottom: 6px;
+            }
+
+            .tier .price {
+                font-size: 22px;
+                font-weight: 800;
+                margin-bottom: 6px;
+            }
+
+            .muted {
+                color: #64748b;
+                font-size: 13px;
+            }
+
+            .loading {
+                margin-top: 22px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: #64748b;
+                font-size: 13px;
             }
 
             .loading-spinner {
@@ -116,15 +312,6 @@
                 animation: spin 1s linear infinite;
             }
 
-            .loading-text {
-                color: #6b7280;
-                font-family:
-                    system-ui,
-                    -apple-system,
-                    sans-serif;
-                font-size: 0.875rem;
-            }
-
             @keyframes spin {
                 0% {
                     transform: rotate(0deg);
@@ -134,35 +321,138 @@
                 }
             }
 
-            /* Hide loading once React hydrates */
-            #root:not(:empty) .loading-container {
-                display: none;
-            }
-
             /* Dark mode support */
             @media (prefers-color-scheme: dark) {
                 body {
                     background-color: #0f172a;
                     color: #f8fafc;
                 }
+                .card,
+                .tier {
+                    background: #0b1220;
+                    border-color: #1f2937;
+                }
+                .btn {
+                    background: #0b1220;
+                    border-color: #334155;
+                    color: #f8fafc;
+                }
+                .btn-primary {
+                    background: #3b82f6;
+                    border-color: #3b82f6;
+                    color: #0b1220;
+                }
+                .pill {
+                    background: rgba(59, 130, 246, 0.15);
+                    border-color: rgba(59, 130, 246, 0.35);
+                    color: #93c5fd;
+                }
+                .kicker,
+                .hero p,
+                .card p,
+                .muted,
+                .loading {
+                    color: #94a3b8;
+                }
                 .loading-spinner {
                     border-color: #374151;
                     border-top-color: #60a5fa;
                 }
-                .loading-text {
-                    color: #9ca3af;
+            }
+
+            @media (min-width: 860px) {
+                .hero {
+                    padding: 40px 0 10px;
+                }
+                .hero h1 {
+                    font-size: 54px;
+                }
+                .grid {
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                }
+                .tiers {
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
                 }
             }
         </style>
-      <script type="module" crossorigin src="/assets/index-Cjl0xS4L.js"></script>
-      <link rel="stylesheet" crossorigin href="/assets/index-BDoxe66f.css">
+        <script src="/env.js"></script>
+      <script type="module" crossorigin src="/assets/index-DbePie9g.js"></script>
+      <link rel="stylesheet" crossorigin href="/assets/index-BPBXHv6z.css">
     </head>
     <body>
         <div id="root">
-            <!-- Loading fallback -->
-            <div class="loading-container">
-                <div class="loading-spinner"></div>
-                <p class="loading-text">Loading Subscription Manager...</p>
+            <div class="shell">
+                <div class="shell-inner">
+                    <div class="shell-header">
+                        <div class="brand">
+                            <div class="logo">MR</div>
+                            <div>MyRenewly</div>
+                        </div>
+                        <div class="header-actions">
+                            <a class="btn" href="/pricing">Pricing</a>
+                            <a class="btn" href="/login">Sign in</a>
+                            <a class="btn btn-primary" href="/signup">Get started free</a>
+                        </div>
+                    </div>
+
+                    <section class="hero">
+                        <div class="kicker">
+                            <span class="pill">Find forgotten subscriptions</span>
+                            <span>Multi-currency friendly • Secure by design</span>
+                        </div>
+                        <h1>The average person wastes $348/year on forgotten subscriptions.</h1>
+                        <p>
+                            MyRenewly helps you spot recurring charges, get smart renewal reminders,
+                            and stay on top of your monthly commitments — in under a minute.
+                        </p>
+                    </section>
+
+                    <div class="grid" aria-label="Highlights">
+                        <div class="card">
+                            <h3>Fast “Aha” moment</h3>
+                            <p>See what’s renewing soon and what you’re barely using.</p>
+                        </div>
+                        <div class="card">
+                            <h3>Smart reminders</h3>
+                            <p>Get alerts before a renewal (and monthly “still using it?” nudges).</p>
+                        </div>
+                        <div class="card">
+                            <h3>Cancellation help</h3>
+                            <p>Step-by-step cancellation guides for popular services.</p>
+                        </div>
+                    </div>
+
+                    <section class="pricing">
+                        <h2>Simple pricing</h2>
+                        <div class="tiers">
+                            <div class="tier">
+                                <strong>Free</strong>
+                                <div class="price">$0</div>
+                                <div class="muted">Track up to 3 subscriptions.</div>
+                            </div>
+                            <div class="tier">
+                                <strong>Personal</strong>
+                                <div class="price">$6.99<span class="muted">/month</span></div>
+                                <div class="muted">For individuals who want reminders + insights.</div>
+                            </div>
+                            <div class="tier">
+                                <strong>Business / Teams</strong>
+                                <div class="price">$19.99<span class="muted">/month</span></div>
+                                <div class="muted">For teams tracking shared and vendor subscriptions.</div>
+                            </div>
+                        </div>
+                        <div class="loading" aria-label="App loading status">
+                            <div class="loading-spinner" aria-hidden="true"></div>
+                            <div>Loading the app…</div>
+                        </div>
+                        <noscript>
+                            <p class="muted">
+                                JavaScript is required to use the dashboard. You can still read the
+                                pricing and legal pages: <a href="/pricing">Pricing</a>, <a href="/privacy">Privacy</a>, <a href="/terms">Terms</a>.
+                            </p>
+                        </noscript>
+                    </section>
+                </div>
             </div>
         </div>
     </body>

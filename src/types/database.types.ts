@@ -107,6 +107,9 @@ export type Database = {
           default_currency: string
           timezone: string
           notification_preferences: Json
+          plan_type: string
+          plan_expires_at: string | null
+          plan_provider: string | null
           created_at: string
           updated_at: string
         }
@@ -118,6 +121,9 @@ export type Database = {
           default_currency?: string
           timezone?: string
           notification_preferences?: Json
+          plan_type?: string
+          plan_expires_at?: string | null
+          plan_provider?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -129,6 +135,9 @@ export type Database = {
           default_currency?: string
           timezone?: string
           notification_preferences?: Json
+          plan_type?: string
+          plan_expires_at?: string | null
+          plan_provider?: string | null
           created_at?: string
           updated_at?: string
         }

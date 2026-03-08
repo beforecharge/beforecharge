@@ -11,27 +11,28 @@ const corsHeaders = {
 interface CreatePaymentIntentRequest {
   planType: "free" | "premium" | "enterprise";
   currency: "usd" | "inr";
-  userId: string;
+  userId?: string;
+  billingInterval?: "monthly" | "yearly";
   metadata?: Record<string, string>;
 }
 
 const PLAN_PRICES = {
   monthly: {
     free: { usd: 0, inr: 0 },
-    premium: { usd: 399, inr: 9900 }, // $3.99 / ₹99 in cents/paise
-    enterprise: { usd: 699, inr: 19900 }, // $6.99 / ₹199 in cents/paise
+    premium: { usd: 699, inr: 29900 }, // $6.99 / ₹299 in cents/paise
+    enterprise: { usd: 1999, inr: 99900 }, // $19.99 / ₹999 in cents/paise
   },
   yearly: {
     free: { usd: 0, inr: 0 },
-    premium: { usd: 4499, inr: 109900 }, // $44.99 / ₹1099 in cents/paise
-    enterprise: { usd: 7999, inr: 219900 }, // $79.99 / ₹2199 in cents/paise
+    premium: { usd: 6999, inr: 299000 }, // $69.99 / ₹2990 in cents/paise
+    enterprise: { usd: 19900, inr: 999000 }, // $199.00 / ₹9990 in cents/paise
   },
 };
 
 const PLAN_NAMES = {
   free: "Free Plan",
-  premium: "Premium Plan",
-  enterprise: "Enterprise Plan",
+  premium: "Personal Plan",
+  enterprise: "Business / Teams Plan",
 };
 
 serve(async (req) => {
@@ -57,27 +58,59 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+    // Require an authenticated user (prevents spoofing `userId` from the client)
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supabaseAuthed = createClient(supabaseUrl, supabaseServiceKey, {
+      global: { headers: { Authorization: authHeader } },
+      auth: { persistSession: false },
+    });
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabaseAuthed.auth.getUser();
+
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // Parse request
     const {
       planType,
       currency,
-      userId,
+      userId: bodyUserId,
+      billingInterval = "monthly",
       metadata = {},
-    }: CreatePaymentIntentRequest & {
-      billingInterval?: "monthly" | "yearly";
-    } = await req.json();
+    }: CreatePaymentIntentRequest = await req.json();
 
     // Validate input
-    if (!planType || !currency || !userId) {
+    if (!planType || !currency) {
       return new Response(
         JSON.stringify({
-          error: "Missing required fields: planType, currency, userId",
+          error: "Missing required fields: planType, currency",
         }),
         {
           status: 400,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         },
       );
+    }
+
+    if (bodyUserId && bodyUserId !== user.id) {
+      return new Response(JSON.stringify({ error: "Forbidden" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     if (planType === "free") {
@@ -104,19 +137,7 @@ serve(async (req) => {
       });
     }
 
-    // Get user details
-    const { data: user, error: userError } =
-      await supabase.auth.admin.getUserById(userId);
-    if (userError || !user) {
-      return new Response(JSON.stringify({ error: "User not found" }), {
-        status: 404,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
     // Calculate amount
-    const billingInterval =
-      (req.body?.billingInterval as "monthly" | "yearly") || "monthly";
     const amount = PLAN_PRICES[billingInterval][planType][currency];
     if (amount === undefined) {
       return new Response(
@@ -133,12 +154,12 @@ serve(async (req) => {
     // Create Stripe payment intent
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
-      currency: currency.toUpperCase(),
+      currency,
       automatic_payment_methods: {
         enabled: true,
       },
       metadata: {
-        userId,
+        userId: user.id,
         planType,
         billingInterval,
         userEmail: user.email || "",
@@ -151,7 +172,7 @@ serve(async (req) => {
     const { error: transactionError } = await supabase
       .from("payment_transactions")
       .insert({
-        user_id: userId,
+        user_id: user.id,
         payment_provider: "stripe",
         payment_intent_id: paymentIntent.id,
         amount,

@@ -63,7 +63,7 @@ const AuthRoute: React.FC<AuthRouteProps> = ({ children }) => {
   }
 
   if (user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <>{children}</>;
@@ -82,33 +82,15 @@ const AuthCallback: React.FC = () => {
         // Log current URL for debugging
         console.log("AuthCallback - Current URL:", window.location.href);
         
-        // Check if we have auth tokens in the URL hash (implicit flow fallback)
-        const hashParams = new URLSearchParams(window.location.hash.substring(1));
-        const accessToken = hashParams.get('access_token');
-        
-        // Check if we have auth code in URL params (PKCE flow)
-        const urlParams = new URLSearchParams(window.location.search);
-        const authCode = urlParams.get('code');
-        
-        if (accessToken) {
-          console.log("Found access token in URL hash (implicit flow), processing...");
-          // Clear the hash from URL
-          window.history.replaceState(null, '', window.location.pathname);
-        } else if (authCode) {
-          console.log("Found auth code in URL params (PKCE flow), processing...");
-          // Clear the search params from URL
-          window.history.replaceState(null, '', window.location.pathname);
-        } else {
-          console.log("No auth tokens found in URL, checking existing session...");
-        }
-        
-        // Let Supabase handle the session
+        // Let Supabase handle the session exchange first, then clean the URL.
         await checkSession();
 
-        // Add a delay to ensure state is updated
-        setTimeout(() => {
-          setIsProcessing(false);
-        }, 2000); // Increased delay for better reliability
+        // Clean up OAuth params after session processing (prevents breaking PKCE exchange)
+        if (window.location.hash || window.location.search) {
+          window.history.replaceState(null, "", window.location.pathname);
+        }
+
+        setIsProcessing(false);
       } catch (error) {
         console.error("Auth callback error:", error);
         setIsProcessing(false);
@@ -134,7 +116,7 @@ const AuthCallback: React.FC = () => {
       <div className="text-center space-y-4">
         <LoadingSpinner size="lg" />
         <p className="text-muted-foreground">Completing sign in...</p>
-        {process.env.NODE_ENV === "development" && (
+        {import.meta.env.DEV && (
           <div className="text-xs text-muted-foreground">
             <p>Processing: {isProcessing.toString()}</p>
             <p>Loading: {isLoading.toString()}</p>
@@ -188,7 +170,7 @@ class ErrorBoundary extends React.Component<
             >
               Refresh Page
             </button>
-            {process.env.NODE_ENV === "development" && this.state.error && (
+            {import.meta.env.DEV && this.state.error && (
               <details className="mt-4 text-left">
                 <summary className="cursor-pointer text-sm text-muted-foreground">
                   Error Details
@@ -259,19 +241,6 @@ const App: React.FC = () => {
 
     initApp();
   }, [initialize, isInitialized, setTheme, theme]);
-
-  // Show loading screen while initializing
-  if (!isInitialized) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center space-y-4">
-          <LoadingSpinner size="lg" />
-          <h2 className="text-xl font-semibold">MyRenewly</h2>
-          <p className="text-muted-foreground">Loading your dashboard...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <ErrorBoundary>

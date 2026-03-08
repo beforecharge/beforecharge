@@ -1,448 +1,469 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-
-import Footer from "@/components/layout/Footer";
-import {
-  CreditCard,
-  TrendingUp,
-  Bell,
-  Shield,
-  Clock,
-  BarChart3,
-  ArrowRight,
-  CheckCircle2,
-  Star,
-  RefreshCw,
-  PieChart,
-  DollarSign,
-  BellRing,
-  FileText,
-
-  ChevronRight,
-} from "lucide-react";
+import "./Home.css";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
 
-  const features = [
-    {
-      icon: CreditCard,
-      title: "Track All Subscriptions",
-      description:
-        "Manage all your recurring payments in one centralized dashboard",
-      color: "text-blue-500",
-    },
-    {
-      icon: TrendingUp,
-      title: "Spending Analytics",
-      description:
-        "Visualize your subscription spending patterns and trends over time",
-      color: "text-green-500",
-    },
-    {
-      icon: Bell,
-      title: "Smart Reminders",
-      description:
-        "Never miss a renewal or trial expiration with intelligent notifications",
-      color: "text-purple-500",
-    },
-    {
-      icon: Shield,
-      title: "Bank-Level Security",
-      description:
-        "Your data is encrypted and secured with industry-standard protection",
-      color: "text-red-500",
-    },
-    {
-      icon: Clock,
-      title: "Real-Time Updates",
-      description:
-        "Stay informed with instant updates on your subscription status",
-      color: "text-yellow-500",
-    },
-    {
-      icon: BarChart3,
-      title: "Detailed Reports",
-      description:
-        "Export comprehensive reports for expense tracking and budgeting",
-      color: "text-indigo-500",
-    },
-  ];
+  const handleCtaClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (user) {
+      navigate("/subscriptions");
+    } else {
+      navigate("/signup");
+    }
+  };
 
-  const benefits = [
-    {
-      title: "Save Money",
-      description: "Identify unused subscriptions and optimize your spending",
-      icon: DollarSign,
-    },
-    {
-      title: "Save Time",
-      description:
-        "Manage everything from one dashboard instead of multiple accounts",
-      icon: Clock,
-    },
-    {
-      title: "Stay Organized",
-      description: "Keep all subscription information organized and accessible",
-      icon: FileText,
-    },
-    {
-      title: "Never Forget",
-      description: "Automated reminders ensure you never miss important dates",
-      icon: BellRing,
-    },
-  ];
-
-  const testimonials = [
-    {
-      name: "Sarah Chen",
-      role: "Product Manager",
-      content:
-        "This app saved me over $200 per month by identifying subscriptions I forgot I had!",
-      rating: 5,
-    },
-    {
-      name: "Michael Rodriguez",
-      role: "Freelancer",
-      content:
-        "The analytics features help me track my business expenses effortlessly.",
-      rating: 5,
-    },
-    {
-      name: "Emily Watson",
-      role: "Small Business Owner",
-      content:
-        "Finally, a simple way to manage all our company subscriptions in one place.",
-      rating: 5,
-    },
-  ];
-
-  // const stats = [
-  //   { label: "Active Users", value: "10,000+" },
-  //   { label: "Subscriptions Tracked", value: "50,000+" },
-  //   { label: "Money Saved", value: "$2M+" },
-  //   { label: "Customer Satisfaction", value: "98%" },
-  // ];
+  const scrollToSection = (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-      {/* Navigation Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-lg bg-background/80 border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-14 sm:h-16">
-            <div className="flex items-center space-x-2">
-              <div className="h-6 w-6 sm:h-8 sm:w-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-xs sm:text-sm">
-                  S
-                </span>
+    <div className="home-page">
+      {/* NAV */}
+      <nav className="bc-nav">
+        <a href="/" className="logo">Before<span>Charge</span></a>
+        <ul className="nav-links">
+          <li>
+            <button onClick={(e) => scrollToSection(e, "how")}>
+              How it works
+            </button>
+          </li>
+          <li>
+            <button onClick={(e) => scrollToSection(e, "features")}>
+              Features
+            </button>
+          </li>
+          <li>
+            <button onClick={(e) => scrollToSection(e, "pricing")}>
+              Pricing
+            </button>
+          </li>
+          <li>
+            <button className="nav-cta" onClick={handleCtaClick}>
+              {user ? "Dashboard →" : "Start Free →"}
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      {/* TICKER */}
+      <div style={{ paddingTop: "65px" }}>
+        <div className="ticker">
+          <div className="ticker-inner">
+            <span className="ticker-item"><span className="ticker-dot">●</span> Never miss a renewal again</span>
+            <span className="ticker-item"><span className="ticker-dot">●</span> Know before you owe</span>
+            <span className="ticker-item"><span className="ticker-dot">●</span> Stop the subscription bleed</span>
+            <span className="ticker-item"><span className="ticker-dot">●</span> Average user saves £340/year</span>
+            <span className="ticker-item"><span className="ticker-dot">●</span> Works in 🇺🇸 🇬🇧 🇦🇪 🇪🇺 🇮🇳</span>
+            <span className="ticker-item"><span className="ticker-dot">●</span> 7-day free trial</span>
+            <span className="ticker-item"><span className="ticker-dot">●</span> Never miss a renewal again</span>
+            <span className="ticker-item"><span className="ticker-dot">●</span> Know before you owe</span>
+            <span className="ticker-item"><span className="ticker-dot">●</span> Stop the subscription bleed</span>
+            <span className="ticker-item"><span className="ticker-dot">●</span> Average user saves £340/year</span>
+            <span className="ticker-item"><span className="ticker-dot">●</span> Works in 🇺🇸 🇬🇧 🇦🇪 🇪🇺 🇮🇳</span>
+            <span className="ticker-item"><span className="ticker-dot">●</span> 7-day free trial</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- HERO -->
+      <section className="hero">
+        <div className="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+
+        <div className="badge">
+          <span className="badge-dot"></span>
+          Now available worldwide — USA, UK, UAE & Europe
+        </div>
+
+        <h1>
+          Know <span className="highlight">before</span><br />
+          you get charged.
+        </h1>
+
+        <p className="hero-sub">
+          BeforeCharge tracks every subscription you own and alerts you 3 days before any charge hits your card. No more surprise bills. No more wasted money.
+        </p>
+
+        <div className="hero-actions">
+          <button className="btn-primary" onClick={handleCtaClick}>
+            {user ? "Go to Dashboard" : "Start for Free — No card needed"}
+          </button>
+          <button className="btn-secondary" onClick={(e) => scrollToSection(e, "how")}>
+            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><polygon points="10,8 16,12 10,16" /></svg>
+            See how it works
+          </button>
+        </div>
+
+        <div className="hero-trust">
+          <span className="trust-item">
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12" /></svg>
+            Free 7-day trial
+          </span>
+          <span className="trust-item">
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12" /></svg>
+            No credit card required
+          </span>
+          <span className="trust-item">
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12" /></svg>
+            Cancel anytime
+          </span>
+          <span className="trust-item">
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12" /></svg>
+            GDPR & privacy-first
+          </span>
+        </div>
+
+        {/* DASHBOARD PREVIEW */}
+        <div className="preview-wrap">
+          <div className="preview-glow"></div>
+          <div className="dashboard">
+            <div className="dash-header">
+              <div className="dot dot-r"></div>
+              <div className="dot dot-y"></div>
+              <div className="dot dot-g"></div>
+              <div className="dash-url">app.beforecharge.com</div>
+            </div>
+            <div className="dash-body">
+              <div className="stat-card">
+                <div className="stat-label">Monthly Spend</div>
+                <div className="stat-value red">$284.97</div>
+                <div className="stat-change">↑ $42 vs last month</div>
               </div>
-              <span className="text-lg sm:text-xl font-bold">
-                <span className="hidden sm:inline">MyRenewly</span>
-                <span className="sm:hidden">MyRenewly</span>
-              </span>
-            </div>
-            <nav className="hidden lg:flex items-center space-x-6">
-              <button
-                onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Features
-              </button>
-              <button
-                onClick={() => navigate('/pricing')}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Pricing
-              </button>
-              <button
-                onClick={() => document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' })}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Testimonials
-              </button>
-            </nav>
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              {user ? (
-                <Button onClick={() => navigate("/subscriptions")} size="sm">
-                  <span className="hidden sm:inline">Go to Dashboard</span>
-                  <span className="sm:hidden">Dashboard</span>
-                  <ArrowRight className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4" />
-                </Button>
-              ) : (
-                <>
-                  <Button
-                    variant="ghost"
-                    onClick={() => navigate("/login")}
-                    size="sm"
-                    className="hidden sm:inline-flex"
-                  >
-                    Sign In
-                  </Button>
-                  <Button onClick={() => navigate("/signup")} size="sm">
-                    <span className="hidden sm:inline">Get Started Free</span>
-                    <span className="sm:hidden">Sign Up</span>
-                    <ArrowRight className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4" />
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <section className="pt-12 sm:pt-20 pb-16 sm:pb-32 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center space-y-6 sm:space-y-8">
-            {/* <Badge className="bg-primary/10 text-primary border-primary/20 px-3 sm:px-4 py-1 text-xs sm:text-sm">
-              <Sparkles className="h-3 w-3 mr-1" />
-              Trusted by 10,000+ users worldwide
-            </Badge> */}
-            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight">
-              Take Control of Your
-              <span className="text-primary block mt-2">
-                Subscription Chaos
-              </span>
-            </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
-              Stop wasting money on forgotten subscriptions. Track, manage, and
-              optimize all your recurring payments in one intelligent dashboard.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4">
-              <Button
-                size="lg"
-                onClick={() => navigate(user ? "/subscriptions" : "/signup")}
-                className="text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 w-full sm:w-auto"
-              >
-                {user ? "Go to Dashboard" : "Start Free Trial"}
-                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={() => navigate("/pricing")}
-                className="text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 w-full sm:w-auto"
-              >
-                View Pricing
-                <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
-              </Button>
-            </div>
-            {/* <div className="grid grid-cols-2 sm:flex sm:items-center sm:justify-center gap-4 sm:gap-8 pt-6 sm:pt-8 px-4">
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-xl sm:text-3xl font-bold text-primary">
-                    {stat.value}
-                  </div>
-                  <div className="text-xs sm:text-sm text-muted-foreground">
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
-            </div> */}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="py-12 sm:py-20 px-4 bg-muted/30">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center space-y-4 mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-4xl font-bold">Everything You Need</h2>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Powerful features to help you manage subscriptions like a pro
-            </p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <Card
-                  key={index}
-                  className="group hover:shadow-lg transition-all duration-300 hover:scale-105 mobile-card-compact"
-                >
-                  <CardHeader className="mobile-card-header">
-                    <div
-                      className={`h-10 w-10 sm:h-12 sm:w-12 rounded-lg ${feature.color} bg-current/10 flex items-center justify-center mb-3 sm:mb-4`}
-                    >
-                      <Icon className={`h-5 w-5 sm:h-6 sm:w-6 ${feature.color}`} />
-                    </div>
-                    <CardTitle className="text-lg sm:text-xl">{feature.title}</CardTitle>
-                    <CardDescription className="text-sm sm:text-base">{feature.description}</CardDescription>
-                  </CardHeader>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl font-bold mb-6">
-                Why Choose Our
-                <span className="text-primary"> MyRenewly?</span>
-              </h2>
-              <p className="text-lg text-muted-foreground mb-8">
-                Join thousands of users who have already taken control of their
-                digital subscriptions and saved money in the process.
-              </p>
-              <div className="space-y-4">
-                {benefits.map((benefit, index) => {
-                  const Icon = benefit.icon;
-                  return (
-                    <div key={index} className="flex items-start space-x-4">
-                      <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <Icon className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold">{benefit.title}</h3>
-                        <p className="text-muted-foreground">
-                          {benefit.description}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
+              <div className="stat-card">
+                <div className="stat-label">Active Subscriptions</div>
+                <div className="stat-value">14</div>
+                <div className="stat-change">3 renewing this week</div>
               </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <Card className="col-span-2">
-                <CardContent className="pt-6">
-                  <div className="flex items-center justify-between">
+              <div className="stat-card">
+                <div className="stat-label">Saved This Year</div>
+                <div className="stat-value green">$340</div>
+                <div className="stat-change">↑ from cancelled subs</div>
+              </div>
+              <div className="dash-subs">
+                <div className="sub-row">
+                  <div className="sub-left">
+                    <div className="sub-icon" style={{ background: "rgba(255,0,0,0.12)" }}>📺</div>
                     <div>
-                      <p className="text-3xl font-bold">$89.99</p>
-                      <p className="text-sm text-muted-foreground">
-                        Average monthly savings
-                      </p>
+                      <div className="sub-name">Netflix</div>
+                      <div className="sub-cycle">Monthly · Auto-renews</div>
                     </div>
-                    <TrendingUp className="h-8 w-8 text-green-500" />
                   </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="pt-6">
-                  <RefreshCw className="h-8 w-8 text-blue-500 mb-2" />
-                  <p className="font-semibold">Auto-Sync</p>
-                  <p className="text-sm text-muted-foreground">
-                    Real-time updates
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="pt-6">
-                  <PieChart className="h-8 w-8 text-purple-500 mb-2" />
-                  <p className="font-semibold">Analytics</p>
-                  <p className="text-sm text-muted-foreground">
-                    Detailed insights
-                  </p>
-                </CardContent>
-              </Card>
+                  <div className="sub-right">
+                    <span className="sub-price">$22.99</span>
+                    <span className="sub-alert alert-red">⚡ Charges in 2 days</span>
+                  </div>
+                </div>
+                <div className="sub-row">
+                  <div className="sub-left">
+                    <div className="sub-icon" style={{ background: "rgba(0,150,255,0.12)" }}>☁️</div>
+                    <div>
+                      <div className="sub-name">Dropbox Plus</div>
+                      <div className="sub-cycle">Annual · $119.99/yr</div>
+                    </div>
+                  </div>
+                  <div className="sub-right">
+                    <span className="sub-price">$9.99</span>
+                    <span className="sub-alert alert-yellow">⏰ In 5 days</span>
+                  </div>
+                </div>
+                <div className="sub-row">
+                  <div className="sub-left">
+                    <div className="sub-icon" style={{ background: "rgba(0,229,160,0.12)" }}>🎵</div>
+                    <div>
+                      <div className="sub-name">Spotify Premium</div>
+                      <div className="sub-cycle">Monthly · Family plan</div>
+                    </div>
+                  </div>
+                  <div className="sub-right">
+                    <span className="sub-price">$16.99</span>
+                    <span className="sub-alert alert-green">✓ 18 days away</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 px-4 bg-muted/30">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center space-y-4 mb-12">
-            <h2 className="text-4xl font-bold">Loved by Users</h2>
-            <p className="text-xl text-muted-foreground">
-              See what our customers have to say about their experience
-            </p>
+      {/* PAIN STATS */}
+      <section>
+        <div className="pain">
+          <div>
+            <div className="section-label">The Problem</div>
+            <h2>Your money is quietly disappearing</h2>
+            <p className="section-sub">Subscriptions are designed to be forgotten. Every free trial, every annual plan, every "we've updated our pricing" email — they're all counting on you not paying attention.</p>
+            <br />
+            <p style={{ color: "var(--accent-before)", fontSize: "22px", fontFamily: "'Syne',sans-serif", fontWeight: 700, letterSpacing: "-0.5px" }}>BeforeCharge pays attention, so you don't have to.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index}>
-                <CardHeader>
-                  <div className="flex items-center space-x-1 mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="h-4 w-4 fill-yellow-500 text-yellow-500"
-                      />
-                    ))}
-                  </div>
-                  <CardDescription className="text-base">
-                    "{testimonial.content}"
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div>
-                    <p className="font-semibold">{testimonial.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {testimonial.role}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="pain-stats">
+            <div className="pain-stat s1">
+              <div className="pain-num">$348</div>
+              <div className="pain-desc">Average wasted annually on forgotten subscriptions</div>
+            </div>
+            <div className="pain-stat s2">
+              <div className="pain-num">4.2×</div>
+              <div className="pain-desc">People underestimate their subscription count by 4x</div>
+            </div>
+            <div className="pain-stat s3">
+              <div className="pain-num">72%</div>
+              <div className="pain-desc">Of users forget about free trials until they're charged</div>
+            </div>
+            <div className="pain-stat s4">
+              <div className="pain-num">11</div>
+              <div className="pain-desc">Average subscriptions per person — up from 4 in 2018</div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-4xl">
-          <Card className="bg-gradient-to-r from-primary/10 to-purple-500/10 border-primary/20">
-            <CardContent className="pt-12 pb-12 text-center space-y-6">
-              <h2 className="text-3xl font-bold">Ready to Take Control?</h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Join thousands of users who are already saving money and time
-                with MyRenewly.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button
-                  size="lg"
-                  onClick={() => navigate(user ? "/subscriptions" : "/signup")}
-                  className="text-lg px-8"
-                >
-                  {user ? "Go to Dashboard" : "Start Your Free Trial"}
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  onClick={() => navigate("/pricing")}
-                  className="text-lg px-8"
-                >
-                  View Pricing Plans
-                </Button>
-              </div>
-              <div className="flex items-center justify-center space-x-4 text-sm text-muted-foreground">
-                <div className="flex items-center">
-                  <CheckCircle2 className="h-4 w-4 mr-1 text-green-500" />
-                  No credit card required
-                </div>
-                <div className="flex items-center">
-                  <CheckCircle2 className="h-4 w-4 mr-1 text-green-500" />
-                  14-day free trial
-                </div>
-                <div className="flex items-center">
-                  <CheckCircle2 className="h-4 w-4 mr-1 text-green-500" />
-                  Cancel anytime
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+      <div className="divider"></div>
+
+      {/* HOW IT WORKS */}
+      <section id="how">
+        <div className="hiw">
+          <div className="section-label">How It Works</div>
+          <h2>Up and running in 60 seconds</h2>
+          <p className="section-sub" style={{ margin: "0 auto" }}>No lengthy setup. No bank login required. Just add your subscriptions and we handle the rest.</p>
+
+          <div className="steps">
+            <div className="step">
+              <div className="step-num">01</div>
+              <div className="step-icon">📧</div>
+              <h3>Connect or add manually</h3>
+              <p>Link your Gmail/Outlook so we auto-detect subscriptions, or add them manually in seconds. Your choice — privacy first.</p>
+            </div>
+            <div className="step">
+              <div className="step-num">02</div>
+              <div className="step-icon">🔍</div>
+              <h3>We scan & organise</h3>
+              <p>BeforeCharge finds every recurring charge, sorts them by category, and shows you exactly what you're spending — all in one clean dashboard.</p>
+            </div>
+            <div className="step">
+              <div className="step-num">03</div>
+              <div className="step-icon">🔔</div>
+              <h3>Get alerted before every charge</h3>
+              <p>3 days before any renewal hits your card, you get a push notification, email or WhatsApp alert — with a one-tap cancel guide if you want out.</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
+      {/* MARKETS */}
+      <section>
+        <div className="markets">
+          <div className="section-label">Global Coverage</div>
+          <h2>Built for your market</h2>
+          <div className="market-flags">
+            <div className="market-item"><div className="flag">🇺🇸</div><div className="market-name">United States</div></div>
+            <div className="market-item"><div className="flag">🇬🇧</div><div className="market-name">United Kingdom</div></div>
+            <div className="market-item"><div className="flag">🇦🇪</div><div className="market-name">UAE</div></div>
+            <div className="market-item"><div className="flag">🇩🇪</div><div className="market-name">Germany</div></div>
+            <div className="market-item"><div className="flag">🇫🇷</div><div className="market-name">France</div></div>
+            <div className="market-item"><div className="flag">🇮🇳</div><div className="market-name">India</div></div>
+          </div>
+          <p style={{ marginTop: "32px", color: "var(--muted-before)", fontSize: "14px" }}>Multi-currency support · USD, GBP, EUR, AED, INR & more</p>
+        </div>
+      </section>
+
+      <div className="divider"></div>
+
+      {/* FEATURES */}
+      <section id="features">
+        <div className="features">
+          <div className="features-header">
+            <div>
+              <div className="section-label">Features</div>
+              <h2>Everything you need. Nothing you don't.</h2>
+            </div>
+            <p className="section-sub">Built for real people who just want to stop being surprised by subscription charges every month.</p>
+          </div>
+          <div className="features-grid">
+            <div className="feat featured">
+              <span className="feat-icon">⚡</span>
+              <h3>Smart Auto-Detection</h3>
+              <p>Connect your email and BeforeCharge instantly finds every subscription — including ones you forgot about years ago. Most users discover 3–5 subscriptions they didn't know they were paying for in the first 5 minutes.</p>
+            </div>
+            <div className="feat">
+              <span className="feat-icon">🔔</span>
+              <h3>3-Day Advance Alerts</h3>
+              <p>Get notified via push, email, or WhatsApp before every single charge — giving you time to cancel if needed.</p>
+            </div>
+            <div className="feat">
+              <span className="feat-icon">📅</span>
+              <h3>Renewal Calendar</h3>
+              <p>Visual monthly calendar of every upcoming charge so you're never blindsided by an annual renewal again.</p>
+            </div>
+            <div className="feat">
+              <span className="feat-icon">🆓</span>
+              <h3>Free Trial Tracker</h3>
+              <p>BeforeCharge flags every free trial and alerts you 2 days before it converts to paid — automatically.</p>
+            </div>
+            <div className="feat">
+              <span className="feat-icon">💱</span>
+              <h3>Multi-Currency</h3>
+              <p>Track subscriptions in USD, GBP, EUR, AED, INR and 30+ currencies. See your total in your home currency.</p>
+            </div>
+            <div className="feat">
+              <span className="feat-icon">📊</span>
+              <h3>Spend Analytics</h3>
+              <p>Monthly reports showing trends, waste opportunities, and exactly how much you've saved since joining.</p>
+            </div>
+            <div className="feat">
+              <span className="feat-icon">👨👩👧</span>
+              <h3>Household Sharing</h3>
+              <p>Share a dashboard with your partner or family — see who's paying for what and split shared subscriptions fairly.</p>
+            </div>
+            <div className="feat">
+              <span className="feat-icon">🏢</span>
+              <h3>Teams & Business</h3>
+              <p>Track company SaaS tools, assign owners to subscriptions, and get a monthly waste report for your finance team.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section>
+        <div className="testimonials">
+          <div className="section-label">Loved by Users</div>
+          <h2>Real people. Real savings.</h2>
+          <div className="testi-grid">
+            <div className="testi">
+              <div className="testi-stars">★★★★★</div>
+              <p className="testi-text">"Found 4 subscriptions I completely forgot about. Cancelled 3 of them and saved £67/month instantly. Genuinely the most useful app I've installed this year."</p>
+              <div className="testi-author">
+                <div className="testi-avatar" style={{ background: "rgba(0,229,160,0.15)", color: "var(--accent-before)" }}>JM</div>
+                <div>
+                  <div className="testi-name">James M.</div>
+                  <div className="testi-role">Freelancer · London, UK 🇬🇧</div>
+                </div>
+              </div>
+            </div>
+            <div className="testi">
+              <div className="testi-stars">★★★★★</div>
+              <p className="testi-text">"I was paying for Adobe Creative Cloud for 8 months after I stopped using it. BeforeCharge caught my next renewal and I cancelled in time. Saved $599."</p>
+              <div className="testi-author">
+                <div className="testi-avatar" style={{ background: "rgba(0,102,255,0.15)", color: "#6699ff" }}>SR</div>
+                <div>
+                  <div className="testi-name">Sarah R.</div>
+                  <div className="testi-role">Designer · New York, USA 🇺🇸</div>
+                </div>
+              </div>
+            </div>
+            <div className="testi">
+              <div className="testi-stars">★★★★★</div>
+              <p className="testi-text">"Running a startup in Dubai, we were hemorrhaging on SaaS tools nobody was using. The team dashboard showed us AED 2,400/month in waste. Incredible."</p>
+              <div className="testi-author">
+                <div className="testi-avatar" style={{ background: "rgba(255,189,46,0.15)", color: "#ffbd2e" }}>AK</div>
+                <div>
+                  <div className="testi-name">Ahmed K.</div>
+                  <div className="testi-role">Founder · Dubai, UAE 🇦🇪</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="divider"></div>
+
+      {/* PRICING */}
+      <section id="pricing">
+        <div className="pricing">
+          <div className="section-label">Pricing</div>
+          <h2>Pays for itself in one cancelled subscription</h2>
+          <p style={{ color: "var(--muted2-before)", fontSize: "17px", fontWeight: 300, marginTop: "12px" }}>Start free. No credit card. Upgrade when you're ready.</p>
+
+          <div className="pricing-grid">
+            <div className="plan">
+              <div className="plan-name">Free</div>
+              <div className="plan-price"><sup>$</sup>0</div>
+              <div className="plan-period">forever free</div>
+              <ul className="plan-features">
+                <li>Up to 5 subscriptions</li>
+                <li>Basic renewal alerts</li>
+                <li>Manual entry</li>
+                <li>Email notifications</li>
+              </ul>
+              <button className="plan-btn plan-btn-outline" onClick={() => navigate("/signup")}>Get Started Free</button>
+            </div>
+
+            <div className="plan popular">
+              <div className="popular-badge">Most Popular</div>
+              <div className="plan-name">Personal</div>
+              <div className="plan-price"><sup>$</sup>6.99</div>
+              <div className="plan-period">per month · billed monthly</div>
+              <ul className="plan-features">
+                <li>Unlimited subscriptions</li>
+                <li>Auto email/Gmail detection</li>
+                <li>3-day advance alerts</li>
+                <li>Free trial tracker</li>
+                <li>Renewal calendar</li>
+                <li>Multi-currency support</li>
+                <li>Spend analytics & reports</li>
+                <li>WhatsApp & SMS alerts</li>
+              </ul>
+              <button className="plan-btn plan-btn-primary" onClick={() => navigate("/signup")}>Start 7-Day Free Trial</button>
+            </div>
+
+            <div className="plan">
+              <div className="plan-name">Business</div>
+              <div className="plan-price"><sup>$</sup>24</div>
+              <div className="plan-period">per month · up to 5 seats</div>
+              <ul className="plan-features">
+                <li>Everything in Personal</li>
+                <li>Team workspace & dashboard</li>
+                <li>Assign subscription owners</li>
+                <li>Monthly waste report</li>
+                <li>CSV/PDF export</li>
+                <li>Priority support</li>
+                <li>Household sharing</li>
+              </ul>
+              <button className="plan-btn plan-btn-outline" onClick={() => navigate("/signup")}>Start Free Trial</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section>
+        <div className="cta-section">
+          <div className="cta-card">
+            <div className="section-label" style={{ justifyContent: "center" }}>Get Started Today</div>
+            <h2>Stop getting charged.<br />Start being <span style={{ color: "var(--accent-before)" }}>in control.</span></h2>
+            <p>Join thousands of people who stopped letting subscriptions silently drain their bank account every month.</p>
+            <button className="btn-primary" style={{ fontSize: "18px", padding: "18px 48px", display: "inline-block" }} onClick={handleCtaClick}>
+              Try BeforeCharge Free →
+            </button>
+            <div style={{ marginTop: "24px", color: "var(--muted-before)", fontSize: "13px" }}>
+              7-day free trial · No credit card · Cancel anytime
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer>
+        <a href="/" className="footer-logo">Before<span>Charge</span></a>
+        <ul className="footer-links">
+          <li><button onClick={(e) => scrollToSection(e, "features")}>Features</button></li>
+          <li><button onClick={(e) => scrollToSection(e, "pricing")}>Pricing</button></li>
+          <li><button onClick={() => { }}>Blog</button></li>
+          <li><button onClick={() => navigate("/privacy")}>Privacy</button></li>
+          <li><button onClick={() => navigate("/terms")}>Terms</button></li>
+          <li><button onClick={() => { }}>Contact</button></li>
+        </ul>
+        <div className="footer-right">© 2025 BeforeCharge · Know before you owe</div>
+      </footer>
     </div>
   );
 };

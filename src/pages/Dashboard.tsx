@@ -23,9 +23,11 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import LoadingSpinner from "@/components/ui/loading-spinner";
+import { DEFAULTS } from "@/lib/constants";
+import { formatCurrencyAmount } from "@/utils/currencyUtils";
 
 const Dashboard: React.FC = () => {
-  const { getDisplayName } = useAuth();
+  const { getDisplayName, profile } = useAuth();
   const navigate = useNavigate();
   const {
     subscriptions,
@@ -43,6 +45,8 @@ const Dashboard: React.FC = () => {
   const activeSubscriptionCount = getActiveSubscriptions().length;
   const upcomingRenewalsData = getUpcomingRenewals(7); // Next 7 days
   const upcomingRenewalsCount = upcomingRenewalsData.length;
+
+  const displayCurrency = profile?.default_currency || DEFAULTS.currency;
 
   const handleReviewRenewals = () => {
     navigate("/subscriptions");
@@ -88,7 +92,7 @@ const Dashboard: React.FC = () => {
           </CardHeader>
           <CardContent className="mobile-card-content">
             <div className="text-xl sm:text-2xl font-bold">
-              ${totalMonthlySpend.toFixed(2)}
+              {formatCurrencyAmount(totalMonthlySpend, displayCurrency)}
             </div>
             <p className="text-xs text-muted-foreground">
               Monthly recurring cost
@@ -103,7 +107,7 @@ const Dashboard: React.FC = () => {
           </CardHeader>
           <CardContent className="mobile-card-content">
             <div className="text-xl sm:text-2xl font-bold">
-              ${totalAnnualSpend.toFixed(2)}
+              {formatCurrencyAmount(totalAnnualSpend, displayCurrency)}
             </div>
             <p className="text-xs text-muted-foreground">
               Projected yearly cost
@@ -233,10 +237,12 @@ const Dashboard: React.FC = () => {
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-medium">
-                          ${subscription.cost.toFixed(2)}/
-                          {subscription.billing_cycle === "monthly"
-                            ? "mo"
-                            : "yr"}
+                          {formatCurrencyAmount(
+                            subscription.cost,
+                            subscription.currency
+                          )}
+                          /
+                          {subscription.billing_cycle === "monthly" ? "mo" : "yr"}
                         </p>
                       </div>
                     </div>
@@ -289,7 +295,10 @@ const Dashboard: React.FC = () => {
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-medium">
-                          ${subscription.cost.toFixed(2)}
+                          {formatCurrencyAmount(
+                            subscription.cost,
+                            subscription.currency
+                          )}
                         </p>
                       </div>
                     </div>

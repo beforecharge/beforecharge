@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 import useSubscriptions from "@/hooks/useSubscriptions";
-
+import { useAuth } from "@/hooks/useAuth";
 import {
   Card,
   CardContent,
@@ -17,6 +17,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import LoadingSpinner from "@/components/ui/loading-spinner";
+import { DEFAULTS } from "@/lib/constants";
+import { convertCurrency, formatCurrencyAmount } from "@/utils/currencyUtils";
 
 const Analytics: React.FC = () => {
   const {
@@ -27,17 +29,33 @@ const Analytics: React.FC = () => {
     getActiveSubscriptions,
   } = useSubscriptions();
 
+  const { profile } = useAuth();
   const activeSubscriptions = getActiveSubscriptions();
   const totalMonthlySpend = getTotalMonthlyCost();
   const totalAnnualSpend = getTotalAnnualCost();
+  const displayCurrency = profile?.default_currency || DEFAULTS.currency;
+
   const averagePerService =
     activeSubscriptions.length > 0
       ? totalMonthlySpend / activeSubscriptions.length
       : 0;
-  const mostExpensive = activeSubscriptions.reduce(
-    (max, sub) => (sub.cost > max.cost ? sub : max),
-    { cost: 0, name: "None" },
-  );
+
+  const mostExpensive =
+    activeSubscriptions.length > 0
+      ? activeSubscriptions.reduce((max, sub) => {
+          const maxConverted = convertCurrency(
+            max.cost,
+            max.currency,
+            displayCurrency,
+          );
+          const subConverted = convertCurrency(
+            sub.cost,
+            sub.currency,
+            displayCurrency,
+          );
+          return subConverted > maxConverted ? sub : max;
+        })
+      : null;
 
   // Get category spending data
   const getCategorySpending = () => {
@@ -48,12 +66,18 @@ const Analytics: React.FC = () => {
       const categoryName = category?.name || "Unknown";
       const categoryColor = category?.color || "#64748b";
 
+      const converted = convertCurrency(
+        sub.cost,
+        sub.currency,
+        displayCurrency,
+      );
+
       if (categoryMap.has(categoryName)) {
-        categoryMap.get(categoryName).amount += sub.cost;
+        categoryMap.get(categoryName).amount += converted;
         categoryMap.get(categoryName).count += 1;
       } else {
         categoryMap.set(categoryName, {
-          amount: sub.cost,
+          amount: converted,
           count: 1,
           color: categoryColor,
         });
@@ -105,7 +129,7 @@ const Analytics: React.FC = () => {
           </CardHeader>
           <CardContent className="mobile-card-content">
             <div className="text-xl sm:text-2xl font-bold">
-              ${totalMonthlySpend.toFixed(2)}
+              {formatCurrencyAmount(totalMonthlySpend, displayCurrency)}
             </div>
             <p className="text-xs text-muted-foreground">
               Current monthly spending
@@ -122,7 +146,7 @@ const Analytics: React.FC = () => {
           </CardHeader>
           <CardContent className="mobile-card-content">
             <div className="text-xl sm:text-2xl font-bold">
-              ${totalAnnualSpend.toFixed(2)}
+              {formatCurrencyAmount(totalAnnualSpend, displayCurrency)}
             </div>
             <p className="text-xs text-muted-foreground">
               Based on current subscriptions
@@ -139,7 +163,7 @@ const Analytics: React.FC = () => {
           </CardHeader>
           <CardContent className="mobile-card-content">
             <div className="text-xl sm:text-2xl font-bold">
-              ${averagePerService.toFixed(2)}
+              {formatCurrencyAmount(averagePerService, displayCurrency)}
             </div>
             <p className="text-xs text-muted-foreground">
               Across {activeSubscriptions.length} active subscriptions
@@ -156,10 +180,15 @@ const Analytics: React.FC = () => {
           </CardHeader>
           <CardContent className="mobile-card-content">
             <div className="text-xl sm:text-2xl font-bold">
-              ${mostExpensive.cost.toFixed(2)}
+              {mostExpensive
+                ? formatCurrencyAmount(
+                    mostExpensive.cost,
+                    mostExpensive.currency,
+                  )
+                : formatCurrencyAmount(0, displayCurrency)}
             </div>
             <p className="text-xs text-muted-foreground">
-              {mostExpensive.name}
+              {mostExpensive?.name ?? "None"}
             </p>
           </CardContent>
         </Card>
@@ -253,7 +282,7 @@ const Analytics: React.FC = () => {
                       />
                     </div>
                     <span className="text-sm font-medium w-16 text-right">
-                      ${item.amount.toFixed(2)}
+                      {formatCurrencyAmount(item.amount, displayCurrency)}
                     </span>
                   </div>
                 </div>
@@ -309,12 +338,14 @@ const Analytics: React.FC = () => {
                   <div className="flex-1">
                     <h4 className="font-medium">Monthly Budget Overview</h4>
                     <p className="text-sm text-muted-foreground mt-1">
-                      You're spending ${totalMonthlySpend.toFixed(2)} per month
-                      across {activeSubscriptions.length} subscriptions
+                      You're spending{" "}
+                      {formatCurrencyAmount(totalMonthlySpend, displayCurrency)}{" "}
+                      per month across {activeSubscriptions.length} subscriptions
                     </p>
                   </div>
                   <span className="text-sm font-medium text-green-600">
-                    ${totalAnnualSpend.toFixed(2)}/year
+                    {formatCurrencyAmount(totalAnnualSpend, displayCurrency)}
+                    /year
                   </span>
                 </div>
               </div>

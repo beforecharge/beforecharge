@@ -57,7 +57,8 @@ export type Currency =
   | "SEK"
   | "NOK"
   | "DKK"
-  | "INR";
+  | "INR"
+  | "AED";
 
 export type SubscriptionStatus = "active" | "cancelled" | "trial" | "expired";
 
@@ -78,6 +79,9 @@ export interface UserProfile {
   default_currency: Currency;
   timezone: string;
   notification_preferences: NotificationPreferences;
+  plan_type?: "free" | "premium" | "enterprise";
+  plan_expires_at?: string | null;
+  plan_provider?: "stripe" | "razorpay" | null;
   created_at: string;
   updated_at: string;
 }
@@ -348,6 +352,7 @@ export const CURRENCY_SYMBOLS: Record<Currency, string> = {
   USD: "$",
   EUR: "€",
   GBP: "£",
+  AED: "د.إ",
   CAD: "C$",
   AUD: "A$",
   JPY: "¥",

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { usePayment } from "@/hooks/usePayment";
 import { useSubscriptions } from "@/hooks/useSubscriptions";
-import { PLAN_LIMITS } from "@/lib/constants";
+import { PLAN_DISPLAY_NAMES, PLAN_LIMITS } from "@/lib/constants";
 import { PlanType } from "@/types/payment.types";
 import toast from "react-hot-toast";
 
@@ -76,10 +76,10 @@ export const useSubscriptionLimits = (): UseSubscriptionLimitsReturn => {
     if (!userPlan) {
       return {
         current: 0,
-        limit: 5,
+        limit: 3,
         percentage: 0,
         canAddMore: false,
-        remaining: 5,
+        remaining: 3,
       };
     }
 
@@ -130,17 +130,17 @@ export const useSubscriptionLimits = (): UseSubscriptionLimitsReturn => {
     if (userPlan.type === "free") {
       suggestedPlan = "premium";
       benefits = [
-        "Up to 15 subscriptions",
+        "Up to 25 subscriptions",
         "Advanced analytics & insights",
         "Smart reminders",
-        "Receipt upload",
+        "Data export (CSV)",
       ];
     } else if (userPlan.type === "premium") {
       suggestedPlan = "enterprise";
       benefits = [
         "Unlimited subscriptions",  
-        "Everything in Premium",
-        "Custom integrations",
+        "Everything in Personal",
+        "Team collaboration",
         "Advanced reporting",
       ];
     }
@@ -149,7 +149,7 @@ export const useSubscriptionLimits = (): UseSubscriptionLimitsReturn => {
       shouldShow,
       title: shouldShow ? "Subscription Limit Reached" : "",
       message: shouldShow
-        ? `You've reached your limit of ${limitInfo.limit} subscriptions on the ${userPlan.type} plan.`
+        ? `You've reached your limit of ${limitInfo.limit} subscriptions on the ${PLAN_DISPLAY_NAMES[userPlan.type]} plan.`
         : "",
       currentPlan: userPlan.type,
       suggestedPlan,
@@ -188,7 +188,7 @@ export const useSubscriptionLimits = (): UseSubscriptionLimitsReturn => {
       if (limit === "unlimited") return "";
 
       if (current >= (limit as number)) {
-        return `You've reached your limit of ${limit} subscriptions. Upgrade to ${upgradeInfo.suggestedPlan} to ${action}.`;
+        return `You've reached your limit of ${limit} subscriptions. Upgrade to ${PLAN_DISPLAY_NAMES[upgradeInfo.suggestedPlan]} to ${action}.`;
       }
 
       const remaining = (limit as number) - current;
@@ -205,7 +205,7 @@ export const useSubscriptionLimits = (): UseSubscriptionLimitsReturn => {
   const handleUpgradePrompt = useCallback(() => {
     if (!upgradeInfo.shouldShow) return;
 
-    const message = `${upgradeInfo.message} Upgrade to ${upgradeInfo.suggestedPlan} for more subscriptions!`;
+    const message = `${upgradeInfo.message} Upgrade to ${PLAN_DISPLAY_NAMES[upgradeInfo.suggestedPlan]} for more subscriptions!`;
 
     toast.error(message, {
       duration: 8000,

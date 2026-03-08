@@ -257,22 +257,7 @@ const Pricing: React.FC = () => {
                       Billed {billingInterval} • Cancel anytime
                       {billingInterval === "yearly" && (
                         <span className="block text-green-600 dark:text-green-400 font-medium">
-                          {billingInterval === "yearly" &&
-                            plan.type === "premium" &&
-                            currency === "USD" &&
-                            "Save $3.89/month"}
-                          {billingInterval === "yearly" &&
-                            plan.type === "premium" &&
-                            currency === "INR" &&
-                            "Save ₹29/month"}
-                          {billingInterval === "yearly" &&
-                            plan.type === "enterprise" &&
-                            currency === "USD" &&
-                            "Save $3.89/month"}
-                          {billingInterval === "yearly" &&
-                            plan.type === "enterprise" &&
-                            currency === "INR" &&
-                            "Save ₹39/month"}
+                          2 months free (vs monthly)
                         </span>
                       )}
                     </p>

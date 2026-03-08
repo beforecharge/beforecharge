@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { User, Bell, Palette, Shield, Save, Eye, EyeOff, Globe } from "lucide-react";
 
 import { useAuth } from "@/hooks/useAuth";
+import useSubscriptions from "@/hooks/useSubscriptions";
 import { useUIStore } from "@/store/uiStore";
 import { Currency } from "@/types/app.types";
 import { 
@@ -9,8 +10,10 @@ import {
   getUserPreferredCurrency, 
   setUserPreferredCurrency,
   getUserCountry,
-  getCurrencyForCountry 
+  getCurrencyForCountry,
+  formatCurrencyAmount,
 } from "@/utils/currencyUtils";
+import { DEFAULTS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,6 +30,7 @@ import CurrencyPreview from "@/components/ui/currency-preview";
 const Settings: React.FC = () => {
   const { user, profile, updateProfile } = useAuth();
   const { theme, setTheme } = useUIStore();
+  const { getActiveSubscriptions, getTotalMonthlyCost } = useSubscriptions();
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -60,6 +64,10 @@ const Settings: React.FC = () => {
     new_password: "",
     confirm_password: "",
   });
+
+  const activeCount = getActiveSubscriptions().length;
+  const totalMonthlySpend = getTotalMonthlyCost();
+  const displayCurrency = profile?.default_currency || DEFAULTS.currency;
 
   useEffect(() => {
     const initializeSettings = async () => {
@@ -583,17 +591,15 @@ const Settings: React.FC = () => {
                   <span className="text-muted-foreground">
                     Active subscriptions
                   </span>
-                  <span className="font-medium">4</span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Total tracked</span>
-                  <span className="font-medium">5</span>
+                  <span className="font-medium">{activeCount}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">
                     Monthly spending
                   </span>
-                  <span className="font-medium">$78.97</span>
+                  <span className="font-medium">
+                    {formatCurrencyAmount(totalMonthlySpend, displayCurrency)}
+                  </span>
                 </div>
               </div>
             </CardContent>

@@ -11,7 +11,7 @@ const corsHeaders = {
 interface CreateRazorpayOrderRequest {
   planType: "free" | "premium" | "enterprise";
   currency: "INR";
-  userId: string;
+  userId?: string;
   billingInterval?: "monthly" | "yearly";
   notes?: Record<string, string>;
 }
@@ -27,20 +27,20 @@ interface RazorpayOrderResponse {
 const PLAN_PRICES = {
   monthly: {
     free: 0,
-    premium: 9900, // ₹99 in paise
-    enterprise: 19900, // ₹199 in paise
+    premium: 29900, // ₹299 in paise
+    enterprise: 99900, // ₹999 in paise
   },
   yearly: {
     free: 0,
-    premium: 109900, // ₹1099 in paise
-    enterprise: 219900, // ₹2199 in paise
+    premium: 299000, // ₹2990 in paise
+    enterprise: 999000, // ₹9990 in paise
   },
 };
 
 const PLAN_NAMES = {
   free: "Free Plan",
-  premium: "Premium Plan",
-  enterprise: "Enterprise Plan",
+  premium: "Personal Plan",
+  enterprise: "Business / Teams Plan",
 };
 
 // Helper function to create Razorpay order
@@ -100,26 +100,59 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+    // Require an authenticated user (prevents spoofing `userId` from the client)
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supabaseAuthed = createClient(supabaseUrl, supabaseServiceKey, {
+      global: { headers: { Authorization: authHeader } },
+      auth: { persistSession: false },
+    });
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabaseAuthed.auth.getUser();
+
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // Parse request
     const {
       planType,
       currency,
-      userId,
+      userId: bodyUserId,
       billingInterval = "monthly",
       notes = {},
     }: CreateRazorpayOrderRequest = await req.json();
 
     // Validate input
-    if (!planType || !currency || !userId) {
+    if (!planType || !currency) {
       return new Response(
         JSON.stringify({
-          error: "Missing required fields: planType, currency, userId",
+          error: "Missing required fields: planType, currency",
         }),
         {
           status: 400,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         },
       );
+    }
+
+    if (bodyUserId && bodyUserId !== user.id) {
+      return new Response(JSON.stringify({ error: "Forbidden" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     if (planType === "free") {
@@ -151,16 +184,6 @@ serve(async (req) => {
       );
     }
 
-    // Get user details
-    const { data: user, error: userError } =
-      await supabase.auth.admin.getUserById(userId);
-    if (userError || !user) {
-      return new Response(JSON.stringify({ error: "User not found" }), {
-        status: 404,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
     // Calculate amount
     const amount = PLAN_PRICES[billingInterval][planType];
     if (amount === undefined) {
@@ -176,11 +199,11 @@ serve(async (req) => {
     }
 
     // Generate unique receipt ID
-    const receiptId = `sub_${userId.slice(0, 8)}_${Date.now()}`;
+    const receiptId = `sub_${user.id.slice(0, 8)}_${Date.now()}`;
 
     // Create Razorpay order
     const orderNotes = {
-      userId,
+      userId: user.id,
       planType,
       billingInterval,
       userEmail: user.email || "",
@@ -200,7 +223,7 @@ serve(async (req) => {
     const { error: transactionError } = await supabase
       .from("payment_transactions")
       .insert({
-        user_id: userId,
+        user_id: user.id,
         payment_provider: "razorpay",
         order_id: razorpayOrder.id,
         amount,

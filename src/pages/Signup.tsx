@@ -7,6 +7,7 @@ import { Eye, EyeOff, Mail, Lock, User, Chrome } from 'lucide-react';
 
 import { useAuth } from '@/hooks/useAuth';
 import { FEATURES } from '@/lib/constants';
+import { isSupabaseConfigured } from '@/lib/supabase';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -136,13 +137,28 @@ const Signup: React.FC = () => {
           </CardHeader>
 
           <CardContent className="space-y-4">
+            {!isSupabaseConfigured && (
+              <div className="p-3 rounded-md border border-destructive/30 bg-destructive/10">
+                <p className="text-sm text-destructive">
+                  Sign up is currently unavailable due to a configuration issue.
+                  Please check your Supabase URL/key environment variables and
+                  redeploy.
+                </p>
+              </div>
+            )}
+
             {/* Google Sign Up */}
             {FEATURES.googleAuth && (
               <Button
                 variant="outline"
                 className="w-full"
                 onClick={handleGoogleSignUp}
-                disabled={isGoogleLoading || isLoading || isSubmitting}
+                disabled={
+                  !isSupabaseConfigured ||
+                  isGoogleLoading ||
+                  isLoading ||
+                  isSubmitting
+                }
               >
                 {isGoogleLoading ? (
                   <LoadingSpinner size="sm" className="mr-2" />
@@ -180,7 +196,7 @@ const Signup: React.FC = () => {
                     placeholder="Enter your full name"
                     className="pl-9"
                     {...register('full_name')}
-                    disabled={isLoading || isSubmitting}
+                    disabled={!isSupabaseConfigured || isLoading || isSubmitting}
                   />
                 </div>
                 {errors.full_name && (
@@ -199,7 +215,7 @@ const Signup: React.FC = () => {
                     placeholder="Enter your email"
                     className="pl-9"
                     {...register('email')}
-                    disabled={isLoading || isSubmitting}
+                    disabled={!isSupabaseConfigured || isLoading || isSubmitting}
                   />
                 </div>
                 {errors.email && (
@@ -218,13 +234,13 @@ const Signup: React.FC = () => {
                     placeholder="Create a password"
                     className="pl-9 pr-9"
                     {...register('password')}
-                    disabled={isLoading || isSubmitting}
+                    disabled={!isSupabaseConfigured || isLoading || isSubmitting}
                   />
                   <button
                     type="button"
                     className="absolute right-3 top-1/2 transform -translate-y-1/2"
                     onClick={() => setShowPassword(!showPassword)}
-                    disabled={isLoading || isSubmitting}
+                    disabled={!isSupabaseConfigured || isLoading || isSubmitting}
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4 text-muted-foreground" />
@@ -249,13 +265,13 @@ const Signup: React.FC = () => {
                     placeholder="Confirm your password"
                     className="pl-9 pr-9"
                     {...register('confirm_password')}
-                    disabled={isLoading || isSubmitting}
+                    disabled={!isSupabaseConfigured || isLoading || isSubmitting}
                   />
                   <button
                     type="button"
                     className="absolute right-3 top-1/2 transform -translate-y-1/2"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    disabled={isLoading || isSubmitting}
+                    disabled={!isSupabaseConfigured || isLoading || isSubmitting}
                   >
                     {showConfirmPassword ? (
                       <EyeOff className="h-4 w-4 text-muted-foreground" />
@@ -309,7 +325,7 @@ const Signup: React.FC = () => {
               <Button
                 type="submit"
                 className="w-full"
-                disabled={isLoading || isSubmitting}
+                disabled={!isSupabaseConfigured || isLoading || isSubmitting}
               >
                 {isLoading || isSubmitting ? (
                   <>

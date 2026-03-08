@@ -4,6 +4,8 @@ import { db } from '@/lib/supabase';
 import { Subscription, Category, SubscriptionFormData } from '@/types/app.types';
 import { Database } from '@/types/database.types';
 import { cleanupDuplicateSubscriptions } from '@/utils/cleanupDuplicates';
+import { convertCurrency } from '@/utils/currencyUtils';
+import { DEFAULTS } from '@/lib/constants';
 import toast from 'react-hot-toast';
 
 // Dummy data for new users
@@ -71,7 +73,7 @@ interface UseSubscriptionsReturn {
 }
 
 export const useSubscriptions = (): UseSubscriptionsReturn => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, profile } = useAuth();
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -414,11 +416,13 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
   }, [subscriptions]);
 
   const getTotalMonthlyCost = useCallback((): number => {
+    const targetCurrency = profile?.default_currency || DEFAULTS.currency;
     return getActiveSubscriptions().reduce((total, sub) => {
       const monthlyCost = convertToMonthlyCost(sub.cost, sub.billing_cycle);
-      return total + monthlyCost;
+      const converted = convertCurrency(monthlyCost, sub.currency, targetCurrency);
+      return total + converted;
     }, 0);
-  }, [getActiveSubscriptions]);
+  }, [getActiveSubscriptions, profile?.default_currency]);
 
   const getTotalAnnualCost = useCallback((): number => {
     return getTotalMonthlyCost() * 12;
@@ -475,7 +479,8 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
 
   useEffect(() => {
     // Only create dummy data in development or if explicitly enabled
-    const shouldCreateDummyData = process.env.NODE_ENV === 'development' || process.env.VITE_CREATE_DUMMY_DATA === 'true';
+    const shouldCreateDummyData =
+      import.meta.env.DEV || import.meta.env.VITE_CREATE_DUMMY_DATA === "true";
     
     if (shouldCreateDummyData && isAuthenticated && user && categories.length > 0 && !isLoading && subscriptions.length === 0 && !hasTriedDummyData) {
       // Create dummy data for new users after a short delay

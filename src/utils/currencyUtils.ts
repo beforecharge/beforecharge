@@ -31,6 +31,12 @@ export const SUPPORTED_CURRENCIES: Record<string, CurrencyInfo> = {
     name: 'British Pound',
     country: ['GB', 'UK', 'United Kingdom']
   },
+  AED: {
+    code: 'AED',
+    symbol: 'د.إ',
+    name: 'UAE Dirham',
+    country: ['AE', 'UAE', 'United Arab Emirates']
+  },
   CAD: {
     code: 'CAD',
     symbol: 'C$',
@@ -58,6 +64,7 @@ export const EXCHANGE_RATES: Record<string, Record<string, number>> = {
     INR: 83.12,
     EUR: 0.92,
     GBP: 0.79,
+    AED: 3.67,
     CAD: 1.36,
     AUD: 1.52,
     JPY: 149.50
@@ -67,6 +74,7 @@ export const EXCHANGE_RATES: Record<string, Record<string, number>> = {
     INR: 1,
     EUR: 0.011,
     GBP: 0.0095,
+    AED: 0.044,
     CAD: 0.016,
     AUD: 0.018,
     JPY: 1.80
@@ -76,6 +84,7 @@ export const EXCHANGE_RATES: Record<string, Record<string, number>> = {
     INR: 90.35,
     EUR: 1,
     GBP: 0.86,
+    AED: 3.99,
     CAD: 1.48,
     AUD: 1.65,
     JPY: 162.80
@@ -85,9 +94,20 @@ export const EXCHANGE_RATES: Record<string, Record<string, number>> = {
     INR: 105.20,
     EUR: 1.16,
     GBP: 1,
+    AED: 4.66,
     CAD: 1.72,
     AUD: 1.92,
     JPY: 189.50
+  },
+  AED: {
+    USD: 0.272,
+    INR: 22.67,
+    EUR: 0.251,
+    GBP: 0.214,
+    AED: 1,
+    CAD: 0.37,
+    AUD: 0.41,
+    JPY: 40.7
   }
 };
 

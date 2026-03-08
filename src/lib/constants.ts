@@ -8,13 +8,14 @@ import {
   AppSettings,
 } from "@/types/app.types";
 import { Plan, PlanType, PlanFeatures } from "@/types/payment.types";
+import { getEnv } from "@/lib/env";
 
 // App Configuration
 export const APP_CONFIG = {
-  name: import.meta.env.VITE_APP_NAME || "MyRenewly",
+  name: getEnv("VITE_APP_NAME") || "MyRenewly",
   version: "1.0.0",
   description: "Track and manage your subscriptions",
-  url: import.meta.env.VITE_APP_URL || "http://localhost:5173",
+  url: getEnv("VITE_APP_URL") || "http://localhost:5173",
   support_email: "support@subscriptionmanager.com",
   max_file_size: 10 * 1024 * 1024, // 10MB
   allowed_file_types: [
@@ -27,17 +28,17 @@ export const APP_CONFIG = {
 
 // Supabase Configuration
 export const SUPABASE_CONFIG = {
-  url: import.meta.env.VITE_SUPABASE_URL,
-  anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY,
-  storageBucket: import.meta.env.VITE_SUPABASE_STORAGE_BUCKET || "receipts",
+  url: getEnv("VITE_SUPABASE_URL"),
+  anonKey: getEnv("VITE_SUPABASE_ANON_KEY"),
+  storageBucket: getEnv("VITE_SUPABASE_STORAGE_BUCKET") || "receipts",
 } as const;
 
 // Feature Flags
 export const FEATURES = {
-  googleAuth: import.meta.env.VITE_ENABLE_GOOGLE_AUTH === "true",
-  emailReminders: import.meta.env.VITE_ENABLE_EMAIL_REMINDERS === "true",
-  receiptUpload: import.meta.env.VITE_ENABLE_RECEIPT_UPLOAD === "true",
-  analytics: import.meta.env.VITE_ENABLE_ANALYTICS === "true",
+  googleAuth: getEnv("VITE_ENABLE_GOOGLE_AUTH") === "true",
+  emailReminders: getEnv("VITE_ENABLE_EMAIL_REMINDERS") === "true",
+  receiptUpload: getEnv("VITE_ENABLE_RECEIPT_UPLOAD") === "true",
+  analytics: getEnv("VITE_ENABLE_ANALYTICS") === "true",
   darkMode: true,
   csvExport: true,
   bulkEdit: true,
@@ -46,13 +47,13 @@ export const FEATURES = {
 
 // Currency Configuration
 export const CURRENCY_CONFIG = {
-  default: (import.meta.env.VITE_DEFAULT_CURRENCY as Currency) || "USD",
-  supported: (import.meta.env.VITE_SUPPORTED_CURRENCIES?.split(
-    ",",
-  ) as Currency[]) || [
+  default: (getEnv("VITE_DEFAULT_CURRENCY") as Currency) || "USD",
+  supported: (getEnv("VITE_SUPPORTED_CURRENCIES")?.split(",") as Currency[]) || [
     "USD",
     "EUR",
     "GBP",
+    "AED",
+    "INR",
     "CAD",
     "AUD",
     "JPY",
@@ -156,20 +157,19 @@ export const PLANS: Plan[] = [
   {
     type: "free",
     name: "Free",
-    description: "Perfect for getting started with subscription tracking",
+    description: "Try MyRenewly with the essentials",
     price: {
       usd: 0,
       inr: 0,
     },
     features: [
-      "Up to 5 subscriptions",
-      "Basic analytics",
-      "Email reminders",
+      "Up to 3 subscriptions",
+      "Upcoming renewals list",
+      "Basic reminders",
       "Manual data entry",
-      "Community support",
     ],
     limits: {
-      subscriptions: 5,
+      subscriptions: 3,
       categories: 10,
       reminders: true,
       analytics: false,
@@ -179,23 +179,25 @@ export const PLANS: Plan[] = [
   },
   {
     type: "premium",
-    name: "Premium",
+    name: "Personal",
     description:
-      "Best for individuals and families with multiple subscriptions",
+      "For individuals who want reminders + insights",
     price: {
-      usd: 3.99,
-      inr: 99,
+      usd: 6.99,
+      inr: 299,
     },
     features: [
-      "Up to 15 subscriptions",
+      "Up to 25 subscriptions",
       "Advanced analytics & insights",
       "Smart reminders",
       "Data export (CSV)",
       "Priority support",
       "Cost optimization tips",
+      "Cancellation guides (Coming Soon)",
+      "Calendar view (Coming Soon)",
     ],
     limits: {
-      subscriptions: 15,
+      subscriptions: 25,
       categories: "unlimited",
       reminders: true,
       analytics: true,
@@ -206,19 +208,20 @@ export const PLANS: Plan[] = [
   },
   {
     type: "enterprise",
-    name: "Enterprise",
-    description: "Advanced features for teams and businesses",
+    name: "Business / Teams",
+    description: "For teams tracking shared + vendor subscriptions",
     price: {
-      usd: 6.99,
-      inr: 199,
+      usd: 19.99,
+      inr: 999,
     },
     features: [
       "Unlimited subscriptions",
-      "Everything in Premium",
+      "Everything in Personal",
       "Team collaboration",
       "Advanced reporting",
       "Dedicated support",
       "Custom categories",
+      "Multi-workspace support (Coming Soon)",
       "Auto-fetch subscriptions (Coming Soon)",
     ],
     limits: {
@@ -237,20 +240,19 @@ export const YEARLY_PLANS: Plan[] = [
   {
     type: "free",
     name: "Free",
-    description: "Perfect for getting started with subscription tracking",
+    description: "Try MyRenewly with the essentials",
     price: {
       usd: 0,
       inr: 0,
     },
     features: [
-      "Up to 5 subscriptions",
-      "Basic analytics",
-      "Email reminders",
+      "Up to 3 subscriptions",
+      "Upcoming renewals list",
+      "Basic reminders",
       "Manual data entry",
-      "Community support",
     ],
     limits: {
-      subscriptions: 5,
+      subscriptions: 3,
       categories: 10,
       reminders: true,
       analytics: false,
@@ -260,24 +262,25 @@ export const YEARLY_PLANS: Plan[] = [
   },
   {
     type: "premium",
-    name: "Premium",
+    name: "Personal",
     description:
-      "Best for individuals and families with multiple subscriptions",
+      "For individuals who want reminders + insights",
     price: {
-      usd: 44.99,
-      inr: 1099,
+      usd: 69.99,
+      inr: 2990,
     },
     features: [
-      "Up to 15 subscriptions",
+      "Up to 25 subscriptions",
       "Advanced analytics & insights",
       "Smart reminders",
       "Data export (CSV)",
       "Priority support",
       "Cost optimization tips",
-      "Auto-fetch subscriptions (Coming Soon)",
+      "Cancellation guides (Coming Soon)",
+      "Calendar view (Coming Soon)",
     ],
     limits: {
-      subscriptions: 15,
+      subscriptions: 25,
       categories: "unlimited",
       reminders: true,
       analytics: true,
@@ -288,19 +291,20 @@ export const YEARLY_PLANS: Plan[] = [
   },
   {
     type: "enterprise",
-    name: "Enterprise",
-    description: "Advanced features for teams and businesses",
+    name: "Business / Teams",
+    description: "For teams tracking shared + vendor subscriptions",
     price: {
-      usd: 79.99,
-      inr: 2199,
+      usd: 199.0,
+      inr: 9990,
     },
     features: [
       "Unlimited subscriptions",
-      "Everything in Premium",
+      "Everything in Personal",
       "Team collaboration",
       "Advanced reporting",
       "Dedicated support",
       "Custom categories",
+      "Multi-workspace support (Coming Soon)",
       "Auto-fetch subscriptions (Coming Soon)",
     ],
     limits: {
@@ -317,36 +321,43 @@ export const YEARLY_PLANS: Plan[] = [
 // Plan Features Configuration
 export const PLAN_FEATURES: Record<PlanType, string[]> = {
   free: [
-    "Up to 5 subscriptions",
-    "Basic analytics",
-    "Email reminders",
+    "Up to 3 subscriptions",
+    "Upcoming renewals list",
+    "Basic reminders",
     "Manual data entry",
-    "Community support",
   ],
   premium: [
-    "Up to 15 subscriptions",
+    "Up to 25 subscriptions",
     "Advanced analytics & insights",
     "Smart reminders",
     "Data export (CSV)",
     "Priority support",
     "Cost optimization tips",
-    "Auto-fetch subscriptions (Coming Soon)",
+    "Cancellation guides (Coming Soon)",
+    "Calendar view (Coming Soon)",
   ],
   enterprise: [
     "Unlimited subscriptions",
-    "Everything in Premium",
+    "Everything in Personal",
     "Team collaboration",
     "Advanced reporting",
     "Dedicated support",
     "Custom categories",
+    "Multi-workspace support (Coming Soon)",
     "Auto-fetch subscriptions (Coming Soon)",
   ],
+};
+
+export const PLAN_DISPLAY_NAMES: Record<PlanType, string> = {
+  free: "Free",
+  premium: "Personal",
+  enterprise: "Business / Teams",
 };
 
 // Plan Limits Configuration
 export const PLAN_LIMITS: Record<PlanType, PlanFeatures> = {
   free: {
-    subscriptions: 5,
+    subscriptions: 3,
     categories: 10,
     reminders: true,
     analytics: false,
@@ -356,7 +367,7 @@ export const PLAN_LIMITS: Record<PlanType, PlanFeatures> = {
     custom_integrations: false,
   },
   premium: {
-    subscriptions: 15,
+    subscriptions: 25,
     categories: "unlimited",
     reminders: true,
     analytics: true,
