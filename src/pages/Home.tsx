@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
-import "./Home.css";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
