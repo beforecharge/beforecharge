@@ -16,4 +16,16 @@ export default defineConfig({
       "@/pages": path.resolve(__dirname, "./src/pages"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui-vendor': ['lucide-react', 'recharts', 'react-day-picker'],
+          'supabase-vendor': ['@supabase/supabase-js'],
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000
+  }
 })
