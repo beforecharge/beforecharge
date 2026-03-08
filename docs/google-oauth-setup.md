@@ -1,9 +1,9 @@
-# Google OAuth Setup for MyRenewly
+# Google OAuth Setup for BeforeCharge
 
 ## OAuth Consent Screen Configuration
 
 ### App Information
-- **App name**: `MyRenewly`
+- **App name**: `BeforeCharge`
 - **User support email**: `mehtasparsh777@gmail.com`
 - **App logo**: Upload a 120x120px logo (optional but recommended)
 - **App domain**: `https://cbsjvqhrloijzhcotqlb.supabase.co`
@@ -13,7 +13,7 @@
 
 ### App Description
 ```
-MyRenewly helps you track and manage all your subscription services in one place. 
+BeforeCharge helps you track and manage all your subscription services in one place. 
 We automatically detect subscriptions from your Gmail to help you stay on top of 
 your recurring payments and avoid unwanted charges.
 ```

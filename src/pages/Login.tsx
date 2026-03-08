@@ -114,8 +114,8 @@ const Login: React.FC = () => {
               </span>
             </div>
             <h1 className="text-xl sm:text-2xl font-bold">
-              <span className="hidden sm:inline">MyRenewly</span>
-              <span className="sm:hidden">MyRenewly</span>
+              <span className="hidden sm:inline">BeforeCharge</span>
+              <span className="sm:hidden">BeforeCharge</span>
             </h1>
           </div>
           <p className="text-muted-foreground text-sm sm:text-base">

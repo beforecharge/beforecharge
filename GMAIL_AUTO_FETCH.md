@@ -1,7 +1,7 @@
 # Gmail Auto-Fetch Feature
 
 ## 🚀 Overview
-The Gmail Auto-Fetch feature automatically scans your Gmail emails to detect subscription services and billing information, making it easy to add all your subscriptions to myrenewly.com with just a few clicks.
+The Gmail Auto-Fetch feature automatically scans your Gmail emails to detect subscription services and billing information, making it easy to add all your subscriptions to beforecharge.com with just a few clicks.
 
 ## ✨ Features
 
@@ -124,7 +124,7 @@ The system calculates confidence scores (0-1) based on:
 
 ### Data Handling:
 - **No server storage**: All processing happens in the browser
-- **No email transmission**: Emails are not sent to myrenewly servers
+- **No email transmission**: Emails are not sent to beforecharge servers
 - **Local processing**: Extraction happens client-side
 - **Secure authentication**: Uses existing Google OAuth tokens
 
@@ -193,4 +193,4 @@ The system calculates confidence scores (0-1) based on:
 - **Coverage**: Detects 90%+ of common subscription services
 - **User satisfaction**: Streamlined onboarding process
 
-This feature significantly improves the user onboarding experience by automatically discovering existing subscriptions, making myrenewly.com more valuable from day one!
+This feature significantly improves the user onboarding experience by automatically discovering existing subscriptions, making beforecharge.com more valuable from day one!

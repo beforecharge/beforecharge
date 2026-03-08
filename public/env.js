@@ -6,14 +6,14 @@
 // - Avoid committing real keys to git; keep this file with empty defaults
 //
 // Supported keys mirror Vite's `import.meta.env.VITE_*` names.
-window.__MYRENEWLY_ENV__ = {
+window.__BEFORECHARGE_ENV__ = {
   // Supabase
   VITE_SUPABASE_URL: "",
   VITE_SUPABASE_ANON_KEY: "",
   VITE_SUPABASE_STORAGE_BUCKET: "receipts",
 
   // App
-  VITE_APP_NAME: "MyRenewly",
+  VITE_APP_NAME: "BeforeCharge",
   VITE_APP_URL: "",
 };
 

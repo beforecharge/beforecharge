@@ -16,7 +16,7 @@ const Terms: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              By accessing and using MyRenewly, you accept and agree to be bound by the terms 
+              By accessing and using BeforeCharge, you accept and agree to be bound by the terms 
               and provision of this agreement. If you do not agree to abide by the above, 
               please do not use this service.
             </p>
@@ -29,7 +29,7 @@ const Terms: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              MyRenewly is a subscription management service that helps you track, manage, 
+              BeforeCharge is a subscription management service that helps you track, manage, 
               and optimize your recurring subscription payments. We provide tools to manually 
               add subscriptions and optionally auto-detect them from your Gmail account.
             </p>
@@ -68,7 +68,7 @@ const Terms: React.FC = () => {
               <h3 className="font-semibold mb-2">Optional Feature</h3>
               <p className="text-sm text-muted-foreground">
                 Gmail integration is an optional feature that requires your explicit consent. 
-                You can use MyRenewly without connecting your Gmail account.
+                You can use BeforeCharge without connecting your Gmail account.
               </p>
             </div>
             
@@ -84,7 +84,7 @@ const Terms: React.FC = () => {
               <h3 className="font-semibold mb-2">Revocation</h3>
               <p className="text-sm text-muted-foreground">
                 You can revoke Gmail access at any time through your Google Account settings 
-                or within the MyRenewly application.
+                or within the BeforeCharge application.
               </p>
             </div>
           </CardContent>
@@ -96,7 +96,7 @@ const Terms: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground mb-4">
-              You agree not to use MyRenewly for any unlawful purpose or in any way that 
+              You agree not to use BeforeCharge for any unlawful purpose or in any way that 
               could damage, disable, or impair the service. Prohibited activities include:
             </p>
             <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
@@ -116,7 +116,7 @@ const Terms: React.FC = () => {
             <p className="text-sm text-muted-foreground">
               While we strive to provide accurate subscription detection from Gmail, 
               you are responsible for verifying the accuracy of all subscription information. 
-              MyRenewly is a tool to assist with subscription management, not a financial advisor.
+              BeforeCharge is a tool to assist with subscription management, not a financial advisor.
             </p>
           </CardContent>
         </Card>
@@ -140,7 +140,7 @@ const Terms: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              MyRenewly is provided "as is" without warranties of any kind. We are not 
+              BeforeCharge is provided "as is" without warranties of any kind. We are not 
               liable for any damages arising from your use of the service, including 
               but not limited to missed subscription payments or inaccurate data.
             </p>

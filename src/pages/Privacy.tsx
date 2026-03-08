@@ -94,7 +94,7 @@ const Privacy: React.FC = () => {
               <h3 className="font-semibold mb-2">User Control</h3>
               <p className="text-sm text-muted-foreground">
                 You can revoke Gmail access at any time through your Google Account settings 
-                or by disconnecting the integration in MyRenewly.
+                or by disconnecting the integration in BeforeCharge.
               </p>
             </div>
           </CardContent>

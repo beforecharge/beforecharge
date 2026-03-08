@@ -1,4 +1,4 @@
-# OAuth Configuration for myrenewly.com
+# OAuth Configuration for beforecharge.com
 
 ## EXACT CONFIGURATION NEEDED
 
@@ -8,12 +8,12 @@
 
 **Site URL:**
 ```
-https://myrenewly.com
+https://beforecharge.com
 ```
 
 **Redirect URLs (add both):**
 ```
-https://myrenewly.com/auth/callback
+https://beforecharge.com/auth/callback
 http://localhost:3000/auth/callback
 ```
 
@@ -24,11 +24,11 @@ http://localhost:3000/auth/callback
 **Authorized redirect URIs (add both):**
 ```
 https://cbsjvqhrlojzhkotqlb.supabase.co/auth/v1/callback
-https://myrenewly.com/auth/callback
+https://beforecharge.com/auth/callback
 ```
 
 ### 3. Code Changes Applied ✅
-- Updated redirect URL logic for myrenewly.com
+- Updated redirect URL logic for beforecharge.com
 - Added better logging for debugging
 - Forced correct production domain usage
 
@@ -36,9 +36,9 @@ https://myrenewly.com/auth/callback
 1. Update Supabase settings as above
 2. Update Google OAuth settings as above  
 3. Deploy the latest code changes
-4. Test OAuth on https://myrenewly.com
+4. Test OAuth on https://beforecharge.com
 5. Check browser console for logs
 
 ## Expected Behavior
 - Development: redirects to localhost:3000/auth/callback
-- Production: redirects to https://myrenewly.com/auth/callback
+- Production: redirects to https://beforecharge.com/auth/callback

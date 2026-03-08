@@ -13,7 +13,7 @@ if (!isSupabaseConfigured) {
   // but do surface an actionable error in the console.
   // Common cause: wrong/missing `VITE_SUPABASE_URL` or missing `https://`.
   console.error(
-    "[MyRenewly] Supabase is not configured correctly. Check VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.",
+    "[BeforeCharge] Supabase is not configured correctly. Check VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.",
     {
       url: SUPABASE_CONFIG.url,
       hasAnonKey: !!SUPABASE_CONFIG.anonKey,
@@ -81,7 +81,7 @@ export const auth = {
       }
       
       // For production - ensure we use the correct domain
-      if (origin.includes('myrenewly.com')) {
+      if (origin.includes('beforecharge.com')) {
         // Use the same subdomain (www or non-www) as current origin
         return `${origin}/auth/callback`;
       }

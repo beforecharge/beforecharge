@@ -120,7 +120,7 @@ const RazorpayPaymentModal: React.FC<RazorpayPaymentModalProps> = ({
         key: order.key,
         amount: order.amount,
         currency: "INR",
-        name: "MyRenewly",
+        name: "BeforeCharge",
         description: `${plan.name} Plan - ${billingInterval}`,
         order_id: order.id,
         handler: async (response: RazorpayResponse) => {

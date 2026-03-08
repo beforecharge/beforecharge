@@ -5,10 +5,10 @@ export default function LandingPage() {
   return (
     <>
       <Head>
-        <title>MyRenewly – Track &amp; Manage Your Subscriptions</title>
+        <title>BeforeCharge – Track &amp; Manage Your Subscriptions</title>
         <meta
           name="description"
-          content="The average person wastes $348/year on forgotten subscriptions. MyRenewly helps you find and cancel them in under a minute."
+          content="The average person wastes $348/year on forgotten subscriptions. BeforeCharge helps you find and cancel them in under a minute."
         />
       </Head>
       <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-950 to-slate-950 text-slate-50">
@@ -19,7 +19,7 @@ export default function LandingPage() {
                 MR
               </div>
               <span className="text-lg font-semibold tracking-tight">
-                MyRenewly
+                BeforeCharge
               </span>
             </div>
             <div className="flex items-center gap-3 text-sm">
@@ -52,7 +52,7 @@ export default function LandingPage() {
               on forgotten subscriptions.
             </h1>
             <p className="max-w-2xl text-balance text-base text-slate-300 sm:text-lg">
-              MyRenewly connects your subscriptions, surfaces sneaky renewals,
+              BeforeCharge connects your subscriptions, surfaces sneaky renewals,
               and sends smart reminders before money leaves your account.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">

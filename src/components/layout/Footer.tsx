@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
         <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
           <div className="flex items-center space-x-4">
             <p className="text-sm text-muted-foreground">
-              © 2025 MyRenewly. All rights reserved.
+              © 2025 BeforeCharge. All rights reserved.
             </p>
           </div>
           <div className="flex items-center space-x-6">

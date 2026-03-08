@@ -2,13 +2,13 @@ type RuntimeEnv = Record<string, string | undefined>;
 
 declare global {
   interface Window {
-    __MYRENEWLY_ENV__?: RuntimeEnv;
+    __BEFORECHARGE_ENV__?: RuntimeEnv;
   }
 }
 
 function getRuntimeEnv(): RuntimeEnv | undefined {
   if (typeof window === "undefined") return undefined;
-  return window.__MYRENEWLY_ENV__;
+  return window.__BEFORECHARGE_ENV__;
 }
 
 export function getEnv(key: string): string | undefined {

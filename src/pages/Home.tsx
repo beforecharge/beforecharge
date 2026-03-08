@@ -73,11 +73,11 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      <!-- HERO -->
+      {/* HERO */}
       <section className="hero">
         <div className="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
+        <div className="orb orb-2"></div>
+        <div className="orb orb-3"></div>
 
         <div className="badge">
           <span className="badge-dot"></span>

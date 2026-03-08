@@ -2,7 +2,7 @@
 
 ## Current Problem
 Your app shows "Access blocked: This app's request is invalid" or "This app isn't verified" because:
-1. App name in Google Cloud Console doesn't match "MyRenewly"
+1. App name in Google Cloud Console doesn't match "BeforeCharge"
 2. OAuth consent screen is incomplete
 3. Gmail scope requires verification for production use
 
@@ -15,7 +15,7 @@ Your app shows "Access blocked: This app's request is invalid" or "This app isn'
 
 ### Step 2: Update App Information
 ```
-App name: MyRenewly
+App name: BeforeCharge
 User support email: mehtasparsh777@gmail.com
 Developer contact information: mehtasparsh777@gmail.com
 ```
@@ -38,9 +38,9 @@ Terms of service link: https://cbsjvqhrloijzhcotqlb.supabase.co/terms
 
 ### Option 1: Complete Google Verification
 1. **Fill out OAuth consent screen completely**:
-   - App name: MyRenewly
+   - App name: BeforeCharge
    - App logo (120x120px)
-   - App description: "MyRenewly helps users track and manage subscription services by automatically detecting subscriptions from Gmail emails."
+   - App description: "BeforeCharge helps users track and manage subscription services by automatically detecting subscriptions from Gmail emails."
    - Privacy policy URL
    - Terms of service URL
 
@@ -87,7 +87,7 @@ const BASIC_SCOPES = [
 ## 📋 Current App Status
 
 ✅ **Fixed Issues:**
-- App name changed to "MyRenewly" throughout codebase
+- App name changed to "BeforeCharge" throughout codebase
 - Privacy policy and Terms of Service pages created
 - Routes added for `/privacy` and `/terms`
 - HTML meta tags updated

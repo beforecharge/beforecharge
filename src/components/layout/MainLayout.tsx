@@ -60,7 +60,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 </span>
               </div>
               <span className="hidden font-bold sm:inline-block text-sm sm:text-base">
-                MyRenewly
+                BeforeCharge
               </span>
             </Link>
           </div>
@@ -155,7 +155,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                         S
                       </span>
                     </div>
-                    <span className="font-bold text-sm">MyRenewly</span>
+                    <span className="font-bold text-sm">BeforeCharge</span>
                   </div>
                   <div className="space-y-1">
                     {navigation.map((item) => {

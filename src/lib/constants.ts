@@ -12,7 +12,7 @@ import { getEnv } from "@/lib/env";
 
 // App Configuration
 export const APP_CONFIG = {
-  name: getEnv("VITE_APP_NAME") || "MyRenewly",
+  name: getEnv("VITE_APP_NAME") || "BeforeCharge",
   version: "1.0.0",
   description: "Track and manage your subscriptions",
   url: getEnv("VITE_APP_URL") || "http://localhost:5173",
@@ -157,7 +157,7 @@ export const PLANS: Plan[] = [
   {
     type: "free",
     name: "Free",
-    description: "Try MyRenewly with the essentials",
+    description: "Try BeforeCharge with the essentials",
     price: {
       usd: 0,
       inr: 0,
@@ -240,7 +240,7 @@ export const YEARLY_PLANS: Plan[] = [
   {
     type: "free",
     name: "Free",
-    description: "Try MyRenewly with the essentials",
+    description: "Try BeforeCharge with the essentials",
     price: {
       usd: 0,
       inr: 0,
