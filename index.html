@@ -1,419 +1,395 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <!-- Primary Meta Tags -->
-        <title>BeforeCharge — Know before you owe.</title>
-        <meta
-            name="title"
-            content="BeforeCharge — Know before you owe."
-        />
-        <meta
-            name="description"
-            content="BeforeCharge tracks every subscription you have and alerts you before you're charged — so you can decide whether to keep, pause, or cancel without losing money. Connect your Gmail and we automatically detect your active subscriptions from billing emails. Get notified 3 days before any renewal hits your card. See your monthly spend, track free trials, and spot subscriptions you've forgotten about."
-        />
-        <meta
-            name="keywords"
-            content="beforecharge, subscription manager, subscription tracker, recurring payments, budget tracker, subscription analytics"
-        />
-        <meta name="author" content="BeforeCharge" />
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <!-- Open Graph / Facebook -->
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://beforecharge.com/" />
-        <meta
-            property="og:title"
-            content="BeforeCharge — Know before you owe."
-        />
-        <meta
-            property="og:description"
-            content="BeforeCharge tracks every subscription you have and alerts you before you're charged — so you can decide whether to keep, pause, or cancel without losing money. Connect your Gmail and we automatically detect your active subscriptions from billing emails. Get notified 3 days before any renewal hits your card. See your monthly spend, track free trials, and spot subscriptions you've forgotten about."
-        />
-        <meta property="og:image" content="/og-image.png" />
+    <!-- Primary Meta Tags -->
+    <title>BeforeCharge — Know before you owe.</title>
+    <meta name="title" content="BeforeCharge — Know before you owe." />
+    <meta name="description"
+        content="BeforeCharge tracks every subscription you have and alerts you before you're charged — so you can decide whether to keep, pause, or cancel without losing money. Connect your Gmail and we automatically detect your active subscriptions from billing emails. Get notified 3 days before any renewal hits your card. See your monthly spend, track free trials, and spot subscriptions you've forgotten about." />
+    <meta name="keywords"
+        content="beforecharge, subscription manager, subscription tracker, recurring payments, budget tracker, subscription analytics" />
+    <meta name="author" content="BeforeCharge" />
 
-        <!-- Twitter -->
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta
-            property="twitter:url"
-            content="https://beforecharge.com/"
-        />
-        <meta
-            property="twitter:title"
-            content="BeforeCharge — Know before you owe."
-        />
-        <meta
-            property="twitter:description"
-            content="BeforeCharge tracks every subscription you have and alerts you before you're charged — so you can decide whether to keep, pause, or cancel without losing money. Connect your Gmail and we automatically detect your active subscriptions from billing emails. Get notified 3 days before any renewal hits your card. See your monthly spend, track free trials, and spot subscriptions you've forgotten about."
-        />
-        <meta property="twitter:image" content="/og-image.png" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://beforecharge.com/" />
+    <meta property="og:title" content="BeforeCharge — Know before you owe." />
+    <meta property="og:description"
+        content="BeforeCharge tracks every subscription you have and alerts you before you're charged — so you can decide whether to keep, pause, or cancel without losing money. Connect your Gmail and we automatically detect your active subscriptions from billing emails. Get notified 3 days before any renewal hits your card. See your monthly spend, track free trials, and spot subscriptions you've forgotten about." />
+    <meta property="og:image" content="/og-image.png" />
 
-        <!-- Theme and appearance -->
-        <meta name="theme-color" content="#12E888" />
-        <meta name="color-scheme" content="light dark" />
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://beforecharge.com/" />
+    <meta property="twitter:title" content="BeforeCharge — Know before you owe." />
+    <meta property="twitter:description"
+        content="BeforeCharge tracks every subscription you have and alerts you before you're charged — so you can decide whether to keep, pause, or cancel without losing money. Connect your Gmail and we automatically detect your active subscriptions from billing emails. Get notified 3 days before any renewal hits your card. See your monthly spend, track free trials, and spot subscriptions you've forgotten about." />
+    <meta property="twitter:image" content="/og-image.png" />
 
-        <!-- PWA Meta Tags -->
-        <meta name="application-name" content="BeforeCharge" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta
-            name="apple-mobile-web-app-title"
-            content="BeforeCharge"
-        />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="msapplication-TileColor" content="#12E888" />
-        <meta name="msapplication-tap-highlight" content="no" />
+    <!-- Theme and appearance -->
+    <meta name="theme-color" content="#12E888" />
+    <meta name="color-scheme" content="light dark" />
 
-        <!-- Apple Touch Icons -->
-        <link
-            rel="apple-touch-icon"
-            sizes="180x180"
-            href="/apple-touch-icon.png"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="/favicon-32x32.png"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="/favicon-16x16.png"
-        />
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="BeforeCharge" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="BeforeCharge" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="msapplication-TileColor" content="#12E888" />
+    <meta name="msapplication-tap-highlight" content="no" />
 
-        <!-- Preload critical resources -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 
-        <!-- Prevent flash of unstyled content -->
-        <style>
-            /* Minimal loading / no-JS shell styles */
-            html,
-            body {
-                height: 100%;
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Prevent flash of unstyled content -->
+    <style>
+        /* Minimal loading / no-JS shell styles */
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family:
+                system-ui,
+                -apple-system,
+                Segoe UI,
+                Roboto,
+                sans-serif;
+            background: #07080D;
+            color: #e8ecf4;
+        }
+
+        #root {
+            min-height: 100vh;
+            display: flex;
+            align-items: stretch;
+            justify-content: stretch;
+        }
+
+        .shell {
+            width: 100%;
+            padding: 40px 16px 64px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .shell-inner {
+            width: 100%;
+            max-width: 960px;
+        }
+
+        .shell-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+        }
+
+        .logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #12E888;
+            color: #000000;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+            padding: 0 14px;
+            border-radius: 10px;
+            border: 1px solid #1f2937;
+            text-decoration: none;
+            color: #f8fafc;
+            background: #0b1220;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #12E888;
+            border-color: #12E888;
+            color: #000;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+            padding: 28px 0 10px;
+        }
+
+        .kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(18, 232, 136, 0.08);
+            color: #12E888;
+            border: 1px solid rgba(18, 232, 136, 0.2);
+            font-weight: 700;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: 36px;
+            line-height: 1.08;
+            letter-spacing: -0.03em;
+        }
+
+        .hero p {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.5;
+            color: #9ca3af;
+            max-width: 60ch;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 22px;
+        }
+
+        .card {
+            border: 1px solid #1f2937;
+            border-radius: 14px;
+            padding: 16px;
+            background: #0b1220;
+        }
+
+        .card h3 {
+            margin: 0 0 6px;
+            font-size: 14px;
+            color: #f8fafc;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #94a3b8;
+        }
+
+        .pricing {
+            margin-top: 28px;
+        }
+
+        .pricing h2 {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+
+        .tiers {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .tier {
+            border: 1px solid #1f2937;
+            border-radius: 14px;
+            padding: 16px;
+            background: #0b1220;
+        }
+
+        .tier strong {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .tier .price {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .muted {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .loading {
+            margin-top: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .loading-spinner {
+            width: 2rem;
+            height: 2rem;
+            border: 2px solid #374151;
+            border-top: 2px solid #12E888;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
             }
 
-            body {
-                margin: 0;
-                font-family:
-                    system-ui,
-                    -apple-system,
-                    Segoe UI,
-                    Roboto,
-                    sans-serif;
-                background: #07080D;
-                color: #e8ecf4;
+            100% {
+                transform: rotate(360deg);
             }
+        }
 
-            #root {
-                min-height: 100vh;
-                display: flex;
-                align-items: stretch;
-                justify-content: stretch;
-            }
-
-            .shell {
-                width: 100%;
-                padding: 40px 16px 64px;
-                display: flex;
-                justify-content: center;
-            }
-
-            .shell-inner {
-                width: 100%;
-                max-width: 960px;
-            }
-
-            .shell-header {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 12px;
-                margin-bottom: 32px;
-            }
-
-            .brand {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                font-weight: 800;
-            }
-
-            .logo {
-                width: 36px;
-                height: 36px;
-                border-radius: 10px;
-                background: #12E888;
-                color: #000000;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 14px;
-                font-weight: 800;
-                letter-spacing: 0.02em;
-            }
-
-            .header-actions {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                flex-wrap: wrap;
-                justify-content: flex-end;
-            }
-
-            .btn {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                height: 40px;
-                padding: 0 14px;
-                border-radius: 10px;
-                border: 1px solid #1f2937;
-                text-decoration: none;
-                color: #f8fafc;
-                background: #0b1220;
-                font-weight: 600;
-                font-size: 14px;
-            }
-
-            .btn-primary {
-                background: #12E888;
-                border-color: #12E888;
-                color: #000;
-            }
-
+        @media (min-width: 860px) {
             .hero {
-                display: grid;
-                grid-template-columns: 1fr;
-                gap: 18px;
-                padding: 28px 0 10px;
-            }
-
-            .kicker {
-                display: inline-flex;
-                align-items: center;
-                gap: 10px;
-                font-size: 13px;
-                color: #94a3b8;
-            }
-
-            .pill {
-                display: inline-flex;
-                align-items: center;
-                padding: 4px 10px;
-                border-radius: 999px;
-                background: rgba(18, 232, 136, 0.08);
-                color: #12E888;
-                border: 1px solid rgba(18, 232, 136, 0.2);
-                font-weight: 700;
+                padding: 40px 0 10px;
             }
 
             .hero h1 {
-                margin: 0;
-                font-size: 36px;
-                line-height: 1.08;
-                letter-spacing: -0.03em;
-            }
-
-            .hero p {
-                margin: 0;
-                font-size: 18px;
-                line-height: 1.5;
-                color: #9ca3af;
-                max-width: 60ch;
+                font-size: 54px;
             }
 
             .grid {
-                display: grid;
-                grid-template-columns: repeat(1, minmax(0, 1fr));
-                gap: 14px;
-                margin-top: 22px;
-            }
-
-            .card {
-                border: 1px solid #1f2937;
-                border-radius: 14px;
-                padding: 16px;
-                background: #0b1220;
-            }
-
-            .card h3 {
-                margin: 0 0 6px;
-                font-size: 14px;
-                color: #f8fafc;
-            }
-
-            .card p {
-                margin: 0;
-                font-size: 13px;
-                line-height: 1.5;
-                color: #94a3b8;
-            }
-
-            .pricing {
-                margin-top: 28px;
-            }
-
-            .pricing h2 {
-                margin: 0 0 10px;
-                font-size: 18px;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
             }
 
             .tiers {
-                display: grid;
-                grid-template-columns: 1fr;
-                gap: 12px;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
             }
+        }
+    </style>
+    <script src="/env.js"></script>
+</head>
 
-            .tier {
-                border: 1px solid #1f2937;
-                border-radius: 14px;
-                padding: 16px;
-                background: #0b1220;
-            }
-
-            .tier strong {
-                display: block;
-                font-size: 14px;
-                margin-bottom: 6px;
-            }
-
-            .tier .price {
-                font-size: 22px;
-                font-weight: 800;
-                margin-bottom: 6px;
-            }
-
-            .muted {
-                color: #94a3b8;
-                font-size: 13px;
-            }
-
-            .loading {
-                margin-top: 22px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                color: #94a3b8;
-                font-size: 13px;
-            }
-
-            .loading-spinner {
-                width: 2rem;
-                height: 2rem;
-                border: 2px solid #374151;
-                border-top: 2px solid #12E888;
-                border-radius: 50%;
-                animation: spin 1s linear infinite;
-            }
-
-            @keyframes spin {
-                0% {
-                    transform: rotate(0deg);
-                }
-                100% {
-                    transform: rotate(360deg);
-                }
-            }
-
-            @media (min-width: 860px) {
-                .hero {
-                    padding: 40px 0 10px;
-                }
-                .hero h1 {
-                    font-size: 54px;
-                }
-                .grid {
-                    grid-template-columns: repeat(3, minmax(0, 1fr));
-                }
-                .tiers {
-                    grid-template-columns: repeat(3, minmax(0, 1fr));
-                }
-            }
-        </style>
-        <script src="/env.js"></script>
-    </head>
-    <body>
-        <div id="root">
-            <div class="shell">
-                <div class="shell-inner">
-                    <div class="shell-header">
-                        <div class="brand">
-                            <div class="logo">BC</div>
-                            <div>BeforeCharge</div>
-                        </div>
-                        <div class="header-actions">
-                            <a class="btn" href="/pricing">Pricing</a>
-                            <a class="btn" href="/login">Sign in</a>
-                            <a class="btn btn-primary" href="/signup">Get started free</a>
-                        </div>
+<body>
+    <div id="root">
+        <div class="shell">
+            <div class="shell-inner">
+                <div class="shell-header">
+                    <div class="brand">
+                        <div class="logo">BC</div>
+                        <div>BeforeCharge</div>
                     </div>
-
-                    <section class="hero">
-                        <div class="kicker">
-                            <span class="pill">Find forgotten subscriptions</span>
-                            <span>Multi-currency friendly • Secure by design</span>
-                        </div>
-                        <h1>Know before you get charged.</h1>
-                        <p>
-                            BeforeCharge helps you spot recurring charges, get smart renewal reminders,
-                            and stay on top of your monthly commitments — in under a minute.
-                        </p>
-                    </section>
-
-                    <div class="grid" aria-label="Highlights">
-                        <div class="card">
-                            <h3>Fast “Aha” moment</h3>
-                            <p>See what’s renewing soon and what you’re barely using.</p>
-                        </div>
-                        <div class="card">
-                            <h3>Smart reminders</h3>
-                            <p>Get alerts before a renewal (and monthly “still using it?” nudges).</p>
-                        </div>
-                        <div class="card">
-                            <h3>Cancellation help</h3>
-                            <p>Step-by-step cancellation guides for popular services.</p>
-                        </div>
+                    <div class="header-actions">
+                        <a class="btn" href="/pricing">Pricing</a>
+                        <a class="btn" href="/login">Sign in</a>
+                        <a class="btn btn-primary" href="/signup">Get started free</a>
                     </div>
-
-                    <section class="pricing">
-                        <h2>Simple pricing</h2>
-                        <div class="tiers">
-                            <div class="tier">
-                                <strong>Free</strong>
-                                <div class="price">$0</div>
-                                <div class="muted">Track up to 5 subscriptions.</div>
-                            </div>
-                            <div class="tier">
-                                <strong>Personal</strong>
-                                <div class="price">$6.99<span class="muted">/month</span></div>
-                                <div class="muted">Unlimited subscriptions + Insights.</div>
-                            </div>
-                            <div class="tier">
-                                <strong>Business / Teams</strong>
-                                <div class="price">$24<span class="muted">/month</span></div>
-                                <div class="muted">For teams tracking shared subscriptions.</div>
-                            </div>
-                        </div>
-                        <div class="loading" aria-label="App loading status">
-                            <div class="loading-spinner" aria-hidden="true"></div>
-                            <div>Loading the app…</div>
-                        </div>
-                        <noscript>
-                            <p class="muted">
-                                JavaScript is required to use the dashboard. You can still read the
-                                pricing and legal pages: <a href="/pricing">Pricing</a>, <a href="/privacy">Privacy</a>, <a href="/terms">Terms</a>.
-                            </p>
-                        </noscript>
-                    </section>
                 </div>
+
+                <section class="hero">
+                    <div class="kicker">
+                        <span class="pill">Find forgotten subscriptions</span>
+                        <span>Multi-currency friendly • Secure by design</span>
+                    </div>
+                    <h1>Know before you get charged.</h1>
+                    <p>
+                        BeforeCharge helps you spot recurring charges, get smart renewal reminders,
+                        and stay on top of your monthly commitments — in under a minute.
+                    </p>
+                </section>
+
+                <div class="grid" aria-label="Highlights">
+                    <div class="card">
+                        <h3>Fast “Aha” moment</h3>
+                        <p>See what’s renewing soon and what you’re barely using.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Smart reminders</h3>
+                        <p>Get alerts before a renewal (and monthly “still using it?” nudges).</p>
+                    </div>
+                    <div class="card">
+                        <h3>Cancellation help</h3>
+                        <p>Step-by-step cancellation guides for popular services.</p>
+                    </div>
+                </div>
+
+                <section class="pricing">
+                    <h2>Simple pricing</h2>
+                    <div class="tiers">
+                        <div class="tier">
+                            <strong>Free</strong>
+                            <div class="price">$0</div>
+                            <div class="muted">Track up to 5 subscriptions.</div>
+                        </div>
+                        <div class="tier">
+                            <strong>Personal</strong>
+                            <div class="price">$6.99<span class="muted">/month</span></div>
+                            <div class="muted">Unlimited subscriptions + Insights.</div>
+                        </div>
+                        <div class="tier">
+                            <strong>Business / Teams</strong>
+                            <div class="price">$24<span class="muted">/month</span></div>
+                            <div class="muted">For teams tracking shared subscriptions.</div>
+                        </div>
+                    </div>
+                    <div class="loading" aria-label="App loading status">
+                        <div class="loading-spinner" aria-hidden="true"></div>
+                        <div>Loading the app…</div>
+                    </div>
+                    <noscript>
+                        <p class="muted">
+                            JavaScript is required to use the dashboard. You can still read the
+                            pricing and legal pages: <a href="/pricing">Pricing</a>, <a
+                                href="https://beforecharge.com/privacy">Privacy Policy</a>, <a href="/terms">Terms</a>.
+                        </p>
+                    </noscript>
+
+                    <!-- Raw footer for crawlers to detect privacy link without JS -->
+                    <footer style="margin-top: 30px; text-align: center; color: #94a3b8; font-size: 13px;">
+                        <a href="https://beforecharge.com/privacy">Privacy Policy</a>
+                    </footer>
+                </section>
             </div>
         </div>
-        <script type="module" src="/src/main.tsx"></script>
-    </body>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
