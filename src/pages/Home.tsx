@@ -456,12 +456,11 @@ const Home: React.FC = () => {
         <ul className="footer-links">
           <li><button onClick={(e) => scrollToSection(e, "features")}>Features</button></li>
           <li><button onClick={(e) => scrollToSection(e, "pricing")}>Pricing</button></li>
-          <li><button onClick={() => { }}>Blog</button></li>
           <li><button onClick={() => navigate("/privacy")}>Privacy</button></li>
           <li><button onClick={() => navigate("/terms")}>Terms</button></li>
-          <li><button onClick={() => { }}>Contact</button></li>
+          <li><button onClick={() => window.location.href = "mailto:hello@beforecharge.com"}>Contact Us</button></li>
         </ul>
-        <div className="footer-right">© 2025 BeforeCharge · Know before you owe</div>
+        <div className="footer-right">© 2026 BeforeCharge · Know before you owe</div>
       </footer>
     </div>
   );

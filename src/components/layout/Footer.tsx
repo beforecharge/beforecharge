@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
         <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
           <div className="flex items-center space-x-4">
             <p className="text-sm text-muted-foreground">
-              © 2025 BeforeCharge. All rights reserved.
+              © 2026 BeforeCharge. All rights reserved.
             </p>
           </div>
           <div className="flex items-center space-x-6">
@@ -25,12 +25,12 @@ const Footer: React.FC = () => {
             >
               Terms of Service
             </Link>
-            <Link
-              to="/support"
+            <a
+              href="mailto:hello@beforecharge.com"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               Support
-            </Link>
+            </a>
           </div>
           <div className="flex items-center space-x-2 text-sm text-muted-foreground">
             <Zap className="h-4 w-4 text-primary" />
