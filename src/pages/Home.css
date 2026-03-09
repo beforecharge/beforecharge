@@ -1,16 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Geist+Mono:wght@400;500&family=Geist:wght@400;500;600;700&display=swap');
 
 :root {
-    --bg-before: #080a0f;
-    --bg2-before: #0d1117;
-    --card-before: #111520;
-    --border-before: rgba(255, 255, 255, 0.06);
-    --accent-before: #00e5a0;
-    --accent2-before: #0066ff;
-    --accent3-before: #ff4d6d;
-    --text-before: #f0f2f8;
-    --muted-before: #6b7280;
-    --muted2-before: #9ca3af;
+    --bg-before: #07080D;
+    --bg2-before: #0c0d14;
+    --card-before: #10121A;
+    --border-before: rgba(255, 255, 255, 0.055);
+    --accent-before: #12E888;
+    --accent2-before: #4F8EF7;
+    --accent3-before: #F0484E;
+    --text-before: #E8ECF4;
+    --muted-before: #7D8799;
+    --muted2-before: #7D8799;
 }
 
 .home-page,
@@ -25,7 +25,7 @@
 .home-page {
     background: var(--bg-before);
     color: var(--text-before);
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 16px;
     line-height: 1.6;
     overflow-x: hidden;
@@ -61,7 +61,7 @@
 }
 
 .home-page .logo {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 800;
     font-size: 22px;
     letter-spacing: -0.5px;
@@ -73,10 +73,18 @@
     color: var(--accent-before);
 }
 
+.home-page .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+}
+
 .home-page .nav-links {
     display: flex;
     gap: 36px;
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .home-page .nav-links a,
@@ -186,8 +194,8 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(0, 229, 160, 0.08);
-    border: 1px solid rgba(0, 229, 160, 0.2);
+    background: rgba(18, 232, 136, 0.08);
+    border: 1px solid rgba(18, 232, 136, 0.2);
     color: var(--accent-before);
     padding: 8px 18px;
     border-radius: 100px;
@@ -221,7 +229,7 @@
 }
 
 .home-page h1 {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 800;
     font-size: clamp(48px, 7vw, 88px);
     line-height: 1.05;
@@ -277,7 +285,7 @@
     font-size: 16px;
     text-decoration: none;
     transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     letter-spacing: -0.2px;
     border: none;
     cursor: pointer;
@@ -285,7 +293,7 @@
 
 .home-page .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(0, 229, 160, 0.25);
+    box-shadow: 0 12px 40px rgba(18, 232, 136, 0.25);
 }
 
 .home-page .btn-secondary {
@@ -342,7 +350,7 @@
 .home-page .preview-glow {
     position: absolute;
     inset: -40px;
-    background: radial-gradient(ellipse at center, rgba(0, 229, 160, 0.08) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(18, 232, 136, 0.08) 0%, transparent 70%);
     pointer-events: none;
 }
 
@@ -416,7 +424,7 @@
 }
 
 .home-page .stat-value {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 28px;
     font-weight: 700;
     color: var(--text-before);
@@ -497,7 +505,7 @@
 }
 
 .home-page .sub-price {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 600;
     font-size: 15px;
 }
@@ -522,9 +530,9 @@
 }
 
 .home-page .alert-green {
-    background: rgba(0, 229, 160, 0.1);
+    background: rgba(18, 232, 136, 0.1);
     color: var(--accent-before);
-    border: 1px solid rgba(0, 229, 160, 0.2);
+    border: 1px solid rgba(18, 232, 136, 0.2);
 }
 
 @keyframes fadeUp {
@@ -567,7 +575,7 @@
 }
 
 .home-page h2 {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 800;
     font-size: clamp(32px, 4vw, 52px);
     line-height: 1.1;
@@ -636,7 +644,7 @@
 }
 
 .home-page .pain-num {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 42px;
     font-weight: 800;
     line-height: 1;
@@ -705,11 +713,11 @@
 
 .home-page .step:hover {
     transform: translateY(-6px);
-    border-color: rgba(0, 229, 160, 0.2);
+    border-color: rgba(18, 232, 136, 0.2);
 }
 
 .home-page .step-num {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 64px;
     font-weight: 800;
     color: rgba(255, 255, 255, 0.04);
@@ -722,8 +730,8 @@
 .home-page .step-icon {
     width: 52px;
     height: 52px;
-    background: rgba(0, 229, 160, 0.1);
-    border: 1px solid rgba(0, 229, 160, 0.2);
+    background: rgba(18, 232, 136, 0.1);
+    border: 1px solid rgba(18, 232, 136, 0.2);
     border-radius: 14px;
     display: flex;
     align-items: center;
@@ -733,7 +741,7 @@
 }
 
 .home-page .step h3 {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 20px;
     font-weight: 700;
     margin-bottom: 12px;
@@ -780,7 +788,7 @@
 }
 
 .home-page .feat:hover {
-    border-color: rgba(0, 229, 160, 0.15);
+    border-color: rgba(18, 232, 136, 0.15);
     background: rgba(17, 21, 32, 0.8);
 }
 
@@ -791,7 +799,7 @@
 }
 
 .home-page .feat h3 {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 17px;
     font-weight: 700;
     margin-bottom: 10px;
@@ -805,8 +813,8 @@
 }
 
 .home-page .feat.featured {
-    background: linear-gradient(135deg, rgba(0, 229, 160, 0.08), rgba(0, 102, 255, 0.08));
-    border-color: rgba(0, 229, 160, 0.2);
+    background: linear-gradient(135deg, rgba(18, 232, 136, 0.08), rgba(0, 102, 255, 0.08));
+    border-color: rgba(18, 232, 136, 0.2);
     grid-column: span 2;
 }
 
@@ -841,7 +849,7 @@
 
 .home-page .plan.popular {
     border-color: var(--accent-before);
-    background: linear-gradient(135deg, rgba(0, 229, 160, 0.06), var(--card-before));
+    background: linear-gradient(135deg, rgba(18, 232, 136, 0.06), var(--card-before));
 }
 
 .home-page .popular-badge {
@@ -870,7 +878,7 @@
 }
 
 .home-page .plan-price {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 52px;
     font-weight: 800;
     letter-spacing: -2px;
@@ -924,7 +932,7 @@
     font-size: 15px;
     text-decoration: none;
     transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     cursor: pointer;
     border: none;
     width: 100%;
@@ -947,7 +955,7 @@
 }
 
 .home-page .plan-btn-primary:hover {
-    box-shadow: 0 8px 30px rgba(0, 229, 160, 0.3);
+    box-shadow: 0 8px 30px rgba(18, 232, 136, 0.3);
 }
 
 /* TESTIMONIALS */
@@ -1003,7 +1011,7 @@
     justify-content: center;
     font-size: 16px;
     font-weight: 700;
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 .home-page .testi-name {
@@ -1076,7 +1084,7 @@
     transform: translateX(-50%);
     width: 400px;
     height: 300px;
-    background: radial-gradient(ellipse, rgba(0, 229, 160, 0.12) 0%, transparent 70%);
+    background: radial-gradient(ellipse, rgba(18, 232, 136, 0.12) 0%, transparent 70%);
     pointer-events: none;
 }
 
@@ -1108,7 +1116,7 @@
 }
 
 .home-page .footer-logo {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 800;
     font-size: 18px;
     color: var(--text-before);
@@ -1152,9 +1160,9 @@
 
 /* TICKER */
 .home-page .ticker {
-    background: rgba(0, 229, 160, 0.05);
-    border-top: 1px solid rgba(0, 229, 160, 0.1);
-    border-bottom: 1px solid rgba(0, 229, 160, 0.1);
+    background: rgba(18, 232, 136, 0.05);
+    border-top: 1px solid rgba(18, 232, 136, 0.1);
+    border-bottom: 1px solid rgba(18, 232, 136, 0.1);
     padding: 14px 0;
     overflow: hidden;
     white-space: nowrap;

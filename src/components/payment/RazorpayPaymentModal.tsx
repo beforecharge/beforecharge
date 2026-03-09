@@ -214,7 +214,7 @@ const RazorpayPaymentModal: React.FC<RazorpayPaymentModalProps> = ({
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-md">
           <div className="text-center p-6">
-            <div className="mx-auto flex items-center justify-center w-12 h-12 rounded-full bg-green-100 mb-4">
+            <div className="mx-auto flex items-center justify-center w-12 h-12 rounded-full bg-green-900/20 mb-4">
               <Check className="h-6 w-6 text-green-600" />
             </div>
             <DialogTitle className="text-xl font-semibold text-green-900 mb-2">
@@ -223,7 +223,7 @@ const RazorpayPaymentModal: React.FC<RazorpayPaymentModalProps> = ({
             <DialogDescription>
               Your payment has been processed successfully.
             </DialogDescription>
-            <p className="text-gray-600 mb-4">
+            <p className="text-muted-foreground mb-4">
               Your subscription has been upgraded successfully.
             </p>
             <LoadingSpinner size="sm" />

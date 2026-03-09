@@ -2,20 +2,14 @@ import React from "react";
 import {
   TrendingUp,
   DollarSign,
-  Calendar,
   PieChart,
   BarChart3,
+  Calendar,
+  Activity
 } from "lucide-react";
 
 import useSubscriptions from "@/hooks/useSubscriptions";
 import { useAuth } from "@/hooks/useAuth";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 import { DEFAULTS } from "@/lib/constants";
 import { convertCurrency, formatCurrencyAmount } from "@/utils/currencyUtils";
@@ -43,21 +37,20 @@ const Analytics: React.FC = () => {
   const mostExpensive =
     activeSubscriptions.length > 0
       ? activeSubscriptions.reduce((max, sub) => {
-          const maxConverted = convertCurrency(
-            max.cost,
-            max.currency,
-            displayCurrency,
-          );
-          const subConverted = convertCurrency(
-            sub.cost,
-            sub.currency,
-            displayCurrency,
-          );
-          return subConverted > maxConverted ? sub : max;
-        })
+        const maxConverted = convertCurrency(
+          max.cost,
+          max.currency,
+          displayCurrency,
+        );
+        const subConverted = convertCurrency(
+          sub.cost,
+          sub.currency,
+          displayCurrency,
+        );
+        return subConverted > maxConverted ? sub : max;
+      })
       : null;
 
-  // Get category spending data
   const getCategorySpending = () => {
     const categoryMap = new Map();
 
@@ -107,172 +100,69 @@ const Analytics: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div>
+      <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Analytics</h1>
-          <p className="text-muted-foreground text-sm sm:text-base">
-            Insights and trends for your subscription spending
-          </p>
+          <h1 className="text-2xl font-bold">Analytics</h1>
+          <p className="text-muted-foreground text-sm">Insights and trends for your subscription spending</p>
         </div>
       </div>
 
-      {/* Key Metrics */}
-      <div className="stats-mobile grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="mobile-card-compact">
-          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Monthly Spending
-            </CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="mobile-card-content">
-            <div className="text-xl sm:text-2xl font-bold">
-              {formatCurrencyAmount(totalMonthlySpend, displayCurrency)}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Current monthly spending
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="mobile-card-compact">
-          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Annual Projection
-            </CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="mobile-card-content">
-            <div className="text-xl sm:text-2xl font-bold">
-              {formatCurrencyAmount(totalAnnualSpend, displayCurrency)}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Based on current subscriptions
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="mobile-card-compact">
-          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Average per Service
-            </CardTitle>
-            <PieChart className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="mobile-card-content">
-            <div className="text-xl sm:text-2xl font-bold">
-              {formatCurrencyAmount(averagePerService, displayCurrency)}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Across {activeSubscriptions.length} active subscriptions
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="mobile-card-compact">
-          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Most Expensive
-            </CardTitle>
-            <BarChart3 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="mobile-card-content">
-            <div className="text-xl sm:text-2xl font-bold">
-              {mostExpensive
-                ? formatCurrencyAmount(
-                    mostExpensive.cost,
-                    mostExpensive.currency,
-                  )
-                : formatCurrencyAmount(0, displayCurrency)}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {mostExpensive?.name ?? "None"}
-            </p>
-          </CardContent>
-        </Card>
+      <div className="kpi-grid mb-6">
+        <div className="kpi">
+          <div className="kpi-accent" style={{ background: "var(--c-green)" }}></div>
+          <div className="kpi-lbl">Monthly Spend</div>
+          <div className="kpi-val">{formatCurrencyAmount(totalMonthlySpend, displayCurrency)}</div>
+          <DollarSign className="kpi-glyph" />
+        </div>
+        <div className="kpi">
+          <div className="kpi-accent" style={{ background: "var(--c-violet)" }}></div>
+          <div className="kpi-lbl">Annual Projection</div>
+          <div className="kpi-val">{formatCurrencyAmount(totalAnnualSpend, displayCurrency)}</div>
+          <TrendingUp className="kpi-glyph" />
+        </div>
+        <div className="kpi">
+          <div className="kpi-accent" style={{ background: "var(--c-amber)" }}></div>
+          <div className="kpi-lbl">Avg. per Service</div>
+          <div className="kpi-val">{formatCurrencyAmount(averagePerService, displayCurrency)}</div>
+          <PieChart className="kpi-glyph" />
+        </div>
+        <div className="kpi">
+          <div className="kpi-accent" style={{ background: "var(--c-red)" }}></div>
+          <div className="kpi-lbl">Most Expensive</div>
+          <div className="kpi-val text-xl">
+            {mostExpensive
+              ? formatCurrencyAmount(mostExpensive.cost, mostExpensive.currency)
+              : formatCurrencyAmount(0, displayCurrency)}
+            <span className="text-sm font-normal text-muted-foreground ml-1">{mostExpensive?.name ?? ""}</span>
+          </div>
+          <BarChart3 className="kpi-glyph" />
+        </div>
       </div>
 
-      {/* Charts Section */}
-      <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
-        {/* Spending Trend */}
-        <Card className="mobile-card-compact">
-          <CardHeader className="mobile-card-header">
-            <CardTitle className="text-lg sm:text-xl">Spending Trend</CardTitle>
-            <CardDescription className="text-sm">
-              Monthly subscription costs over time
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="mobile-card-content">
-            <div className="h-[200px] sm:h-[300px] flex items-center justify-center bg-muted/20 rounded-lg">
-              <div className="text-center space-y-2">
-                <TrendingUp className="h-8 w-8 sm:h-12 sm:w-12 mx-auto text-muted-foreground" />
-                <p className="text-xs sm:text-sm text-muted-foreground">
-                  Line chart coming soon
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Will show 6-month spending trend
-                </p>
+      <div className="dash-cols">
+        <div className="panel flex-1">
+          <div className="panel-top">
+            <div className="panel-title">
+              <div className="panel-title-ico" style={{ background: "var(--c-blue-bg)", color: "var(--c-blue)" }}>
+                <PieChart className="h-4 w-4" />
               </div>
+              Category Breakdown
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Category Breakdown */}
-        <Card className="mobile-card-compact">
-          <CardHeader className="mobile-card-header">
-            <CardTitle className="text-lg sm:text-xl">Category Breakdown</CardTitle>
-            <CardDescription className="text-sm">Spending distribution by category</CardDescription>
-          </CardHeader>
-          <CardContent className="mobile-card-content">
-            <div className="h-[200px] sm:h-[300px] flex items-center justify-center bg-muted/20 rounded-lg">
-              <div className="text-center space-y-2">
-                <PieChart className="h-8 w-8 sm:h-12 sm:w-12 mx-auto text-muted-foreground" />
-                <p className="text-xs sm:text-sm text-muted-foreground">
-                  Pie chart coming soon
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Will show category spending distribution
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Category Details */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Category Analysis</CardTitle>
-          <CardDescription>
-            Detailed breakdown of spending by category
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
+          </div>
+          <div className="p-4 space-y-4">
             {categorySpending.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-4">
-                No subscription data available
-              </p>
+              <p className="text-sm text-muted-foreground text-center py-4">No subscription data available</p>
             ) : (
               categorySpending.map((item) => (
-                <div
-                  key={item.category}
-                  className="flex items-center justify-between"
-                >
-                  <div className="flex items-center space-x-3">
-                    <div
-                      className="h-3 w-3 rounded-full"
-                      style={{ backgroundColor: item.color }}
-                    />
-                    <span className="font-medium">{item.category}</span>
-                    <span className="text-xs text-muted-foreground">
-                      ({item.count})
-                    </span>
+                <div key={item.category} className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-3 w-1/3">
+                    <div className="h-3 w-3 rounded-full" style={{ backgroundColor: item.color }} />
+                    <span className="font-medium text-sm">{item.category}</span>
+                    <span className="text-xs text-muted-foreground">({item.count})</span>
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="w-32 bg-muted rounded-full h-2">
+                  <div className="flex items-center space-x-4 flex-1 justify-end">
+                    <div className="w-full sm:w-32 bg-muted rounded-full h-2">
                       <div
                         className="h-2 rounded-full"
                         style={{
@@ -281,7 +171,7 @@ const Analytics: React.FC = () => {
                         }}
                       />
                     </div>
-                    <span className="text-sm font-medium w-16 text-right">
+                    <span className="text-sm font-medium w-20 text-right">
                       {formatCurrencyAmount(item.amount, displayCurrency)}
                     </span>
                   </div>
@@ -289,79 +179,54 @@ const Analytics: React.FC = () => {
               ))
             )}
           </div>
-        </CardContent>
-      </Card>
+        </div>
 
-      {/* Cost Optimization */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Cost Optimization</CardTitle>
-          <CardDescription>
-            Recommendations to reduce your subscription costs
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {activeSubscriptions.filter(
-              (sub) => sub.billing_cycle === "monthly",
-            ).length > 0 && (
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-start space-x-3">
-                  <div className="p-2 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg">
-                    <Calendar className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-medium">Annual vs Monthly Savings</h4>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Consider switching monthly subscriptions to annual billing
-                      for potential savings
-                    </p>
-                  </div>
-                  <span className="text-sm font-medium text-blue-600">
-                    {
-                      activeSubscriptions.filter(
-                        (sub) => sub.billing_cycle === "monthly",
-                      ).length
-                    }{" "}
-                    opportunities
-                  </span>
+        <div className="panel">
+          <div className="panel-top">
+            <div className="panel-title">
+              <div className="panel-title-ico" style={{ background: "var(--c-green-bg)", color: "var(--c-green)" }}>
+                <Activity className="h-4 w-4" />
+              </div>
+              Cost Optimization
+            </div>
+          </div>
+          <div>
+            {activeSubscriptions.filter(sub => sub.billing_cycle === "monthly").length > 0 && (
+              <div className="sub-row">
+                <div className="sub-ico text-yellow-500" style={{ background: "var(--c-amber-bg)", color: "var(--c-amber)" }}>
+                  <Calendar className="h-4 w-4" />
+                </div>
+                <div className="sub-inf">
+                  <div className="sub-name">Annual vs Monthly</div>
+                  <div className="sub-meta">Consider switching to annual billing</div>
+                </div>
+                <div className="sub-price text-blue-500">
+                  {activeSubscriptions.filter(sub => sub.billing_cycle === "monthly").length} opportunities
                 </div>
               </div>
             )}
-
             {totalMonthlySpend > 0 && (
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-start space-x-3">
-                  <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                    <PieChart className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-medium">Monthly Budget Overview</h4>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      You're spending{" "}
-                      {formatCurrencyAmount(totalMonthlySpend, displayCurrency)}{" "}
-                      per month across {activeSubscriptions.length} subscriptions
-                    </p>
-                  </div>
-                  <span className="text-sm font-medium text-green-600">
-                    {formatCurrencyAmount(totalAnnualSpend, displayCurrency)}
-                    /year
-                  </span>
+              <div className="sub-row">
+                <div className="sub-ico" style={{ background: "var(--c-blue-bg)", color: "var(--c-blue)" }}>
+                  <TrendingUp className="h-4 w-4" />
+                </div>
+                <div className="sub-inf">
+                  <div className="sub-name">Budget Overview</div>
+                  <div className="sub-meta">{activeSubscriptions.length} subscriptions tracked</div>
+                </div>
+                <div className="sub-price text-green-500">
+                  {formatCurrencyAmount(totalAnnualSpend, displayCurrency)}/yr
                 </div>
               </div>
             )}
-
             {activeSubscriptions.length === 0 && (
-              <div className="p-4 border rounded-lg text-center">
-                <p className="text-sm text-muted-foreground">
-                  No active subscriptions to analyze. Add some subscriptions to
-                  see optimization insights.
-                </p>
+              <div className="p-8 text-center text-sm text-muted-foreground">
+                No active subscriptions to analyze.
               </div>
             )}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };

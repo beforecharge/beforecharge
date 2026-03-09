@@ -74,18 +74,18 @@ export const auth = {
     // Determine the correct redirect URL based on environment
     const getRedirectUrl = () => {
       const origin = window.location.origin;
-      
+
       // For development
       if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
         return `${origin}/auth/callback`;
       }
-      
+
       // For production - ensure we use the correct domain
       if (origin.includes('beforecharge.com')) {
         // Use the same subdomain (www or non-www) as current origin
         return `${origin}/auth/callback`;
       }
-      
+
       // Fallback to current origin
       return `${origin}/auth/callback`;
     };
@@ -107,7 +107,7 @@ export const auth = {
         skipBrowserRedirect: false,
       },
     });
-    
+
     console.log('OAuth initiation result:', { data, error });
     return { data, error };
   },
@@ -589,17 +589,22 @@ export const realtime = {
 export const handleSupabaseError = (error: any) => {
   console.error('Supabase error:', error);
 
-  // Common error mappings
   const errorMappings: Record<string, string> = {
     'Invalid login credentials': 'Invalid email or password',
     'User already registered': 'An account with this email already exists',
     'Email not confirmed': 'Please check your email and confirm your account',
     'Password should be at least 6 characters': 'Password must be at least 6 characters long',
     'Unable to validate email address': 'Please enter a valid email address',
+    'email rate limit exceeded': 'Rate limit hit! To continue testing immediately, please go to your Supabase Dashboard > Authentication > Providers > Email, and turn OFF "Confirm email".',
   };
 
   if (error?.message && errorMappings[error.message]) {
     return errorMappings[error.message];
+  }
+
+  // Rate limit specifics
+  if (error?.message?.includes('rate limit')) {
+    return 'Rate limit hit! To continue testing immediately, please go to your Supabase Dashboard > Authentication > Providers > Email, and turn OFF "Confirm email".';
   }
 
   // Network errors

@@ -138,9 +138,9 @@ const GmailAutoFetch: React.FC<GmailAutoFetchProps> = ({ onSubscriptionsAdded })
   };
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 0.8) return 'bg-green-100 text-green-800';
-    if (confidence >= 0.6) return 'bg-yellow-100 text-yellow-800';
-    return 'bg-red-100 text-red-800';
+    if (confidence >= 0.8) return 'bg-green-900/20 text-green-400';
+    if (confidence >= 0.6) return 'bg-yellow-900/20 text-yellow-400';
+    return 'bg-red-900/20 text-red-400';
   };
 
   const getConfidenceText = (confidence: number) => {
@@ -197,7 +197,7 @@ const GmailAutoFetch: React.FC<GmailAutoFetchProps> = ({ onSubscriptionsAdded })
 
         {!user && (
           <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <p className="text-sm text-yellow-800">
+            <p className="text-sm text-yellow-400">
               Please sign in with Google to use the Gmail auto-fetch feature.
             </p>
           </div>
@@ -259,7 +259,7 @@ const GmailAutoFetch: React.FC<GmailAutoFetchProps> = ({ onSubscriptionsAdded })
                       </div>
 
                       {showDetails && (
-                        <div className="text-xs text-muted-foreground bg-gray-50 p-2 rounded">
+                        <div className="text-xs text-muted-foreground bg-muted p-2 rounded">
                           <p><strong>From:</strong> {subscription.email}</p>
                         </div>
                       )}
@@ -271,8 +271,8 @@ const GmailAutoFetch: React.FC<GmailAutoFetchProps> = ({ onSubscriptionsAdded })
 
             {/* Add Selected Button */}
             {selectedSubscriptions.size > 0 && (
-              <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <span className="text-sm text-blue-800">
+              <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-800 rounded-lg">
+                <span className="text-sm text-blue-400">
                   {selectedSubscriptions.size} subscription{selectedSubscriptions.size > 1 ? 's' : ''} selected
                 </span>
                 <Button
@@ -298,10 +298,10 @@ const GmailAutoFetch: React.FC<GmailAutoFetchProps> = ({ onSubscriptionsAdded })
         )}
 
         {/* Privacy Notice */}
-        <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
+        <div className="p-3 bg-muted border border-gray-200 rounded-lg">
           <div className="flex items-start gap-2">
-            <AlertCircle className="h-4 w-4 text-gray-600 mt-0.5 flex-shrink-0" />
-            <div className="text-xs text-gray-600">
+            <AlertCircle className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+            <div className="text-xs text-muted-foreground">
               <p className="font-medium mb-1">Privacy & Security</p>
               <p>
                 We only read email headers and content to detect subscriptions.

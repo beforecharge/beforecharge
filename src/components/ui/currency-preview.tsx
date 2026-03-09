@@ -18,7 +18,7 @@ const CurrencyPreview: React.FC<CurrencyPreviewProps> = ({
   ];
 
   return (
-    <div className={`p-3 bg-gray-50 border border-gray-200 rounded-lg ${className}`}>
+    <div className={`p-3 bg-muted border border-gray-200 rounded-lg ${className}`}>
       <h4 className="text-sm font-medium mb-2">Preview: How subscriptions will appear</h4>
       <div className="space-y-1">
         {sampleAmounts.map((sample, index) => {
@@ -28,7 +28,7 @@ const CurrencyPreview: React.FC<CurrencyPreviewProps> = ({
           
           return (
             <div key={index} className="flex justify-between text-xs">
-              <span className="text-gray-600">{sample.service}</span>
+              <span className="text-muted-foreground">{sample.service}</span>
               <span className="font-medium">
                 {formatCurrencyAmount(convertedAmount, selectedCurrency)}
                 {sample.currency !== selectedCurrency && (

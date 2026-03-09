@@ -16,11 +16,25 @@ export function getEnv(key: string): string | undefined {
   const runtimeVal = runtime?.[key];
   if (runtimeVal != null && runtimeVal !== "") return runtimeVal;
 
-  // Vite exposes env vars on `import.meta.env` (only those prefixed with VITE_)
-  // We access dynamically so we can share this helper across the app.
-  const viteEnv = import.meta.env as unknown as Record<string, string | undefined>;
-  const viteVal = viteEnv[key];
-  if (viteVal != null && viteVal !== "") return viteVal;
+  // Next.js statically replaces process.env during build. 
+  // We must access them explicitly, not dynamically via `process.env[key]`.
+  const processEnv: Record<string, string | undefined> = {
+    VITE_SUPABASE_URL: process.env.VITE_SUPABASE_URL,
+    VITE_SUPABASE_ANON_KEY: process.env.VITE_SUPABASE_ANON_KEY,
+    VITE_APP_NAME: process.env.VITE_APP_NAME,
+    VITE_APP_URL: process.env.VITE_APP_URL,
+    VITE_SUPABASE_STORAGE_BUCKET: process.env.VITE_SUPABASE_STORAGE_BUCKET,
+    VITE_ENABLE_GOOGLE_AUTH: process.env.VITE_ENABLE_GOOGLE_AUTH,
+    VITE_ENABLE_EMAIL_REMINDERS: process.env.VITE_ENABLE_EMAIL_REMINDERS,
+    VITE_ENABLE_RECEIPT_UPLOAD: process.env.VITE_ENABLE_RECEIPT_UPLOAD,
+    VITE_ENABLE_ANALYTICS: process.env.VITE_ENABLE_ANALYTICS,
+    VITE_DEFAULT_CURRENCY: process.env.VITE_DEFAULT_CURRENCY,
+    VITE_SUPPORTED_CURRENCIES: process.env.VITE_SUPPORTED_CURRENCIES,
+    VITE_CREATE_DUMMY_DATA: process.env.VITE_CREATE_DUMMY_DATA,
+  };
+
+  const nextVal = processEnv[key];
+  if (nextVal != null && nextVal !== "") return nextVal;
 
   return undefined;
 }

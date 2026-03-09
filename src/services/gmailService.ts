@@ -49,11 +49,11 @@ class GmailService {
       const { data: { session } } = await supabase.auth.getSession();
 
       if (!session?.provider_token) {
-        throw new Error('No Google OAuth token found. Please sign in with Google first.');
+        return false;
       }
 
       // Validate that we have the required scopes (informational)
-      console.log('Required Gmail scopes:', GMAIL_SCOPES);
+      // console.log('Required Gmail scopes:', GMAIL_SCOPES);
 
       this.accessToken = session.provider_token;
 
@@ -62,7 +62,6 @@ class GmailService {
 
       return true;
     } catch (error) {
-      console.error('Failed to initialize Gmail service:', error);
       return false;
     }
   }
@@ -440,7 +439,7 @@ class GmailService {
       // Initialize Gmail service
       const initialized = await this.initializeWithSupabaseToken();
       if (!initialized) {
-        throw new Error('Failed to initialize Gmail service');
+        throw 'Failed to initialize Gmail service. No Google OAuth token.';
       }
 
       // Search for subscription emails
@@ -519,10 +518,9 @@ class GmailService {
               billing_cycle: sub.billingCycle === 'yearly' ? 'annual' : sub.billingCycle,
               renewal_date: sub.nextBilling?.toISOString().split('T')[0] ||
                 new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-              category_id: categories?.id || '',
+              category_id: categories?.id as any,
               description: `Auto-detected from Gmail (${Math.round(sub.confidence * 100)}% confidence)`,
               is_active: true,
-
             });
 
           if (!error) {

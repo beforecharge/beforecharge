@@ -177,7 +177,7 @@ export async function checkDatabaseHealth(): Promise<{
  * WARNING: This will delete all user data!
  */
 export async function resetDatabase(): Promise<DatabaseInitResult> {
-  if (import.meta.env.PROD) {
+  if (process.env.PROD) {
     return {
       success: false,
       message: "Database reset is not allowed in production",

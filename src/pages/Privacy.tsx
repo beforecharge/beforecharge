@@ -21,12 +21,12 @@ const Privacy: React.FC = () => {
                 When you create an account, we collect your email address and name to provide our services.
               </p>
             </div>
-            
+
             <div>
               <h3 className="font-semibold mb-2">Gmail Access (Optional)</h3>
               <p className="text-sm text-muted-foreground">
-                If you choose to use our Gmail auto-fetch feature, we access your Gmail messages to detect 
-                subscription-related emails. We only read email headers and content to identify subscription 
+                If you choose to use our Gmail auto-fetch feature, we access your Gmail messages to detect
+                subscription-related emails. We only read email headers and content to identify subscription
                 information. We do not store your emails on our servers.
               </p>
             </div>
@@ -34,7 +34,7 @@ const Privacy: React.FC = () => {
             <div>
               <h3 className="font-semibold mb-2">Subscription Data</h3>
               <p className="text-sm text-muted-foreground">
-                We store the subscription information you provide or that we detect from your emails, 
+                We store the subscription information you provide or that we detect from your emails,
                 including service names, costs, billing cycles, and renewal dates.
               </p>
             </div>
@@ -62,8 +62,8 @@ const Privacy: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              We implement appropriate security measures to protect your personal information. 
-              Your data is stored securely using industry-standard encryption. We use Supabase 
+              We implement appropriate security measures to protect your personal information.
+              Your data is stored securely using industry-standard encryption. We use Supabase
               for data storage and authentication, which provides enterprise-grade security.
             </p>
           </CardContent>
@@ -77,15 +77,15 @@ const Privacy: React.FC = () => {
             <div>
               <h3 className="font-semibold mb-2">Limited Access</h3>
               <p className="text-sm text-muted-foreground">
-                We only access Gmail messages that contain subscription-related keywords. 
+                We only access Gmail messages that contain subscription-related keywords.
                 We do not access personal emails, contacts, or other Gmail data.
               </p>
             </div>
-            
+
             <div>
               <h3 className="font-semibold mb-2">No Storage</h3>
               <p className="text-sm text-muted-foreground">
-                We do not store your Gmail messages. We only extract subscription information 
+                We do not store your Gmail messages. We only extract subscription information
                 and immediately discard the email content.
               </p>
             </div>
@@ -93,7 +93,7 @@ const Privacy: React.FC = () => {
             <div>
               <h3 className="font-semibold mb-2">User Control</h3>
               <p className="text-sm text-muted-foreground">
-                You can revoke Gmail access at any time through your Google Account settings 
+                You can revoke Gmail access at any time through your Google Account settings
                 or by disconnecting the integration in BeforeCharge.
               </p>
             </div>
@@ -123,7 +123,7 @@ const Privacy: React.FC = () => {
             <p className="text-sm text-muted-foreground">
               If you have any questions about this Privacy Policy, please contact us at:
               <br />
-              <strong>Email:</strong> mehtasparsh777@gmail.com
+              <strong>Email:</strong> sparshmehta1001@gmail.com
             </p>
           </CardContent>
         </Card>

@@ -12,14 +12,6 @@ import { isSupabaseConfigured } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 
 // Form validation schema
@@ -103,19 +95,13 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-secondary/5 px-4 py-8">
-      <div className="w-full max-w-md space-y-6">
+    <div className="min-h-screen flex items-center justify-center pt-16 px-4 py-8 relative" style={{ background: "var(--c-bg)" }}>
+      <div className="w-full max-w-md space-y-6 relative z-10 block">
         {/* Header */}
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center space-x-2">
-            <div className="h-6 w-6 sm:h-8 sm:w-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-xs sm:text-sm">
-                S
-              </span>
-            </div>
-            <h1 className="text-xl sm:text-2xl font-bold">
-              <span className="hidden sm:inline">BeforeCharge</span>
-              <span className="sm:hidden">BeforeCharge</span>
+            <h1 className="text-3xl font-bold font-display" style={{ letterSpacing: "-1px" }}>
+              Before<span style={{ color: "var(--c-primary)" }}>Charge</span>
             </h1>
           </div>
           <p className="text-muted-foreground text-sm sm:text-base">
@@ -123,19 +109,19 @@ const Login: React.FC = () => {
           </p>
         </div>
 
-        {/* Login Card */}
-        <Card className="mobile-card-compact">
-          <CardHeader className="mobile-card-header">
-            <CardTitle className="text-xl sm:text-2xl">Welcome back</CardTitle>
-            <CardDescription className="text-sm sm:text-base">
+        {/* Login Panel */}
+        <div className="panel">
+          <div className="panel-top flex-col items-center justify-center p-6 border-b border-white/5">
+            <h2 className="text-xl sm:text-2xl font-bold">Welcome back</h2>
+            <p className="text-sm sm:text-base text-muted-foreground mt-1">
               Sign in to your account to continue
-            </CardDescription>
-          </CardHeader>
+            </p>
+          </div>
 
-          <CardContent className="mobile-card-content space-y-4">
+          <div className="p-6 space-y-4">
             {!isSupabaseConfigured && (
-              <div className="p-3 rounded-md border border-destructive/30 bg-destructive/10">
-                <p className="text-sm text-destructive">
+              <div className="p-3 rounded-md border border-red-500/30 bg-red-500/10">
+                <p className="text-sm text-red-500">
                   Authentication is currently unavailable due to a configuration
                   issue. Please check your Supabase URL/key environment variables
                   and redeploy.
@@ -147,7 +133,7 @@ const Login: React.FC = () => {
             {FEATURES.googleAuth && (
               <Button
                 variant="outline"
-                className="mobile-button-full w-full h-11 sm:h-10"
+                className="w-full h-11 bg-white/5 border-white/10 hover:bg-white/10 text-white font-medium"
                 onClick={handleGoogleSignIn}
                 disabled={
                   !isSupabaseConfigured ||
@@ -157,7 +143,7 @@ const Login: React.FC = () => {
                 }
               >
                 {isGoogleLoading ? (
-                  <LoadingSpinner size="sm" className="mr-2" />
+                  <LoadingSpinner size="sm" className="mr-2 border-white" />
                 ) : (
                   <Chrome className="mr-2 h-4 w-4" />
                 )}
@@ -167,12 +153,12 @@ const Login: React.FC = () => {
 
             {/* Divider */}
             {FEATURES.googleAuth && (
-              <div className="relative">
+              <div className="relative py-2">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
+                  <span className="w-full border-t border-white/10" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
+                  <span className="bg-[#10121a] px-2 text-muted-foreground">
                     Or continue with
                   </span>
                 </div>
@@ -183,20 +169,20 @@ const Login: React.FC = () => {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               {/* Email Field */}
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-sm font-medium">Email</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="Enter your email"
-                    className="pl-9 mobile-input h-11 sm:h-10"
+                    className="pl-9 h-11 bg-black/50 border-white/10 focus-visible:ring-primary"
                     {...register("email")}
                     disabled={isLoading || isSubmitting}
                   />
                 </div>
                 {errors.email && (
-                  <p className="text-sm text-destructive">
+                  <p className="text-sm text-red-500">
                     {errors.email.message}
                   </p>
                 )}
@@ -204,14 +190,14 @@ const Login: React.FC = () => {
 
               {/* Password Field */}
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-sm font-medium">Password</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
-                    className="pl-9 pr-9 mobile-input h-11 sm:h-10"
+                    className="pl-9 pr-9 h-11 bg-black/50 border-white/10 focus-visible:ring-primary"
                     {...register("password")}
                     disabled={isLoading || isSubmitting}
                   />
@@ -229,17 +215,17 @@ const Login: React.FC = () => {
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="text-sm text-destructive">
+                  <p className="text-sm text-red-500">
                     {errors.password.message}
                   </p>
                 )}
               </div>
 
               {/* Forgot Password Link */}
-              <div className="flex justify-end">
+              <div className="flex justify-end pt-1">
                 <Link
                   to="/forgot-password"
-                  className="text-sm text-primary hover:underline"
+                  className="text-sm text-primary hover:text-primary/80 transition-colors"
                 >
                   Forgot password?
                 </Link>
@@ -247,20 +233,20 @@ const Login: React.FC = () => {
 
               {/* Error Message */}
               {error && (
-                <div className="p-3 rounded-md bg-destructive/10 border border-destructive/20">
-                  <p className="text-sm text-destructive">{error}</p>
+                <div className="p-3 rounded-md bg-red-500/10 border border-red-500/20">
+                  <p className="text-sm text-red-500">{error}</p>
                 </div>
               )}
 
               {/* Submit Button */}
               <Button
                 type="submit"
-                className="mobile-button-full w-full h-11 sm:h-10"
+                className="w-full h-11 bg-primary text-black font-bold hover:bg-primary/90 mt-2"
                 disabled={!isSupabaseConfigured || isLoading || isSubmitting}
               >
                 {isLoading || isSubmitting ? (
                   <>
-                    <LoadingSpinner size="sm" className="mr-2" />
+                    <LoadingSpinner size="sm" className="mr-2 border-black" />
                     Signing in...
                   </>
                 ) : (
@@ -268,20 +254,18 @@ const Login: React.FC = () => {
                 )}
               </Button>
             </form>
-          </CardContent>
+          </div>
 
-          <CardFooter>
-            <div className="text-center text-sm text-muted-foreground">
-              Don't have an account?{" "}
-              <Link
-                to="/signup"
-                className="text-primary hover:underline font-medium"
-              >
-                Sign up
-              </Link>
-            </div>
-          </CardFooter>
-        </Card>
+          <div className="p-6 pt-0 text-center text-sm text-muted-foreground border-t border-white/5 mt-4 pt-4">
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="text-primary hover:text-primary/80 font-medium transition-colors"
+            >
+              Sign up
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

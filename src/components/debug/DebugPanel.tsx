@@ -9,7 +9,7 @@ const DebugPanel: React.FC = () => {
   const { user } = useAuth();
   const { subscriptions, cleanupDuplicates, refreshSubscriptions } = useSubscriptions();
 
-  if (!import.meta.env.DEV) {
+  if (process.env.NODE_ENV === "production") {
     return null;
   }
 
@@ -24,7 +24,7 @@ const DebugPanel: React.FC = () => {
   return (
     <Card className="border-orange-200 bg-orange-50">
       <CardHeader>
-        <CardTitle className="text-orange-800">Debug Panel</CardTitle>
+        <CardTitle className="text-orange-400">Debug Panel</CardTitle>
         <CardDescription className="text-orange-600">
           Development tools for managing subscriptions
         </CardDescription>
@@ -44,7 +44,7 @@ const DebugPanel: React.FC = () => {
             <strong>Duplicate Names:</strong> {duplicateNames.join(', ') || 'None'}
           </div>
         </div>
-        
+
         <div className="flex gap-2">
           <Button
             onClick={cleanupDuplicates}
@@ -56,7 +56,7 @@ const DebugPanel: React.FC = () => {
             <Trash2 className="h-4 w-4" />
             Clean Up Duplicates
           </Button>
-          
+
           <Button
             onClick={refreshSubscriptions}
             variant="outline"

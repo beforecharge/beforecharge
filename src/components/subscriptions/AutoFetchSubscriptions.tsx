@@ -134,7 +134,7 @@ const AutoFetchSubscriptions: React.FC<AutoFetchSubscriptionsProps> = ({
 
         <div className="space-y-6">
           {/* Hero Section */}
-          <div className="text-center space-y-4 py-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-lg">
+          <div className="text-center space-y-4 py-6 bg-gradient-to-br from-blue-950/20 to-purple-950/20 dark:from-blue-950/20 dark:to-purple-950/20 rounded-lg">
             <div className="flex justify-center">
               <div className="relative">
                 <Mail className="h-16 w-16 text-blue-500" />
@@ -208,7 +208,7 @@ const AutoFetchSubscriptions: React.FC<AutoFetchSubscriptionsProps> = ({
                   className={`flex items-center gap-3 p-3 rounded-lg border ${
                     provider.supported
                       ? "bg-green-50 border-green-200 dark:bg-green-950/20 dark:border-green-800"
-                      : "bg-gray-50 border-gray-200 dark:bg-gray-950/20 dark:border-gray-800"
+                      : "bg-muted border-gray-200 dark:bg-gray-950/20 dark:border-gray-800"
                   }`}
                 >
                   <span className="text-2xl">{provider.icon}</span>
@@ -252,7 +252,7 @@ const AutoFetchSubscriptions: React.FC<AutoFetchSubscriptionsProps> = ({
             <h3 className="text-lg font-semibold">How It Works</h3>
             <div className="grid md:grid-cols-3 gap-4">
               <div className="text-center space-y-2">
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center mx-auto">
+                <div className="w-12 h-12 bg-blue-900/20 dark:bg-blue-900/20 rounded-full flex items-center justify-center mx-auto">
                   <Mail className="h-6 w-6 text-blue-600" />
                 </div>
                 <h4 className="font-medium">1. Connect Email</h4>
@@ -261,7 +261,7 @@ const AutoFetchSubscriptions: React.FC<AutoFetchSubscriptionsProps> = ({
                 </p>
               </div>
               <div className="text-center space-y-2">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto">
+                <div className="w-12 h-12 bg-green-900/20 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto">
                   <Zap className="h-6 w-6 text-green-600" />
                 </div>
                 <h4 className="font-medium">2. AI Scanning</h4>
@@ -270,7 +270,7 @@ const AutoFetchSubscriptions: React.FC<AutoFetchSubscriptionsProps> = ({
                 </p>
               </div>
               <div className="text-center space-y-2">
-                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/20 rounded-full flex items-center justify-center mx-auto">
+                <div className="w-12 h-12 bg-purple-900/20 dark:bg-purple-900/20 rounded-full flex items-center justify-center mx-auto">
                   <CreditCard className="h-6 w-6 text-purple-600" />
                 </div>
                 <h4 className="font-medium">3. Auto-Import</h4>
@@ -282,15 +282,15 @@ const AutoFetchSubscriptions: React.FC<AutoFetchSubscriptionsProps> = ({
           </div>
 
           {/* Privacy & Security */}
-          <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950/20">
+          <Card className="border-blue-800 bg-blue-50 dark:bg-blue-950/20">
             <CardContent className="pt-6">
               <div className="flex items-start gap-3">
                 <Shield className="h-6 w-6 text-blue-600 shrink-0 mt-1" />
                 <div>
-                  <h4 className="font-medium text-blue-900 dark:text-blue-100">
+                  <h4 className="font-medium text-blue-100 dark:text-blue-100">
                     Your Privacy is Our Priority
                   </h4>
-                  <p className="text-sm text-blue-700 dark:text-blue-300 mt-2">
+                  <p className="text-sm text-blue-300 dark:text-blue-300 mt-2">
                     We only read email headers and subscription-related content.
                     No personal emails or sensitive information is stored. All
                     data is encrypted and you can revoke access anytime.

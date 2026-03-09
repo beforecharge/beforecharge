@@ -116,7 +116,7 @@ const AuthCallback: React.FC = () => {
       <div className="text-center space-y-4">
         <LoadingSpinner size="lg" />
         <p className="text-muted-foreground">Completing sign in...</p>
-        {import.meta.env.DEV && (
+        {process.env.NODE_ENV !== "production" && (
           <div className="text-xs text-muted-foreground">
             <p>Processing: {isProcessing.toString()}</p>
             <p>Loading: {isLoading.toString()}</p>
@@ -170,7 +170,7 @@ class ErrorBoundary extends React.Component<
             >
               Refresh Page
             </button>
-            {import.meta.env.DEV && this.state.error && (
+            {process.env.NODE_ENV !== "production" && this.state.error && (
               <details className="mt-4 text-left">
                 <summary className="cursor-pointer text-sm text-muted-foreground">
                   Error Details

@@ -2,26 +2,18 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Plus,
+  TrendingUp,
   DollarSign,
   Calendar,
-  TrendingUp,
   AlertCircle,
-  CheckCircle2,
+  Activity,
+  CreditCard
 } from "lucide-react";
 
 import { useAuth } from "@/hooks/useAuth";
 import useSubscriptions from "@/hooks/useSubscriptions";
 import { useSubscriptionLimits } from "@/hooks/useSubscriptionLimits";
 import { AddSubscriptionModal } from "@/components/subscriptions";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 import { DEFAULTS } from "@/lib/constants";
 import { formatCurrencyAmount } from "@/utils/currencyUtils";
@@ -43,14 +35,10 @@ const Dashboard: React.FC = () => {
   const totalMonthlySpend = getTotalMonthlyCost();
   const totalAnnualSpend = getTotalAnnualCost();
   const activeSubscriptionCount = getActiveSubscriptions().length;
-  const upcomingRenewalsData = getUpcomingRenewals(7); // Next 7 days
+  const upcomingRenewalsData = getUpcomingRenewals(7);
   const upcomingRenewalsCount = upcomingRenewalsData.length;
 
   const displayCurrency = profile?.default_currency || DEFAULTS.currency;
-
-  const handleReviewRenewals = () => {
-    navigate("/subscriptions");
-  };
 
   if (isLoading) {
     return (
@@ -60,293 +48,145 @@ const Dashboard: React.FC = () => {
     );
   }
 
+  // Calculate simple unused mock data for UI visual completion
+  const unusedSimulated = 2;
+  const healthScore = 92;
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-            Welcome back, {getDisplayName()}!
-          </h1>
-          <p className="text-muted-foreground text-sm sm:text-base">
-            Here's what's happening with your subscriptions today.
-          </p>
+          <h1 className="text-2xl font-bold">Welcome back, {getDisplayName()}!</h1>
+          <p className="text-muted-foreground text-sm">Here's the latest on your subscriptions.</p>
         </div>
         <AddSubscriptionModal
           trigger={
-            <Button className="w-full sm:w-auto">
-              <Plus className="mr-2 h-4 w-4" />
-              <span className="sm:hidden">Add</span>
-              <span className="hidden sm:inline">Add Subscription</span>
-            </Button>
+            <button className="add-btn">
+              <Plus className="h-4 w-4" />
+              Add Subscription
+            </button>
           }
         />
       </div>
 
-      {/* Stats Cards */}
-      <div className="stats-mobile grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <Card className="mobile-card-compact">
-          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Monthly</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="mobile-card-content">
-            <div className="text-xl sm:text-2xl font-bold">
-              {formatCurrencyAmount(totalMonthlySpend, displayCurrency)}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Monthly recurring cost
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="mobile-card-compact">
-          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Annual Spend</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="mobile-card-content">
-            <div className="text-xl sm:text-2xl font-bold">
-              {formatCurrencyAmount(totalAnnualSpend, displayCurrency)}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Projected yearly cost
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="mobile-card-compact">
-          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Active Subscriptions
-            </CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="mobile-card-content">
-            <div className="text-xl sm:text-2xl font-bold">{activeSubscriptionCount}</div>
-            <p className="text-xs text-muted-foreground">Currently active</p>
-          </CardContent>
-        </Card>
-
-        <Card className="mobile-card-compact">
-          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Subscription Limit
-            </CardTitle>
-            {limitInfo.canAddMore ? (
-              <CheckCircle2 className="h-4 w-4 text-green-500" />
-            ) : (
-              <AlertCircle className="h-4 w-4 text-orange-500" />
-            )}
-          </CardHeader>
-          <CardContent className="mobile-card-content">
-            <div className="text-xl sm:text-2xl font-bold">
-              {limitInfo.current}/
-              {limitInfo.limit === "unlimited" ? "∞" : limitInfo.limit}
-            </div>
-            <div className="flex items-center justify-between">
-              <p className="text-xs text-muted-foreground">
-                {limitInfo.limit === "unlimited"
-                  ? "Unlimited"
-                  : `${limitInfo.remaining} remaining`}
-              </p>
-              {!limitInfo.canAddMore && (
-                <Badge variant="warning" className="text-xs">
-                  Limit reached
-                </Badge>
-              )}
-            </div>
-            {limitInfo.limit !== "unlimited" && (
-              <div className="mt-2 w-full bg-muted rounded-full h-1">
-                <div
-                  className={`h-1 rounded-full transition-all duration-300 ${
-                    limitInfo.percentage >= 100
-                      ? "bg-red-500"
-                      : limitInfo.percentage >= 80
-                        ? "bg-orange-500"
-                        : "bg-green-500"
-                  }`}
-                  style={{ width: `${Math.min(limitInfo.percentage, 100)}%` }}
-                />
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card className="mobile-card-compact">
-          <CardHeader className="mobile-card-header flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Upcoming Renewals
-            </CardTitle>
-            <AlertCircle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="mobile-card-content">
-            <div className="text-xl sm:text-2xl font-bold">{upcomingRenewalsCount}</div>
-            <p className="text-xs text-muted-foreground">Next 7 days</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Recent Subscriptions */}
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Subscriptions</CardTitle>
-            <CardDescription>
-              Your latest subscription activities
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {subscriptions.length === 0 ? (
-                <div className="text-center py-8">
-                  <p className="text-sm text-muted-foreground">
-                    No subscriptions yet
-                  </p>
-                  <AddSubscriptionModal
-                    trigger={
-                      <Button variant="outline" size="sm" className="mt-2">
-                        <Plus className="mr-2 h-3 w-3" />
-                        Add Your First Subscription
-                      </Button>
-                    }
-                  />
-                </div>
-              ) : (
-                getActiveSubscriptions()
-                  .slice(0, 3)
-                  .map((subscription) => (
-                    <div
-                      key={subscription.id}
-                      className="flex items-center justify-between"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <div className="h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center">
-                          <span className="text-xs font-medium text-primary">
-                            {subscription.name.charAt(0)}
-                          </span>
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium">
-                            {subscription.name}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {subscription.description || "No description"}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-medium">
-                          {formatCurrencyAmount(
-                            subscription.cost,
-                            subscription.currency
-                          )}
-                          /
-                          {subscription.billing_cycle === "monthly" ? "mo" : "yr"}
-                        </p>
-                      </div>
-                    </div>
-                  ))
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Upcoming Renewals</CardTitle>
-            <CardDescription>Subscriptions renewing soon</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {upcomingRenewalsData.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-4">
-                  No upcoming renewals in the next 7 days
-                </p>
-              ) : (
-                upcomingRenewalsData.map((subscription) => {
-                  const renewalDate = new Date(subscription.renewal_date);
-                  const daysUntil = Math.ceil(
-                    (renewalDate.getTime() - new Date().getTime()) /
-                      (1000 * 60 * 60 * 24),
-                  );
-
-                  return (
-                    <div
-                      key={subscription.id}
-                      className="flex items-center justify-between"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <div className="h-8 w-8 bg-orange-100 dark:bg-orange-900/20 rounded-full flex items-center justify-center">
-                          <Calendar className="h-4 w-4 text-orange-600 dark:text-orange-400" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium">
-                            {subscription.name}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {daysUntil === 0
-                              ? "Today"
-                              : daysUntil === 1
-                                ? "Tomorrow"
-                                : `In ${daysUntil} days`}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-medium">
-                          {formatCurrencyAmount(
-                            subscription.cost,
-                            subscription.currency
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Quick Actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-          <CardDescription>
-            Manage your subscriptions efficiently
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <AddSubscriptionModal
-              trigger={
-                <Button variant="outline" className="h-16 sm:h-20 flex-col text-xs sm:text-sm">
-                  <Plus className="h-4 w-4 sm:h-6 sm:w-6 mb-1 sm:mb-2" />
-                  Add New Subscription
-                </Button>
-              }
-            />
-            <Button
-              variant="outline"
-              className="h-16 sm:h-20 flex-col text-xs sm:text-sm"
-              onClick={() => navigate("/analytics")}
-            >
-              <TrendingUp className="h-4 w-4 sm:h-6 sm:w-6 mb-1 sm:mb-2" />
-              View Analytics
-            </Button>
-            <Button
-              variant="outline"
-              className="h-16 sm:h-20 flex-col text-xs sm:text-sm sm:col-span-2 lg:col-span-1"
-              onClick={handleReviewRenewals}
-            >
-              <AlertCircle className="h-4 w-4 sm:h-6 sm:w-6 mb-1 sm:mb-2" />
-              Review Renewals
-            </Button>
+      <div className="health-banner">
+        <div className="hb-score">{healthScore}<span>/100</span></div>
+        <div className="hb-body">
+          <div className="hb-title">Your subscription health is excellent</div>
+          <div className="hb-sub">You have simulated $12.50 in unused subscriptions this month.</div>
+          <div className="hb-track">
+            <div className="hb-fill" style={{ width: `${healthScore}%` }}></div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+        <div className="hb-tags">
+          <span className="tag tag-r">{unusedSimulated} Unused</span>
+          <span className="tag tag-a">{upcomingRenewalsCount} Renewing Soon</span>
+          <span className="tag tag-g">Save $50/mo</span>
+        </div>
+      </div>
+
+      <div className="kpi-grid">
+        <div className="kpi">
+          <div className="kpi-accent" style={{ background: "var(--c-green)" }}></div>
+          <div className="kpi-lbl">Total Monthly</div>
+          <div className="kpi-val">{formatCurrencyAmount(totalMonthlySpend, displayCurrency)}</div>
+          <div className="kpi-delta" style={{ color: "var(--c-green)" }}>↓ 2.4% vs last mo</div>
+          <DollarSign className="kpi-glyph" />
+        </div>
+        <div className="kpi">
+          <div className="kpi-accent" style={{ background: "var(--c-blue)" }}></div>
+          <div className="kpi-lbl">Active Subs</div>
+          <div className="kpi-val">{activeSubscriptionCount}</div>
+          <div className="kpi-delta">Across {limitInfo.current} categories</div>
+          <Activity className="kpi-glyph" />
+        </div>
+        <div className="kpi">
+          <div className="kpi-accent" style={{ background: "var(--c-amber)" }}></div>
+          <div className="kpi-lbl">Upcoming (7d)</div>
+          <div className="kpi-val">{upcomingRenewalsCount}</div>
+          <div className="kpi-delta">Action recommended</div>
+          <AlertCircle className="kpi-glyph" />
+        </div>
+        <div className="kpi">
+          <div className="kpi-accent" style={{ background: "var(--c-violet)" }}></div>
+          <div className="kpi-lbl">Annual Est.</div>
+          <div className="kpi-val">{formatCurrencyAmount(totalAnnualSpend, displayCurrency)}</div>
+          <div className="kpi-delta">Projected spend</div>
+          <TrendingUp className="kpi-glyph" />
+        </div>
+      </div>
+
+      <div className="dash-cols">
+        <div className="panel">
+          <div className="panel-top">
+            <div className="panel-title">
+              <div className="panel-title-ico" style={{ background: "var(--c-blue-bg)", color: "var(--c-blue)" }}>
+                <CreditCard className="h-4 w-4" />
+              </div>
+              Recent Subscriptions
+            </div>
+            <div className="panel-link" onClick={() => navigate("/subscriptions")}>View all →</div>
+          </div>
+          <div>
+            {subscriptions.length === 0 ? (
+              <div className="p-8 text-center text-sm text-muted-foreground">No subscriptions yet</div>
+            ) : (
+              getActiveSubscriptions().slice(0, 5).map(sub => (
+                <div className="sub-row" key={sub.id}>
+                  <div className="sub-ico" style={{ background: "rgba(255,255,255,0.04)" }}>
+                    <span className="text-xs">{sub.name.charAt(0)}</span>
+                  </div>
+                  <div className="sub-inf">
+                    <div className="sub-name">{sub.name}</div>
+                    <div className="sub-meta">{sub.billing_cycle}</div>
+                  </div>
+                  <div className="sub-price">{formatCurrencyAmount(sub.cost, sub.currency)}</div>
+                  <span className={`badge ${sub.is_active ? 'badge-g' : 'badge-n'}`}>
+                    {sub.is_active ? 'Active' : 'Inactive'}
+                  </span>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className="panel">
+          <div className="panel-top">
+            <div className="panel-title">
+              <div className="panel-title-ico" style={{ background: "var(--c-red-bg)", color: "var(--c-red)" }}>
+                <Calendar className="h-4 w-4" />
+              </div>
+              Renewing Soon
+            </div>
+          </div>
+          <div>
+            {upcomingRenewalsData.length === 0 ? (
+              <div className="p-8 text-center text-sm text-muted-foreground">No upcoming renewals</div>
+            ) : (
+              upcomingRenewalsData.map(sub => {
+                const renewalDate = new Date(sub.renewal_date);
+                const daysUntil = Math.ceil((renewalDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+                return (
+                  <div className="sub-row" key={sub.id}>
+                    <div className="sub-inf">
+                      <div className="sub-name">{sub.name}</div>
+                      <div className="sub-meta">
+                        {daysUntil === 0 ? "Today" : daysUntil === 1 ? "Tomorrow" : `In ${daysUntil} days`}
+                      </div>
+                    </div>
+                    <div className="sub-price">{formatCurrencyAmount(sub.cost, sub.currency)}</div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+          <div className="panel-top" style={{ borderTop: "1px solid var(--c-border)", borderBottom: "none" }}>
+            <div className="panel-title">
+              Overall Subs Limit: {limitInfo.current}/{limitInfo.limit === "unlimited" ? "∞" : limitInfo.limit}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

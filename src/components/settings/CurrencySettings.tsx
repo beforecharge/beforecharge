@@ -79,15 +79,15 @@ const CurrencySettings: React.FC = () => {
 
       <CardContent className="space-y-4">
         {/* Current Selection */}
-        <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="p-3 bg-blue-50 border border-blue-800 rounded-lg">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium text-blue-900">Current Currency</p>
-              <p className="text-sm text-blue-700">
+              <p className="font-medium text-blue-100">Current Currency</p>
+              <p className="text-sm text-blue-300">
                 {SUPPORTED_CURRENCIES[currentCurrency].name} ({SUPPORTED_CURRENCIES[currentCurrency].symbol})
               </p>
             </div>
-            <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+            <Badge variant="secondary" className="bg-blue-900/20 text-blue-400">
               Active
             </Badge>
           </div>
@@ -107,7 +107,7 @@ const CurrencySettings: React.FC = () => {
                 size="sm"
                 variant="outline"
                 onClick={() => handleCurrencyChange(recommendedCurrency)}
-                className="border-green-300 text-green-700 hover:bg-green-100"
+                className="border-green-300 text-green-700 hover:bg-green-900/20"
               >
                 Use This
               </Button>
@@ -125,7 +125,7 @@ const CurrencySettings: React.FC = () => {
                 className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-colors ${
                   currentCurrency === code
                     ? 'border-primary bg-primary/5'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    : 'border-gray-200 hover:border-gray-300 hover:bg-muted'
                 }`}
                 onClick={() => handleCurrencyChange(code)}
               >
@@ -145,8 +145,8 @@ const CurrencySettings: React.FC = () => {
         </div>
 
         {/* Info */}
-        <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
-          <p className="text-xs text-gray-600">
+        <div className="p-3 bg-muted border border-gray-200 rounded-lg">
+          <p className="text-xs text-muted-foreground">
             <strong>Note:</strong> When auto-fetching subscriptions from Gmail, amounts in foreign currencies 
             will be automatically converted to your preferred currency using current exchange rates. 
             You can always manually edit subscription amounts if needed.

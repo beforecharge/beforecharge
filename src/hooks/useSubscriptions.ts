@@ -480,7 +480,7 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
   useEffect(() => {
     // Only create dummy data in development or if explicitly enabled
     const shouldCreateDummyData =
-      import.meta.env.DEV || import.meta.env.VITE_CREATE_DUMMY_DATA === "true";
+      process.env.NODE_ENV !== "production" || process.env.VITE_CREATE_DUMMY_DATA === "true";
     
     if (shouldCreateDummyData && isAuthenticated && user && categories.length > 0 && !isLoading && subscriptions.length === 0 && !hasTriedDummyData) {
       // Create dummy data for new users after a short delay

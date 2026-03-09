@@ -236,7 +236,7 @@ const AddSubscriptionModal: React.FC<AddSubscriptionModalProps> = ({
     return (
       <Card className="border-orange-200 bg-orange-50 dark:bg-orange-950/20">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-orange-800 dark:text-orange-200">
+          <CardTitle className="flex items-center gap-2 text-orange-400 dark:text-orange-200">
             <AlertTriangle className="h-5 w-5" />
             {upgradeInfo.title}
           </CardTitle>
@@ -270,7 +270,7 @@ const AddSubscriptionModal: React.FC<AddSubscriptionModalProps> = ({
 
           {upgradeInfo.benefits.length > 0 && (
             <div className="space-y-2">
-              <p className="text-xs font-medium text-orange-800 dark:text-orange-200">
+              <p className="text-xs font-medium text-orange-400 dark:text-orange-200">
                 {PLAN_DISPLAY_NAMES[upgradeInfo.suggestedPlan]} plan benefits:
               </p>
               <ul className="text-xs text-orange-700 dark:text-orange-300 space-y-1">

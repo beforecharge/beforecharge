@@ -28,28 +28,28 @@ const Home: React.FC = () => {
       {/* NAV */}
       <nav className="bc-nav">
         <a href="/" className="logo">Before<span>Charge</span></a>
-        <ul className="nav-links">
-          <li>
-            <button onClick={(e) => scrollToSection(e, "how")}>
-              How it works
-            </button>
-          </li>
-          <li>
-            <button onClick={(e) => scrollToSection(e, "features")}>
-              Features
-            </button>
-          </li>
-          <li>
-            <button onClick={(e) => scrollToSection(e, "pricing")}>
-              Pricing
-            </button>
-          </li>
-          <li>
-            <button className="nav-cta" onClick={handleCtaClick}>
-              {user ? "Dashboard →" : "Start Free →"}
-            </button>
-          </li>
-        </ul>
+        <div className="nav-right">
+          <ul className="nav-links">
+            <li>
+              <button onClick={(e) => scrollToSection(e, "how")}>
+                How it works
+              </button>
+            </li>
+            <li>
+              <button onClick={(e) => scrollToSection(e, "features")}>
+                Features
+              </button>
+            </li>
+            <li>
+              <button onClick={(e) => scrollToSection(e, "pricing")}>
+                Pricing
+              </button>
+            </li>
+          </ul>
+          <button className="nav-cta" onClick={handleCtaClick}>
+            {user ? "Dashboard →" : "Start Free →"}
+          </button>
+        </div>
       </nav>
 
       {/* TICKER */}
@@ -176,7 +176,7 @@ const Home: React.FC = () => {
                 </div>
                 <div className="sub-row">
                   <div className="sub-left">
-                    <div className="sub-icon" style={{ background: "rgba(0,229,160,0.12)" }}>🎵</div>
+                    <div className="sub-icon" style={{ background: "rgba(18,232,136,0.12)" }}>🎵</div>
                     <div>
                       <div className="sub-name">Spotify Premium</div>
                       <div className="sub-cycle">Monthly · Family plan</div>
@@ -201,7 +201,7 @@ const Home: React.FC = () => {
             <h2>Your money is quietly disappearing</h2>
             <p className="section-sub">Subscriptions are designed to be forgotten. Every free trial, every annual plan, every "we've updated our pricing" email — they're all counting on you not paying attention.</p>
             <br />
-            <p style={{ color: "var(--accent-before)", fontSize: "22px", fontFamily: "'Syne',sans-serif", fontWeight: 700, letterSpacing: "-0.5px" }}>BeforeCharge pays attention, so you don't have to.</p>
+            <p style={{ color: "var(--accent-before)", fontSize: "22px", fontFamily: "'Bricolage Grotesque',-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", fontWeight: 700, letterSpacing: "-0.5px" }}>BeforeCharge pays attention, so you don't have to.</p>
           </div>
           <div className="pain-stats">
             <div className="pain-stat s1">
@@ -340,7 +340,7 @@ const Home: React.FC = () => {
               <div className="testi-stars">★★★★★</div>
               <p className="testi-text">"Found 4 subscriptions I completely forgot about. Cancelled 3 of them and saved £67/month instantly. Genuinely the most useful app I've installed this year."</p>
               <div className="testi-author">
-                <div className="testi-avatar" style={{ background: "rgba(0,229,160,0.15)", color: "var(--accent-before)" }}>JM</div>
+                <div className="testi-avatar" style={{ background: "rgba(18,232,136,0.15)", color: "var(--accent-before)" }}>JM</div>
                 <div>
                   <div className="testi-name">James M.</div>
                   <div className="testi-role">Freelancer · London, UK 🇬🇧</div>

@@ -66,9 +66,9 @@ export const usePayment = (): UsePaymentReturn => {
           provider,
           currency: currency as "USD" | "INR",
           publishableKey:
-            provider === "stripe"
-              ? import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
-              : import.meta.env.VITE_RAZORPAY_KEY_ID,
+            (provider === "stripe"
+              ? process.env.VITE_STRIPE_PUBLISHABLE_KEY
+              : process.env.VITE_RAZORPAY_KEY_ID) || "",
         };
 
         setPaymentConfig(config);

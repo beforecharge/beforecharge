@@ -5,9 +5,9 @@ import { useAuth } from "@/hooks/useAuth";
 import useSubscriptions from "@/hooks/useSubscriptions";
 import { useUIStore } from "@/store/uiStore";
 import { Currency } from "@/types/app.types";
-import { 
-  SUPPORTED_CURRENCIES, 
-  getUserPreferredCurrency, 
+import {
+  SUPPORTED_CURRENCIES,
+  getUserPreferredCurrency,
   setUserPreferredCurrency,
   getUserCountry,
   getCurrencyForCountry,
@@ -17,13 +17,7 @@ import { DEFAULTS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import LoadingSpinner from "@/components/ui/loading-spinner";
 import CurrencyPreview from "@/components/ui/currency-preview";
 
@@ -77,11 +71,11 @@ const Settings: React.FC = () => {
           getUserCountry(),
           getUserPreferredCurrency()
         ]);
-        
+
         setDetectedCountry(country);
         const recommended = getCurrencyForCountry(country);
         setRecommendedCurrency(recommended);
-        
+
         // Update profile data with detected currency if not set
         if (!profile?.default_currency && recommended) {
           setProfileData(prev => ({
@@ -110,7 +104,7 @@ const Settings: React.FC = () => {
         timezone: profileData.timezone,
         notification_preferences: notificationSettings,
       });
-      
+
       // Also update the local currency preference
       setUserPreferredCurrency(profileData.default_currency);
     } catch (error) {
@@ -153,29 +147,27 @@ const Settings: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
-        <p className="text-muted-foreground">
-          Manage your account settings and preferences
-        </p>
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-bold">Settings</h1>
+          <p className="text-muted-foreground text-sm">Manage your account settings and preferences</p>
+        </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-6">
+      <div className="dash-cols relative flex-col-reverse lg:flex-row">
+        <div className="flex-1 space-y-6">
           {/* Profile Settings */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center space-x-2">
-                <User className="h-5 w-5" />
-                <CardTitle>Profile Information</CardTitle>
+          <div className="panel">
+            <div className="panel-top">
+              <div className="panel-title">
+                <div className="panel-title-ico" style={{ background: "var(--c-blue-bg)", color: "var(--c-blue)" }}>
+                  <User className="h-4 w-4" />
+                </div>
+                Profile Information
               </div>
-              <CardDescription>
-                Update your personal information and preferences
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+            </div>
+            <div className="p-4">
               <form onSubmit={handleProfileSubmit} className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
@@ -190,6 +182,7 @@ const Settings: React.FC = () => {
                         }))
                       }
                       placeholder="Enter your full name"
+                      className="bg-black border-white/10"
                     />
                   </div>
                   <div className="space-y-2">
@@ -199,7 +192,7 @@ const Settings: React.FC = () => {
                       type="email"
                       value={profileData.email}
                       disabled
-                      className="bg-muted"
+                      className="bg-black/50 border-white/10 text-muted-foreground"
                     />
                     <p className="text-xs text-muted-foreground">
                       Contact support to change your email address
@@ -210,7 +203,7 @@ const Settings: React.FC = () => {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="currency" className="flex items-center gap-2">
-                      <Globe className="h-4 w-4" />
+                      <Globe className="h-4 w-4 text-muted-foreground" />
                       Default Currency
                       {detectedCountry && (
                         <span className="text-xs text-muted-foreground">
@@ -227,7 +220,7 @@ const Settings: React.FC = () => {
                           default_currency: e.target.value as Currency,
                         }))
                       }
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      className="flex h-10 w-full rounded-md border border-white/10 bg-black px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
                     >
                       {Object.entries(SUPPORTED_CURRENCIES).map(([code, info]) => (
                         <option key={code} value={code}>
@@ -237,13 +230,10 @@ const Settings: React.FC = () => {
                       ))}
                     </select>
                     {recommendedCurrency && recommendedCurrency !== profileData.default_currency && (
-                      <p className="text-xs text-blue-600">
+                      <p className="text-xs text-primary">
                         💡 Based on your location, we recommend {SUPPORTED_CURRENCIES[recommendedCurrency].name} ({SUPPORTED_CURRENCIES[recommendedCurrency].symbol})
                       </p>
                     )}
-                    <p className="text-xs text-muted-foreground">
-                      This currency will be used for displaying all subscription costs and when auto-fetching from Gmail.
-                    </p>
                     <CurrencyPreview selectedCurrency={profileData.default_currency} className="mt-2" />
                   </div>
                   <div className="space-y-2">
@@ -257,7 +247,7 @@ const Settings: React.FC = () => {
                           timezone: e.target.value,
                         }))
                       }
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      className="flex h-10 w-full rounded-md border border-white/10 bg-black px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
                     >
                       <option value="UTC">UTC</option>
                       <option value="Asia/Kolkata">India Standard Time (IST)</option>
@@ -274,11 +264,11 @@ const Settings: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-end">
-                  <Button type="submit" disabled={isSaving}>
+                <div className="flex justify-end pt-2">
+                  <Button type="submit" disabled={isSaving} className="bg-primary text-black hover:bg-primary/90">
                     {isSaving ? (
                       <>
-                        <LoadingSpinner size="sm" className="mr-2" />
+                        <LoadingSpinner size="sm" className="mr-2 border-black" />
                         Saving...
                       </>
                     ) : (
@@ -290,138 +280,134 @@ const Settings: React.FC = () => {
                   </Button>
                 </div>
               </form>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Notification Settings */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center space-x-2">
-                <Bell className="h-5 w-5" />
-                <CardTitle>Notification Preferences</CardTitle>
+          <div className="panel">
+            <div className="panel-top">
+              <div className="panel-title">
+                <div className="panel-title-ico" style={{ background: "var(--c-amber-bg)", color: "var(--c-amber)" }}>
+                  <Bell className="h-4 w-4" />
+                </div>
+                Notification Preferences
               </div>
-              <CardDescription>
-                Choose how you want to be notified about your subscriptions
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label>Email Reminders</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Receive email notifications about upcoming renewals
-                    </p>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={notificationSettings.email_reminders}
-                    onChange={(e) =>
-                      setNotificationSettings((prev) => ({
-                        ...prev,
-                        email_reminders: e.target.checked,
-                      }))
-                    }
-                    className="h-4 w-4"
-                  />
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label>Trial Expiration Alerts</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Get notified when free trials are about to expire
-                    </p>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={notificationSettings.trial_reminders}
-                    onChange={(e) =>
-                      setNotificationSettings((prev) => ({
-                        ...prev,
-                        trial_reminders: e.target.checked,
-                      }))
-                    }
-                    className="h-4 w-4"
-                  />
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label>Price Change Alerts</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Notify me when subscription prices change
-                    </p>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={notificationSettings.price_change_alerts}
-                    onChange={(e) =>
-                      setNotificationSettings((prev) => ({
-                        ...prev,
-                        price_change_alerts: e.target.checked,
-                      }))
-                    }
-                    className="h-4 w-4"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Reminder Timing</Label>
+            </div>
+            <div className="p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>Email Reminders</Label>
                   <p className="text-sm text-muted-foreground">
-                    When should we remind you before renewals?
+                    Receive email notifications about upcoming renewals
                   </p>
-                  <div className="flex gap-2 flex-wrap">
-                    {[1, 3, 7, 14, 30].map((days) => (
-                      <label key={days} className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          checked={notificationSettings.reminder_days.includes(
-                            days as any,
-                          )}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setNotificationSettings((prev) => ({
-                                ...prev,
-                                reminder_days: [
-                                  ...prev.reminder_days,
-                                  days as any,
-                                ],
-                              }));
-                            } else {
-                              setNotificationSettings((prev) => ({
-                                ...prev,
-                                reminder_days: prev.reminder_days.filter(
-                                  (d) => d !== days,
-                                ),
-                              }));
-                            }
-                          }}
-                          className="h-4 w-4"
-                        />
-                        <span className="text-sm">
-                          {days === 1 ? "1 day" : `${days} days`}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={notificationSettings.email_reminders}
+                  onChange={(e) =>
+                    setNotificationSettings((prev) => ({
+                      ...prev,
+                      email_reminders: e.target.checked,
+                    }))
+                  }
+                  className="h-4 w-4 rounded border-white/10 accent-primary"
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>Trial Expiration Alerts</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Get notified when free trials are about to expire
+                  </p>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={notificationSettings.trial_reminders}
+                  onChange={(e) =>
+                    setNotificationSettings((prev) => ({
+                      ...prev,
+                      trial_reminders: e.target.checked,
+                    }))
+                  }
+                  className="h-4 w-4 rounded border-white/10 accent-primary"
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>Price Change Alerts</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Notify me when subscription prices change
+                  </p>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={notificationSettings.price_change_alerts}
+                  onChange={(e) =>
+                    setNotificationSettings((prev) => ({
+                      ...prev,
+                      price_change_alerts: e.target.checked,
+                    }))
+                  }
+                  className="h-4 w-4 rounded border-white/10 accent-primary"
+                />
+              </div>
+
+              <div className="space-y-2 pt-2 border-t border-white/5 mt-4">
+                <Label className="block mt-4">Reminder Timing</Label>
+                <p className="text-sm text-muted-foreground mb-4">
+                  When should we remind you before renewals?
+                </p>
+                <div className="flex gap-4 flex-wrap">
+                  {[1, 3, 7, 14, 30].map((days) => (
+                    <label key={days} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        checked={notificationSettings.reminder_days.includes(
+                          days as any,
+                        )}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setNotificationSettings((prev) => ({
+                              ...prev,
+                              reminder_days: [
+                                ...prev.reminder_days,
+                                days as any,
+                              ],
+                            }));
+                          } else {
+                            setNotificationSettings((prev) => ({
+                              ...prev,
+                              reminder_days: prev.reminder_days.filter(
+                                (d) => d !== days,
+                              ),
+                            }));
+                          }
+                        }}
+                        className="h-4 w-4 rounded border-white/10 accent-primary"
+                      />
+                      <span className="text-sm">
+                        {days === 1 ? "1 day" : `${days} days`}
+                      </span>
+                    </label>
+                  ))}
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Security Settings */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center space-x-2">
-                <Shield className="h-5 w-5" />
-                <CardTitle>Security</CardTitle>
+          <div className="panel">
+            <div className="panel-top">
+              <div className="panel-title">
+                <div className="panel-title-ico" style={{ background: "var(--c-red-bg)", color: "var(--c-red)" }}>
+                  <Shield className="h-4 w-4" />
+                </div>
+                Security
               </div>
-              <CardDescription>
-                Update your password and security settings
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+            </div>
+            <div className="p-4">
               <form onSubmit={handlePasswordSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="current_password">Current Password</Label>
@@ -437,6 +423,7 @@ const Settings: React.FC = () => {
                         }))
                       }
                       placeholder="Enter current password"
+                      className="bg-black border-white/10 pr-10"
                     />
                     <button
                       type="button"
@@ -469,6 +456,7 @@ const Settings: React.FC = () => {
                           }))
                         }
                         placeholder="Enter new password"
+                        className="bg-black border-white/10 pr-10"
                       />
                       <button
                         type="button"
@@ -498,13 +486,16 @@ const Settings: React.FC = () => {
                         }))
                       }
                       placeholder="Confirm new password"
+                      className="bg-black border-white/10"
                     />
                   </div>
                 </div>
 
-                <div className="flex justify-end">
+                <div className="flex justify-end pt-2">
                   <Button
                     type="submit"
+                    variant="outline"
+                    className="border-white/10 bg-transparent hover:bg-white/5"
                     disabled={
                       !passwordData.current_password ||
                       !passwordData.new_password ||
@@ -516,94 +507,90 @@ const Settings: React.FC = () => {
                   </Button>
                 </div>
               </form>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-6">
+        {/* Sidebar Settings Area */}
+        <div className="w-full lg:w-80 space-y-6">
           {/* Theme Settings */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center space-x-2">
-                <Palette className="h-5 w-5" />
-                <CardTitle>Appearance</CardTitle>
-              </div>
-              <CardDescription>
-                Customize the look and feel of your dashboard
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div>
-                  <Label>Theme</Label>
-                  <div className="mt-2 space-y-2">
-                    {[
-                      { value: "light", label: "Light", emoji: "☀️" },
-                      { value: "dark", label: "Dark", emoji: "🌙" },
-                      { value: "system", label: "System", emoji: "💻" },
-                    ].map((themeOption) => (
-                      <label
-                        key={themeOption.value}
-                        className="flex items-center space-x-2"
-                      >
-                        <input
-                          type="radio"
-                          name="theme"
-                          value={themeOption.value}
-                          checked={theme === themeOption.value}
-                          onChange={(e) => setTheme(e.target.value as any)}
-                          className="h-4 w-4"
-                        />
-                        <span className="text-sm">
-                          {themeOption.emoji} {themeOption.label}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
+          <div className="panel">
+            <div className="panel-top">
+              <div className="panel-title">
+                <div className="panel-title-ico" style={{ background: "var(--c-violet-bg)", color: "var(--c-violet)" }}>
+                  <Palette className="h-4 w-4" />
                 </div>
+                Appearance
               </div>
-            </CardContent>
-          </Card>
+            </div>
+            <div className="p-4">
+              <Label className="mb-3 block">Theme</Label>
+              <div className="space-y-3">
+                {[
+                  { value: "light", label: "Light", emoji: "☀️" },
+                  { value: "dark", label: "Dark", emoji: "🌙" },
+                  { value: "system", label: "System", emoji: "💻" },
+                ].map((themeOption) => (
+                  <label
+                    key={themeOption.value}
+                    className="flex items-center space-x-3 cursor-pointer"
+                  >
+                    <input
+                      type="radio"
+                      name="theme"
+                      value={themeOption.value}
+                      checked={theme === themeOption.value}
+                      onChange={(e) => setTheme(e.target.value as any)}
+                      className="h-4 w-4 text-primary bg-black border-white/20 focus:ring-primary focus:ring-offset-background"
+                    />
+                    <span className="text-sm font-medium">
+                      <span className="mr-2">{themeOption.emoji}</span>
+                      {themeOption.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
 
           {/* Account Stats */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Account Overview</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Member since</span>
-                  <span className="font-medium">
-                    {profile?.created_at
-                      ? new Date(profile.created_at).toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "short",
-                          },
-                        )
-                      : "N/A"}
-                  </span>
+          <div className="panel">
+            <div className="panel-top">
+              <div className="panel-title">
+                <div className="panel-title-ico" style={{ background: "var(--c-green-bg)", color: "var(--c-green)" }}>
+                  <User className="h-4 w-4" />
                 </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">
-                    Active subscriptions
-                  </span>
-                  <span className="font-medium">{activeCount}</span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">
-                    Monthly spending
-                  </span>
-                  <span className="font-medium">
-                    {formatCurrencyAmount(totalMonthlySpend, displayCurrency)}
-                  </span>
-                </div>
+                Account Overview
               </div>
-            </CardContent>
-          </Card>
+            </div>
+            <div className="p-4 space-y-4">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Member since</span>
+                <span className="font-medium text-white">
+                  {profile?.created_at
+                    ? new Date(profile.created_at).toLocaleDateString(
+                      "en-US",
+                      { month: "short", year: "numeric" }
+                    )
+                    : "N/A"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">
+                  Active subscriptions
+                </span>
+                <span className="font-medium text-white">{activeCount}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">
+                  Monthly spending
+                </span>
+                <span className="font-medium text-primary">
+                  {formatCurrencyAmount(totalMonthlySpend, displayCurrency)}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

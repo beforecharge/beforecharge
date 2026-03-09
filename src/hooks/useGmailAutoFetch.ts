@@ -19,7 +19,7 @@ export const useGmailAutoFetch = () => {
     }
 
     setIsLoading(true);
-    
+
     try {
       const result = await gmailService.autoFetchAndSaveSubscriptions();
       setLastResult(result);
@@ -35,9 +35,9 @@ export const useGmailAutoFetch = () => {
   const autoFetchWithToast = useCallback(async (): Promise<AutoFetchResult> => {
     try {
       toast.loading('Scanning your Gmail for subscriptions...', { id: 'auto-fetch' });
-      
+
       const result = await autoFetch();
-      
+
       if (result.added > 0) {
         toast.success(
           `Successfully added ${result.added} new subscription${result.added > 1 ? 's' : ''} from your Gmail!`,
@@ -53,21 +53,22 @@ export const useGmailAutoFetch = () => {
       }
 
       return result;
-      
-    } catch (error: any) {
-      if (error.message.includes('Gmail service not initialized') || 
-          error.message.includes('No Google OAuth token')) {
+
+    } catch (err: any) {
+      const errorMsg = typeof err === 'string' ? err : (err?.message || '');
+      if (errorMsg.includes('Gmail service not initialized') ||
+        errorMsg.includes('No Google OAuth token')) {
         toast.error('Please sign in with Google to access Gmail', { id: 'auto-fetch' });
-      } else if (error.message.includes('access_denied') || 
-                 error.message.includes('verification')) {
-        toast.error('Gmail access requires verification. Please add yourself as a test user in Google Cloud Console.', { 
+      } else if (errorMsg.includes('access_denied') ||
+        errorMsg.includes('verification')) {
+        toast.error('Gmail access requires verification. Please add yourself as a test user in Google Cloud Console.', {
           id: 'auto-fetch',
           duration: 6000
         });
       } else {
-        toast.error(error.message || 'Failed to auto-fetch subscriptions', { id: 'auto-fetch' });
+        toast.error(errorMsg || 'Failed to auto-fetch subscriptions', { id: 'auto-fetch' });
       }
-      throw error;
+      throw err;
     }
   }, [autoFetch]);
 
@@ -76,6 +77,6 @@ export const useGmailAutoFetch = () => {
     autoFetchWithToast,
     isLoading,
     lastResult,
-    isEnabled: !!user && import.meta.env.VITE_ENABLE_GMAIL_AUTOFETCH === 'true'
+    isEnabled: !!user
   };
 };

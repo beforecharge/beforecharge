@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LoadingSpinner from "@/components/ui/loading-spinner";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { usePayment } from "@/hooks/usePayment";
@@ -41,18 +40,15 @@ const Pricing: React.FC = () => {
     useState<PlanType | null>(null);
 
   useEffect(() => {
-    // Detect user location and set currency accordingly
     const detectUserLocation = () => {
-      // Check if user is from India based on timezone or other indicators
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const isIndianTimezone = timezone.includes('Asia/Kolkata') || timezone.includes('Asia/Calcutta');
-      
-      // Also check user profile or payment config
+
       const userIsIndian =
         profile?.default_currency === "INR" ||
         paymentConfig?.provider === "razorpay" ||
         isIndianTimezone;
-      
+
       setCurrency(userIsIndian ? "INR" : "USD");
     };
 
@@ -60,8 +56,7 @@ const Pricing: React.FC = () => {
   }, [profile, paymentConfig]);
 
   useEffect(() => {
-    // Check if Stripe is properly configured
-    const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+    const stripeKey = process.env.VITE_STRIPE_PUBLISHABLE_KEY;
     setIsStripeAvailable(!!stripeKey);
   }, []);
 
@@ -130,11 +125,11 @@ const Pricing: React.FC = () => {
       case "free":
         return <Users className="h-8 w-8 text-green-500" />;
       case "premium":
-        return <Star className="h-8 w-8 text-blue-500" />;
+        return <Star className="h-8 w-8 text-primary" />;
       case "enterprise":
         return <Shield className="h-8 w-8 text-purple-500" />;
       default:
-        return <Zap className="h-8 w-8 text-gray-500" />;
+        return <Zap className="h-8 w-8 text-muted-foreground" />;
     }
   };
 
@@ -151,15 +146,15 @@ const Pricing: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-12">
       {/* Header */}
-      <div className="text-center space-y-4">
+      <div className="text-center space-y-4 pt-8">
         <h1 className="text-4xl font-bold">Choose Your Plan</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Upgrade your subscription management with powerful features and
           unlimited tracking.
         </p>
-        
+
         {/* Currency Display */}
         <div className="flex items-center justify-center gap-2">
           <span className="text-sm text-muted-foreground">
@@ -171,74 +166,69 @@ const Pricing: React.FC = () => {
         <div className="flex items-center justify-center gap-4 mb-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">Billing:</span>
-            <div className="flex bg-muted rounded-lg p-1">
+            <div className="flex bg-black/50 border border-white/10 rounded-lg p-1">
               <button
                 onClick={() => setBillingInterval("monthly")}
-                className={`px-4 py-2 rounded text-sm font-medium transition-all ${
-                  billingInterval === "monthly"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
+                className={`px-4 py-2 rounded text-sm font-medium transition-all ${billingInterval === "monthly"
+                    ? "bg-white/10 text-white shadow-sm"
+                    : "text-muted-foreground hover:text-white"
+                  }`}
               >
                 Monthly
               </button>
               <button
                 onClick={() => setBillingInterval("yearly")}
-                className={`px-4 py-2 rounded text-sm font-medium transition-all relative ${
-                  billingInterval === "yearly"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
+                className={`px-4 py-2 rounded text-sm font-medium transition-all relative ${billingInterval === "yearly"
+                    ? "bg-white/10 text-white shadow-sm"
+                    : "text-muted-foreground hover:text-white"
+                  }`}
               >
                 Yearly
-                <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                <span className="absolute -top-2 -right-2 bg-primary text-black font-bold text-xs.5 px-1.5 py-0.5 rounded-sm">
                   Save
                 </span>
               </button>
             </div>
           </div>
         </div>
-
-
       </div>
 
       {/* Pricing Cards */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
+      <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
         {getCurrentPlans().map((plan) => {
           const features = PLAN_FEATURES[plan.type] || [];
           const price = getPlanPrice(plan);
           const isPopular = plan.type === "premium";
 
           return (
-            <Card
+            <div
               key={plan.type}
-              className={`relative ${
-                isPopular
-                  ? "border-primary shadow-lg scale-105"
-                  : "border-border"
-              }`}
+              className={`panel relative flex flex-col ${isPopular
+                  ? "border-primary/50 shadow-[0_0_30px_rgba(204,255,0,0.1)] md:scale-105 z-10"
+                  : ""
+                }`}
             >
               {isPopular && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <Badge className="bg-primary text-primary-foreground">
+                  <Badge className="bg-primary text-black font-bold border-none px-3 py-1">
                     Most Popular
                   </Badge>
                 </div>
               )}
 
-              <CardHeader className="text-center space-y-4">
-                <div className="flex justify-center">
+              <div className="p-6 text-center space-y-4 border-b border-white/5">
+                <div className="flex justify-center mb-2">
                   {getPlanIcon(plan.type)}
                 </div>
                 <div>
-                  <CardTitle className="text-2xl capitalize">
+                  <h3 className="text-2xl font-bold capitalize">
                     {plan.name}
-                  </CardTitle>
-                  <p className="text-muted-foreground mt-2">
+                  </h3>
+                  <p className="text-muted-foreground mt-2 text-sm">
                     {plan.description}
                   </p>
                 </div>
-                <div className="space-y-2">
+                <div className="py-2">
                   <div className="text-4xl font-bold">
                     {price === 0 ? (
                       "Free"
@@ -247,16 +237,16 @@ const Pricing: React.FC = () => {
                         {currency === "INR" ? "₹" : "$"}
                         {price}
                         <span className="text-lg text-muted-foreground font-normal">
-                          /{billingInterval === "yearly" ? "year" : "month"}
+                          /{billingInterval === "yearly" ? "year" : "mo"}
                         </span>
                       </>
                     )}
                   </div>
                   {price > 0 && (
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground mt-2">
                       Billed {billingInterval} • Cancel anytime
                       {billingInterval === "yearly" && (
-                        <span className="block text-green-600 dark:text-green-400 font-medium">
+                        <span className="block text-primary font-medium mt-1">
                           2 months free (vs monthly)
                         </span>
                       )}
@@ -266,75 +256,66 @@ const Pricing: React.FC = () => {
 
                 {/* Auto-fetch highlight for Premium and Enterprise */}
                 {(plan.type === "premium" || plan.type === "enterprise") && (
-                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
-                    <div className="flex items-center gap-2 text-sm font-medium text-blue-900 dark:text-blue-100">
-                      <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
-                      Coming Soon: Auto-fetch Subscriptions
+                  <div className="bg-primary/10 p-3 rounded-lg border border-primary/20 text-left">
+                    <div className="flex items-center gap-2 text-sm font-medium text-primary">
+                      <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+                      Coming Soon: Auto-fetch
                     </div>
-                    <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
+                    <p className="text-xs text-primary/70 mt-1">
                       AI-powered email scanning to automatically detect and
                       import your subscriptions
                     </p>
                   </div>
                 )}
-              </CardHeader>
+              </div>
 
-              <CardContent className="space-y-6">
-                <div className="space-y-3">
-                  {features.map((feature, index) => (
-                    <div key={index} className="flex items-center gap-3">
-                      <div
-                        className={`flex-shrink-0 ${
-                          feature.includes("Coming Soon")
-                            ? "text-blue-500"
-                            : "text-green-500"
-                        }`}
-                      >
-                        {feature.includes("Coming Soon") ? (
-                          <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
-                        ) : (
-                          getFeatureIcon(
-                            feature.toLowerCase().replace(/[^a-z]/g, ""),
-                          )
-                        )}
+              <div className="p-6 space-y-6 flex-1 flex flex-col">
+                <div className="space-y-3 flex-1">
+                  {features.map((feature, index) => {
+                    const isComingSoon = feature.includes("Coming Soon");
+                    const iconColor = isComingSoon ? "text-primary/70" : "text-primary";
+                    const textColor = isComingSoon ? "text-primary/70 font-medium" : "text-muted-foreground";
+
+                    return (
+                      <div key={index} className="flex items-center gap-3">
+                        <div className={`flex-shrink-0 ${iconColor}`}>
+                          {isComingSoon ? (
+                            <span className="flex h-2 w-2 rounded-full bg-primary/70 animate-pulse"></span>
+                          ) : (
+                            getFeatureIcon(feature.toLowerCase().replace(/[^a-z]/g, ""))
+                          )}
+                        </div>
+                        <span className={`text-sm ${textColor}`}>
+                          {feature}
+                        </span>
                       </div>
-                      <span
-                        className={`text-sm ${
-                          feature.includes("Coming Soon")
-                            ? "text-blue-700 dark:text-blue-300 font-medium"
-                            : ""
-                        }`}
-                      >
-                        {feature}
-                      </span>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 <Button
                   size="lg"
-                  variant={isPopular ? "default" : "outline"}
-                  className="w-full"
+                  className={`w-full ${isPopular ? "bg-primary text-black hover:bg-primary/90" : "bg-white/10 text-white hover:bg-white/20"}`}
                   onClick={() => handlePlanSelect(plan.type)}
                   disabled={isProcessing || selectedPlan === plan.type}
                 >
                   {selectedPlan === plan.type ? (
-                    <LoadingSpinner size="sm" className="mr-2" />
+                    <LoadingSpinner size="sm" className={`mr-2 ${isPopular ? "border-black" : "border-white"}`} />
                   ) : null}
                   {plan.type === "free" ? "Get Started" : "Upgrade Now"}
                 </Button>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           );
         })}
       </div>
 
       {/* Payment Provider Info */}
       {paymentConfig && (
-        <div className="text-center space-y-2">
+        <div className="text-center space-y-2 pt-8">
           <p className="text-sm text-muted-foreground">
             Secure payments powered by{" "}
-            <span className="font-medium capitalize">
+            <span className="font-medium capitalize text-white">
               {paymentConfig.provider}
             </span>
           </p>
@@ -356,48 +337,48 @@ const Pricing: React.FC = () => {
       )}
 
       {/* FAQ Section */}
-      <div className="max-w-4xl mx-auto space-y-8 pt-16">
+      <div className="max-w-4xl mx-auto space-y-8 pt-16 px-4">
         <div className="text-center">
           <h2 className="text-3xl font-bold">Frequently Asked Questions</h2>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6 sm:gap-8">
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">
+        <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
+          <div className="panel p-6">
+            <h3 className="text-lg font-semibold mb-2">
               Can I change plans anytime?
             </h3>
-            <p className="text-muted-foreground">
+            <p className="text-sm text-muted-foreground leading-relaxed">
               Yes, you can upgrade or downgrade your plan at any time. Changes
               take effect immediately, and you'll be charged or credited
               proportionally.
             </p>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">
+          <div className="panel p-6">
+            <h3 className="text-lg font-semibold mb-2">
               What payment methods do you accept?
             </h3>
-            <p className="text-muted-foreground">
+            <p className="text-sm text-muted-foreground leading-relaxed">
               We accept all major credit cards, debit cards, and digital wallets
               through Stripe (global) and Razorpay (India).
             </p>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Is there a free trial?</h3>
-            <p className="text-muted-foreground">
+          <div className="panel p-6">
+            <h3 className="text-lg font-semibold mb-2">Is there a free trial?</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
               Our Free plan gives you access to core features with limits. You
               can upgrade anytime to unlock unlimited subscriptions and advanced
               features.
             </p>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">How secure is my data?</h3>
-            <p className="text-muted-foreground">
+          <div className="panel p-6">
+            <h3 className="text-lg font-semibold mb-2">How secure is my data?</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
               Your data is encrypted at rest and in transit. We use
               industry-standard security practices and never store your payment
-              information directly.
+              information directly in our databases.
             </p>
           </div>
         </div>

@@ -6,6 +6,7 @@ import { UserProfile, NotificationPreferences } from "@/types/app.types";
 import {
   DEFAULT_NOTIFICATION_PREFERENCES,
 } from "@/lib/constants";
+import { guessUserCurrency } from "@/lib/currency";
 import toast from "react-hot-toast";
 
 interface AuthState {
@@ -64,7 +65,7 @@ const ensureProfileExists = async (user: User): Promise<UserProfile | null> => {
         email: user.email!,
         full_name: user.user_metadata?.full_name || user.user_metadata?.name || undefined,
         avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || undefined,
-        default_currency: "USD",
+        default_currency: guessUserCurrency(),
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         notification_preferences: DEFAULT_NOTIFICATION_PREFERENCES,
         plan_type: "free",
@@ -141,7 +142,7 @@ export const useAuthStore = create<AuthState>()(
               email: data.user.email!,
               full_name: userData?.full_name || undefined,
               avatar_url: undefined,
-              default_currency: "USD",
+              default_currency: guessUserCurrency(),
               timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
               notification_preferences: DEFAULT_NOTIFICATION_PREFERENCES,
               plan_type: "free",

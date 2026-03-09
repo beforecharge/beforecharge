@@ -16,8 +16,8 @@ const Terms: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              By accessing and using BeforeCharge, you accept and agree to be bound by the terms 
-              and provision of this agreement. If you do not agree to abide by the above, 
+              By accessing and using BeforeCharge, you accept and agree to be bound by the terms
+              and provision of this agreement. If you do not agree to abide by the above,
               please do not use this service.
             </p>
           </CardContent>
@@ -29,8 +29,8 @@ const Terms: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              BeforeCharge is a subscription management service that helps you track, manage, 
-              and optimize your recurring subscription payments. We provide tools to manually 
+              BeforeCharge is a subscription management service that helps you track, manage,
+              and optimize your recurring subscription payments. We provide tools to manually
               add subscriptions and optionally auto-detect them from your Gmail account.
             </p>
           </CardContent>
@@ -44,15 +44,15 @@ const Terms: React.FC = () => {
             <div>
               <h3 className="font-semibold mb-2">Account Creation</h3>
               <p className="text-sm text-muted-foreground">
-                You must provide accurate and complete information when creating an account. 
+                You must provide accurate and complete information when creating an account.
                 You are responsible for maintaining the security of your account credentials.
               </p>
             </div>
-            
+
             <div>
               <h3 className="font-semibold mb-2">Account Responsibility</h3>
               <p className="text-sm text-muted-foreground">
-                You are responsible for all activities that occur under your account. 
+                You are responsible for all activities that occur under your account.
                 Please notify us immediately of any unauthorized use of your account.
               </p>
             </div>
@@ -67,15 +67,15 @@ const Terms: React.FC = () => {
             <div>
               <h3 className="font-semibold mb-2">Optional Feature</h3>
               <p className="text-sm text-muted-foreground">
-                Gmail integration is an optional feature that requires your explicit consent. 
+                Gmail integration is an optional feature that requires your explicit consent.
                 You can use BeforeCharge without connecting your Gmail account.
               </p>
             </div>
-            
+
             <div>
               <h3 className="font-semibold mb-2">Limited Access</h3>
               <p className="text-sm text-muted-foreground">
-                When you grant Gmail access, we only read emails to detect subscription 
+                When you grant Gmail access, we only read emails to detect subscription
                 information. We do not access other Gmail features or store your emails.
               </p>
             </div>
@@ -83,7 +83,7 @@ const Terms: React.FC = () => {
             <div>
               <h3 className="font-semibold mb-2">Revocation</h3>
               <p className="text-sm text-muted-foreground">
-                You can revoke Gmail access at any time through your Google Account settings 
+                You can revoke Gmail access at any time through your Google Account settings
                 or within the BeforeCharge application.
               </p>
             </div>
@@ -96,7 +96,7 @@ const Terms: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground mb-4">
-              You agree not to use BeforeCharge for any unlawful purpose or in any way that 
+              You agree not to use BeforeCharge for any unlawful purpose or in any way that
               could damage, disable, or impair the service. Prohibited activities include:
             </p>
             <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
@@ -114,8 +114,8 @@ const Terms: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              While we strive to provide accurate subscription detection from Gmail, 
-              you are responsible for verifying the accuracy of all subscription information. 
+              While we strive to provide accurate subscription detection from Gmail,
+              you are responsible for verifying the accuracy of all subscription information.
               BeforeCharge is a tool to assist with subscription management, not a financial advisor.
             </p>
           </CardContent>
@@ -127,8 +127,8 @@ const Terms: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              We strive to maintain high service availability but cannot guarantee 
-              uninterrupted access. We may perform maintenance or updates that 
+              We strive to maintain high service availability but cannot guarantee
+              uninterrupted access. We may perform maintenance or updates that
               temporarily affect service availability.
             </p>
           </CardContent>
@@ -140,8 +140,8 @@ const Terms: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              BeforeCharge is provided "as is" without warranties of any kind. We are not 
-              liable for any damages arising from your use of the service, including 
+              BeforeCharge is provided "as is" without warranties of any kind. We are not
+              liable for any damages arising from your use of the service, including
               but not limited to missed subscription payments or inaccurate data.
             </p>
           </CardContent>
@@ -153,8 +153,8 @@ const Terms: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              We reserve the right to modify these terms at any time. We will notify 
-              users of significant changes via email or through the application. 
+              We reserve the right to modify these terms at any time. We will notify
+              users of significant changes via email or through the application.
               Continued use of the service constitutes acceptance of modified terms.
             </p>
           </CardContent>
@@ -168,7 +168,7 @@ const Terms: React.FC = () => {
             <p className="text-sm text-muted-foreground">
               If you have any questions about these Terms of Service, please contact us at:
               <br />
-              <strong>Email:</strong> mehtasparsh777@gmail.com
+              <strong>Email:</strong> sparshmehta1001@gmail.com
             </p>
           </CardContent>
         </Card>
