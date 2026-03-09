@@ -115,11 +115,19 @@ const Signup: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center pt-16 px-4 py-8 relative" style={{ background: "var(--c-bg)" }}>
       <div className="w-full max-w-md space-y-6 relative z-10 block">
         {/* Header */}
+        <Link
+          to="/"
+          className="fixed top-6 right-6 p-2 rounded-full bg-[#10121a] border border-white/10 text-muted-foreground hover:text-white hover:bg-white/5 transition-colors z-50 flex items-center justify-center"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+        </Link>
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center space-x-2">
-            <h1 className="text-3xl font-bold font-display" style={{ letterSpacing: "-1px" }}>
-              Before<span style={{ color: "var(--c-primary)" }}>Charge</span>
-            </h1>
+            <Link to="/">
+              <h1 className="text-3xl font-bold font-display hover:opacity-90 transition-opacity" style={{ letterSpacing: "-1px" }}>
+                Before<span style={{ color: "var(--c-primary)" }}>Charge</span>
+              </h1>
+            </Link>
           </div>
           <p className="text-muted-foreground text-sm sm:text-base">
             Start tracking your subscriptions today

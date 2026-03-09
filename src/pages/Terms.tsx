@@ -1,10 +1,26 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Terms: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <div className="space-y-6">
+    <div className="container mx-auto px-4 py-8 max-w-4xl relative min-h-screen">
+      <button
+        onClick={() => {
+          if (window.history.length > 2) {
+            navigate(-1);
+          } else {
+            navigate('/');
+          }
+        }}
+        className="fixed top-6 right-6 p-2 rounded-full bg-[#10121a] border border-white/10 text-muted-foreground hover:text-white hover:bg-white/5 transition-colors z-50 flex items-center justify-center"
+      >
+        <X className="h-5 w-5" />
+      </button>
+      <div className="space-y-6 pt-12">
         <div className="text-center">
           <h1 className="text-3xl font-bold mb-2">Terms of Service</h1>
           <p className="text-muted-foreground">Last updated: {new Date().toLocaleDateString()}</p>
@@ -168,7 +184,7 @@ const Terms: React.FC = () => {
             <p className="text-sm text-muted-foreground">
               If you have any questions about these Terms of Service, please contact us at:
               <br />
-              <strong>Email:</strong> sparshmehta1001@gmail.com
+              <strong>Email:</strong> hello@beforecharge.com
             </p>
           </CardContent>
         </Card>

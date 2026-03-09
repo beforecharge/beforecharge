@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, Link } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 import { useUIStore } from "@/store/uiStore";
 
@@ -78,10 +78,10 @@ const AuthCallback: React.FC = () => {
     const handleAuthCallback = async () => {
       try {
         setIsProcessing(true);
-        
+
         // Log current URL for debugging
         console.log("AuthCallback - Current URL:", window.location.href);
-        
+
         // Let Supabase handle the session exchange first, then clean the URL.
         await checkSession();
 
@@ -191,7 +191,7 @@ class ErrorBoundary extends React.Component<
 
 // Main App Component
 const App: React.FC = () => {
-  const { initialize, isInitialized } = useAuthStore();
+  const { initialize, isInitialized, user } = useAuthStore();
   const { setTheme, theme } = useUIStore();
 
   // Handle OAuth redirects that might land on any page
@@ -199,7 +199,7 @@ const App: React.FC = () => {
     const handleOAuthRedirect = () => {
       const hashParams = new URLSearchParams(window.location.hash.substring(1));
       const accessToken = hashParams.get('access_token');
-      
+
       if (accessToken) {
         console.log("OAuth redirect detected, redirecting to callback...");
         // Redirect to the proper callback route
@@ -267,13 +267,25 @@ const App: React.FC = () => {
 
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
-          <Route 
-            path="/pricing" 
+          <Route
+            path="/pricing"
             element={
-              <MainLayout>
-                <Pricing />
-              </MainLayout>
-            } 
+              user ? (
+                <MainLayout>
+                  <Pricing />
+                </MainLayout>
+              ) : (
+                <div className="min-h-screen relative pt-12 px-4 pb-12">
+                  <Link
+                    to="/"
+                    className="fixed top-6 right-6 p-2 rounded-full bg-[#10121a] border border-white/10 text-muted-foreground hover:text-white hover:bg-white/5 transition-colors z-50 flex items-center justify-center"
+                  >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+                  </Link>
+                  <Pricing />
+                </div>
+              )
+            }
           />
 
           {/* Protected Routes with Layout */}
