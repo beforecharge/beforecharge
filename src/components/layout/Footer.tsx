@@ -25,12 +25,12 @@ const Footer: React.FC = () => {
             >
               Terms of Service
             </Link>
-            <a
-              href="mailto:hello@beforecharge.com"
+            <Link
+              to="/contact"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               Support
-            </a>
+            </Link>
           </div>
           <div className="flex items-center space-x-2 text-sm text-muted-foreground">
             <Zap className="h-4 w-4 text-primary" />

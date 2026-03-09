@@ -458,7 +458,7 @@ const Home: React.FC = () => {
           <li><button onClick={(e) => scrollToSection(e, "pricing")}>Pricing</button></li>
           <li><button onClick={() => navigate("/privacy")}>Privacy</button></li>
           <li><button onClick={() => navigate("/terms")}>Terms</button></li>
-          <li><button onClick={() => window.location.href = "mailto:hello@beforecharge.com"}>Contact Us</button></li>
+          <li><button onClick={() => navigate("/contact")}>Contact Us</button></li>
         </ul>
         <div className="footer-right">© 2026 BeforeCharge · Know before you owe</div>
       </footer>

@@ -56,6 +56,24 @@ const Pricing: React.FC = () => {
   }, [profile, paymentConfig]);
 
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't navigate if any modals are open as you would only want to close the modal
+      if (e.key === 'Escape' && !showStripeModal && !showRazorpayModal) {
+        if (!user) {
+          navigate('/');
+        } else if (window.history.length > 2) {
+          navigate(-1);
+        } else {
+          navigate('/');
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate, user, showStripeModal, showRazorpayModal]);
+
+  useEffect(() => {
     const stripeKey = process.env.VITE_STRIPE_PUBLISHABLE_KEY;
     setIsStripeAvailable(!!stripeKey);
   }, []);
@@ -170,8 +188,8 @@ const Pricing: React.FC = () => {
               <button
                 onClick={() => setBillingInterval("monthly")}
                 className={`px-4 py-2 rounded text-sm font-medium transition-all ${billingInterval === "monthly"
-                    ? "bg-white/10 text-white shadow-sm"
-                    : "text-muted-foreground hover:text-white"
+                  ? "bg-white/10 text-white shadow-sm"
+                  : "text-muted-foreground hover:text-white"
                   }`}
               >
                 Monthly
@@ -179,8 +197,8 @@ const Pricing: React.FC = () => {
               <button
                 onClick={() => setBillingInterval("yearly")}
                 className={`px-4 py-2 rounded text-sm font-medium transition-all relative ${billingInterval === "yearly"
-                    ? "bg-white/10 text-white shadow-sm"
-                    : "text-muted-foreground hover:text-white"
+                  ? "bg-white/10 text-white shadow-sm"
+                  : "text-muted-foreground hover:text-white"
                   }`}
               >
                 Yearly
@@ -204,8 +222,8 @@ const Pricing: React.FC = () => {
             <div
               key={plan.type}
               className={`panel relative flex flex-col ${isPopular
-                  ? "border-primary/50 shadow-[0_0_30px_rgba(204,255,0,0.1)] md:scale-105 z-10"
-                  : ""
+                ? "border-primary/50 shadow-[0_0_30px_rgba(204,255,0,0.1)] md:scale-105 z-10"
+                : ""
                 }`}
             >
               {isPopular && (
