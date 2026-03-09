@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 
 const Home: React.FC = () => {
@@ -456,9 +456,9 @@ const Home: React.FC = () => {
         <ul className="footer-links">
           <li><button onClick={(e) => scrollToSection(e, "features")}>Features</button></li>
           <li><button onClick={(e) => scrollToSection(e, "pricing")}>Pricing</button></li>
-          <li><button onClick={() => navigate("/privacy")}>Privacy</button></li>
-          <li><button onClick={() => navigate("/terms")}>Terms</button></li>
-          <li><button onClick={() => navigate("/contact")}>Contact Us</button></li>
+          <li><a href="https://beforecharge.com/privacy">Privacy Policy</a></li>
+          <li><Link to="/terms">Terms</Link></li>
+          <li><Link to="/contact">Contact Us</Link></li>
         </ul>
         <div className="footer-right">© 2026 BeforeCharge · Know before you owe</div>
       </footer>

@@ -1134,14 +1134,21 @@
     padding: 0;
 }
 
-.home-page .footer-links a {
+.home-page .footer-links a,
+.home-page .footer-links button {
     color: var(--muted-before);
     text-decoration: none;
     font-size: 14px;
     transition: color 0.2s;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
 }
 
-.home-page .footer-links a:hover {
+.home-page .footer-links a:hover,
+.home-page .footer-links button:hover {
     color: var(--text-before);
 }
 
