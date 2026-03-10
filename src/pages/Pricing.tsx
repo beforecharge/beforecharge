@@ -21,6 +21,7 @@ import { StripePaymentModal, RazorpayPaymentModal } from "@/components/payment";
 import { PLANS, YEARLY_PLANS, PLAN_FEATURES } from "@/lib/constants";
 import { Plan, PlanType } from "@/types/payment.types";
 import toast from "react-hot-toast";
+import { trackEvent, ANALYTICS_EVENTS } from "@/utils/analytics";
 
 const Pricing: React.FC = () => {
   const navigate = useNavigate();
@@ -91,6 +92,10 @@ const Pricing: React.FC = () => {
 
     setSelectedPlan(planType);
     setPlanLoading(true);
+    trackEvent(ANALYTICS_EVENTS.PLAN_SELECT, {
+      plan: planType,
+      billing: billingInterval
+    });
 
     try {
       const plan = PLANS.find((p) => p.type === planType);
@@ -186,7 +191,10 @@ const Pricing: React.FC = () => {
             <span className="text-sm text-muted-foreground">Billing:</span>
             <div className="flex bg-black/50 border border-white/10 rounded-lg p-1">
               <button
-                onClick={() => setBillingInterval("monthly")}
+                onClick={() => {
+                  setBillingInterval("monthly");
+                  trackEvent(ANALYTICS_EVENTS.BILLING_TOGGLE, { interval: 'monthly' });
+                }}
                 className={`px-4 py-2 rounded text-sm font-medium transition-all ${billingInterval === "monthly"
                   ? "bg-white/10 text-white shadow-sm"
                   : "text-muted-foreground hover:text-white"
@@ -195,7 +203,10 @@ const Pricing: React.FC = () => {
                 Monthly
               </button>
               <button
-                onClick={() => setBillingInterval("yearly")}
+                onClick={() => {
+                  setBillingInterval("yearly");
+                  trackEvent(ANALYTICS_EVENTS.BILLING_TOGGLE, { interval: 'yearly' });
+                }}
                 className={`px-4 py-2 rounded text-sm font-medium transition-all relative ${billingInterval === "yearly"
                   ? "bg-white/10 text-white shadow-sm"
                   : "text-muted-foreground hover:text-white"

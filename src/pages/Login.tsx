@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Eye, EyeOff, Mail, Lock, Chrome } from "lucide-react";
+import { trackEvent, ANALYTICS_EVENTS } from "@/utils/analytics";
 
 import { useAuth } from "@/hooks/useAuth";
 import { FEATURES } from "@/lib/constants";
@@ -66,6 +67,7 @@ const Login: React.FC = () => {
   // Handle form submission
   const onSubmit = async (data: LoginFormData) => {
     try {
+      trackEvent(ANALYTICS_EVENTS.LOGIN_CLICK, { method: 'email' });
       const result = await signIn(data.email, data.password);
 
       if (result.success) {
@@ -82,6 +84,7 @@ const Login: React.FC = () => {
 
     try {
       setIsGoogleLoading(true);
+      trackEvent(ANALYTICS_EVENTS.GOOGLE_AUTH_CLICK, { context: 'login' });
       const result = await signInWithGoogle();
 
       if (result.success) {

@@ -195,6 +195,19 @@ const App: React.FC = () => {
   const { initialize, isInitialized, user } = useAuthStore();
   const { setTheme, theme } = useUIStore();
 
+  const location = useLocation();
+
+  // Handle Google Analytics page views
+  useEffect(() => {
+    // @ts-ignore
+    if (typeof window.gtag === 'function') {
+      // @ts-ignore
+      window.gtag('config', 'G-MWJ1N43M5G', {
+        page_path: location.pathname + location.search,
+      });
+    }
+  }, [location]);
+
   // Handle OAuth redirects that might land on any page
   useEffect(() => {
     const handleOAuthRedirect = () => {

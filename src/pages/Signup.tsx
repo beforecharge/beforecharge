@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Eye, EyeOff, Mail, Lock, User, Chrome } from 'lucide-react';
+import { trackEvent, ANALYTICS_EVENTS } from "@/utils/analytics";
 
 import { useAuth } from '@/hooks/useAuth';
 import { FEATURES } from '@/lib/constants';
@@ -81,6 +82,7 @@ const Signup: React.FC = () => {
   // Handle form submission
   const onSubmit = async (data: SignupFormData) => {
     try {
+      trackEvent(ANALYTICS_EVENTS.SIGN_UP_CLICK, { method: 'email' });
       const result = await signUp(data.email, data.password, {
         full_name: data.full_name,
       });
@@ -99,10 +101,11 @@ const Signup: React.FC = () => {
 
     try {
       setIsGoogleLoading(true);
+      trackEvent(ANALYTICS_EVENTS.GOOGLE_AUTH_CLICK, { context: 'signup' });
       const result = await signInWithGoogle();
 
       if (result.success) {
-        // OAuth redirect will handle navigation
+        trackEvent(ANALYTICS_EVENTS.GOOGLE_AUTH_SUCCESS);
       }
     } catch (error) {
       console.error('Google sign up error:', error);

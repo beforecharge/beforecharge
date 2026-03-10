@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
+import { trackEvent, ANALYTICS_EVENTS } from "@/utils/analytics";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -8,6 +9,10 @@ const Home: React.FC = () => {
 
   const handleCtaClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    trackEvent(ANALYTICS_EVENTS.HERO_CTA_CLICK, {
+      authenticated: !!user,
+      location: 'hero'
+    });
     if (user) {
       navigate("/subscriptions");
     } else {
@@ -393,7 +398,10 @@ const Home: React.FC = () => {
                 <li>Manual entry</li>
                 <li>Email notifications</li>
               </ul>
-              <button className="plan-btn plan-btn-outline" onClick={() => navigate("/signup")}>Get Started Free</button>
+              <button className="plan-btn plan-btn-outline" onClick={() => {
+                trackEvent(ANALYTICS_EVENTS.PLAN_SELECT, { plan: 'free' });
+                navigate("/signup");
+              }}>Get Started Free</button>
             </div>
 
             <div className="plan popular">
@@ -411,7 +419,10 @@ const Home: React.FC = () => {
                 <li>Spend analytics & reports</li>
                 <li>WhatsApp & SMS alerts</li>
               </ul>
-              <button className="plan-btn plan-btn-primary" onClick={() => navigate("/signup")}>Start 7-Day Free Trial</button>
+              <button className="plan-btn plan-btn-primary" onClick={() => {
+                trackEvent(ANALYTICS_EVENTS.PLAN_SELECT, { plan: 'personal' });
+                navigate("/signup");
+              }}>Start 7-Day Free Trial</button>
             </div>
 
             <div className="plan">
@@ -427,7 +438,10 @@ const Home: React.FC = () => {
                 <li>Priority support</li>
                 <li>Household sharing</li>
               </ul>
-              <button className="plan-btn plan-btn-outline" onClick={() => navigate("/signup")}>Start Free Trial</button>
+              <button className="plan-btn plan-btn-outline" onClick={() => {
+                trackEvent(ANALYTICS_EVENTS.PLAN_SELECT, { plan: 'business' });
+                navigate("/signup");
+              }}>Start Free Trial</button>
             </div>
           </div>
         </div>

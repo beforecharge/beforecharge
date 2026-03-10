@@ -17,6 +17,7 @@ import { useSubscriptionLimits } from "@/hooks/useSubscriptionLimits";
 import useSubscriptions from "@/hooks/useSubscriptions";
 import { DEFAULTS } from "@/lib/constants";
 import { useAuth } from "@/hooks/useAuth";
+import { trackEvent, ANALYTICS_EVENTS } from "@/utils/analytics";
 
 const getDaysUntilRenewal = (renewalDate: string) => {
   const renewal = new Date(renewalDate);
@@ -69,6 +70,7 @@ const Subscriptions: React.FC = () => {
 
   const handleDeleteSubscription = async (id: string, name: string) => {
     if (window.confirm(`Are you sure you want to delete "${name}"?`)) {
+      trackEvent(ANALYTICS_EVENTS.SUB_DELETED, { sub_name: name });
       await deleteSubscription(id);
     }
   };
@@ -88,7 +90,7 @@ const Subscriptions: React.FC = () => {
           <AutoFetchButton className="add-btn" />
           <AddSubscriptionModal
             trigger={
-              <button className="add-btn">
+              <button className="add-btn" onClick={() => trackEvent(ANALYTICS_EVENTS.ADD_SUBSCRIPTION_CLICK)}>
                 <Plus className="h-4 w-4" />
                 Add Subscription
               </button>

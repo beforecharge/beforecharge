@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import LoadingSpinner from '@/components/ui/loading-spinner';
 import { useGmailAutoFetch, AutoFetchResult } from '@/hooks/useGmailAutoFetch';
 import { Mail } from 'lucide-react';
+import { trackEvent, ANALYTICS_EVENTS } from "@/utils/analytics";
 
 interface AutoFetchButtonProps {
   onComplete?: (result: AutoFetchResult) => void;
@@ -11,8 +12,8 @@ interface AutoFetchButtonProps {
   className?: string;
 }
 
-const AutoFetchButton: React.FC<AutoFetchButtonProps> = ({ 
-  onComplete, 
+const AutoFetchButton: React.FC<AutoFetchButtonProps> = ({
+  onComplete,
   variant = 'outline',
   size = 'sm',
   className = ''
@@ -21,6 +22,7 @@ const AutoFetchButton: React.FC<AutoFetchButtonProps> = ({
 
   const handleAutoFetch = async () => {
     try {
+      trackEvent(ANALYTICS_EVENTS.AUTO_FETCH_CLICK);
       const result = await autoFetchWithToast();
       onComplete?.(result);
     } catch (error) {
