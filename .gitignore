@@ -33,6 +33,32 @@ lerna-debug.log*
 *.sln
 *.sw?
 
+# Documentation files (development notes)
+*_COMPLETE.md
+*_FIX.md
+*_IMPROVEMENTS.md
+*_CHECKLIST.md
+CLAUDE.md
+DOCUMENTATION_INDEX.md
+INTERACTIVE_QUIZ_HERO.md
+PRICING_CALCULATOR.md
+SEO_ROBOTS_FIX.md
+SEO_SETUP.md
+
+# Media files
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.mp4
+*.mov
+!public/favicon.png
+!public/favicon.ico
+
+# Claude AI directory
+.claude/
+
 # Android build artifacts
 /android-app/app/build/
 /android-app/build/
@@ -63,6 +89,5 @@ android-app/app/src/main/res/
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
-
 
 .next

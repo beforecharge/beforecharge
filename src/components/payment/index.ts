@@ -1,2 +1,1 @@
-export { default as StripePaymentModal } from './StripePaymentModal';
-export { default as RazorpayPaymentModal } from './RazorpayPaymentModal';
+export { default as LemonSqueezyPaymentModal } from './LemonSqueezyPaymentModal';

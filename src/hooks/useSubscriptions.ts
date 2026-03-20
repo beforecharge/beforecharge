@@ -77,6 +77,7 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCategoriesLoaded, setIsCategoriesLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Helper function to convert billing cycle to monthly cost
@@ -108,6 +109,8 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
     } catch (err: any) {
       console.error('Error fetching categories:', err);
       setError(`Failed to load categories: ${err.message}`);
+    } finally {
+      setIsCategoriesLoaded(true);
     }
   }, [user]);
 
@@ -445,7 +448,7 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
 
     try {
       const result = await cleanupDuplicateSubscriptions(user.id);
-      
+
       if (result.success) {
         if (result.duplicatesRemoved > 0) {
           toast.success(`Removed ${result.duplicatesRemoved} duplicate subscription(s)`);
@@ -469,19 +472,18 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
   }, [isAuthenticated, user, fetchCategories]);
 
   useEffect(() => {
-    if (isAuthenticated && user && categories.length > 0) {
+    if (isAuthenticated && user && isCategoriesLoaded) {
       fetchSubscriptions();
     }
-  }, [isAuthenticated, user, categories.length, fetchSubscriptions]);
+  }, [isAuthenticated, user, isCategoriesLoaded, fetchSubscriptions]);
 
   // Track if we've already tried to create dummy data for this user
   const [hasTriedDummyData, setHasTriedDummyData] = useState(false);
 
   useEffect(() => {
-    // Only create dummy data in development or if explicitly enabled
-    const shouldCreateDummyData =
-      process.env.NODE_ENV !== "production" || process.env.VITE_CREATE_DUMMY_DATA === "true";
-    
+    // Dummy data disabled as per user request
+    const shouldCreateDummyData = false;
+
     if (shouldCreateDummyData && isAuthenticated && user && categories.length > 0 && !isLoading && subscriptions.length === 0 && !hasTriedDummyData) {
       // Create dummy data for new users after a short delay
       const timer = setTimeout(() => {

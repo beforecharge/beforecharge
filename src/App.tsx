@@ -18,6 +18,7 @@ import Terms from "@/pages/Terms";
 import Contact from "@/pages/Contact";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
+import CalendarPage from "@/pages/Calendar";
 
 // Loading component
 import LoadingSpinner from "@/components/ui/loading-spinner";
@@ -331,6 +332,17 @@ const App: React.FC = () => {
               <ProtectedRoute>
                 <MainLayout>
                   <Analytics />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/calendar"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <CalendarPage />
                 </MainLayout>
               </ProtectedRoute>
             }

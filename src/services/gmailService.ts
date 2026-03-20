@@ -49,6 +49,7 @@ class GmailService {
       const { data: { session } } = await supabase.auth.getSession();
 
       if (!session?.provider_token) {
+        console.log('No provider_token found in session. User needs to sign in with Google.');
         return false;
       }
 
@@ -62,6 +63,19 @@ class GmailService {
 
       return true;
     } catch (error) {
+      console.error('Error initializing Gmail service:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Check if user has Gmail access (provider_token exists)
+   */
+  async hasGmailAccess(): Promise<boolean> {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      return !!session?.provider_token;
+    } catch (error) {
       return false;
     }
   }
@@ -74,12 +88,16 @@ class GmailService {
       throw new Error('Gmail service not initialized');
     }
 
-    // Search queries for common subscription patterns
+    // Search queries for subscription-specific patterns (excluding credit card bills)
     const searchQueries = [
-      'subject:(subscription OR billing OR invoice OR receipt OR payment)',
-      'from:(noreply OR billing OR subscriptions OR payments)',
-      'subject:(monthly OR yearly OR annual OR recurring)',
-      'body:(subscription OR billing cycle OR next payment OR auto-renew)'
+      // Specific subscription services
+      'subject:(subscription OR membership OR premium OR pro plan)',
+      // Recurring billing (but not credit card statements)
+      'from:(noreply OR subscriptions OR billing) -subject:(statement OR credit card OR card ending)',
+      // Specific subscription keywords
+      'subject:(auto-renew OR recurring OR monthly plan OR annual plan)',
+      // Service-specific patterns
+      'from:(netflix OR spotify OR amazon OR adobe OR microsoft OR apple OR google) subject:(subscription OR billing OR invoice)'
     ];
 
     const allMessages: GmailMessage[] = [];
@@ -180,6 +198,125 @@ class GmailService {
     const body = this.extractEmailBody(message);
     const fullText = `${subject} ${body}`.toLowerCase();
 
+    // FILTER OUT: Credit card bills, bank statements, and non-subscription emails
+    const excludePatterns = [
+      // Credit card and banking
+      'credit card statement',
+      'card ending in',
+      'statement for card',
+      'bank statement',
+      'account statement',
+      'payment due on your card',
+      'minimum payment due',
+      'outstanding balance',
+      'credit limit',
+      'available credit',
+      'total amount due',
+      'billing statement for',
+      'monthly statement for account',
+      'statement period',
+      'previous balance',
+      'new balance',
+      'finance charge',
+      'late fee',
+      'overlimit fee',
+      // Social media and forums (not subscriptions)
+      'reddit',
+      'redditmail',
+      'facebook',
+      'twitter',
+      'instagram',
+      'tiktok',
+      'snapchat',
+      'whatsapp',
+      'telegram',
+      // Email newsletters (not subscriptions)
+      'newsletter',
+      'weekly digest',
+      'daily digest',
+      'unsubscribe',
+      // E-commerce (not subscriptions)
+      'order confirmation',
+      'order shipped',
+      'delivery update',
+      'package delivered',
+      'return confirmation',
+      // General notifications (not subscriptions)
+      'password reset',
+      'verify your email',
+      'account verification',
+      'security alert',
+      'login attempt',
+      'new device',
+      // Marketing emails
+      'limited time offer',
+      'sale ends',
+      'discount code',
+      'promo code'
+    ];
+
+    for (const pattern of excludePatterns) {
+      if (fullText.includes(pattern)) {
+        console.log(`Filtered out: ${subject} (matched: ${pattern})`);
+        return null;
+      }
+    }
+
+    // REQUIRE: Must have subscription-specific keywords OR be from known subscription services
+    const subscriptionKeywords = [
+      'subscription',
+      'membership',
+      'auto-renew',
+      'recurring charge',
+      'premium plan',
+      'pro plan',
+      'monthly plan',
+      'annual plan',
+      'subscription renewal',
+      'your plan',
+      'premium membership'
+    ];
+
+    const knownSubscriptionServices = [
+      'netflix',
+      'spotify',
+      'amazon prime',
+      'adobe',
+      'microsoft',
+      'apple',
+      'google one',
+      'youtube premium',
+      'disney',
+      'hbo',
+      'hulu',
+      'peacock',
+      'paramount',
+      'zee5',
+      'hotstar',
+      'sonyliv',
+      'voot',
+      'jio',
+      'airtel',
+      'github',
+      'linkedin premium',
+      'canva',
+      'dropbox',
+      'notion',
+      'slack',
+      'zoom',
+      'grammarly'
+    ];
+
+    const hasSubscriptionKeyword = subscriptionKeywords.some(keyword => fullText.includes(keyword));
+    const isKnownService = knownSubscriptionServices.some(service => 
+      fullText.includes(service) || from.toLowerCase().includes(service)
+    );
+
+    if (!hasSubscriptionKeyword && !isKnownService) {
+      console.log(`Filtered out: ${subject} (no subscription indicators)`);
+      return null;
+    }
+
     // Extract service name
     const serviceName = this.extractServiceName(from, subject, body);
     if (!serviceName) return null;
@@ -187,6 +324,20 @@ class GmailService {
     // Extract amount and currency
     const { amount, currency } = this.extractAmountAndCurrency(fullText);
     if (!amount) return null;
+
+    // Smart amount validation based on context
+    // For enterprise/business subscriptions, amounts can be higher
+    const isBusinessSubscription = fullText.includes('business') || 
+                                   fullText.includes('enterprise') || 
+                                   fullText.includes('team') ||
+                                   fullText.includes('organization');
+    
+    const maxAmount = isBusinessSubscription ? 100000 : 50000; // Higher limit for business
+    
+    if (amount > maxAmount) {
+      console.log(`Filtered out: ${serviceName} (amount too high: ${amount} ${currency})`);
+      return null;
+    }
 
     // Extract billing cycle
     const billingCycle = this.extractBillingCycle(fullText);
@@ -297,60 +448,57 @@ class GmailService {
     const userCurrency = this.userPreferredCurrency || 'USD';
 
     // Enhanced currency patterns with better detection
+    // Order matters - we'll try user's currency first
     const currencyPatterns = [
       // Indian Rupee patterns (prioritize for Indian users)
-      { pattern: /₹\s*(\d+(?:,\d+)*(?:\.\d{2})?)/g, currency: 'INR' },
-      { pattern: /(?:rs\.?\s*|rupees?\s*)(\d+(?:,\d+)*(?:\.\d{2})?)/gi, currency: 'INR' },
-      { pattern: /(\d+(?:,\d+)*(?:\.\d{2})?)\s*(?:inr|₹)/gi, currency: 'INR' },
+      { pattern: /₹\s*(\d+(?:,\d+)*(?:\.\d{2})?)/g, currency: 'INR', priority: userCurrency === 'INR' ? 1 : 5 },
+      { pattern: /(?:rs\.?\s*|rupees?\s*)(\d+(?:,\d+)*(?:\.\d{2})?)/gi, currency: 'INR', priority: userCurrency === 'INR' ? 1 : 5 },
+      { pattern: /(\d+(?:,\d+)*(?:\.\d{2})?)\s*(?:inr|₹)/gi, currency: 'INR', priority: userCurrency === 'INR' ? 1 : 5 },
 
       // US Dollar patterns
-      { pattern: /\$\s*(\d+(?:,\d+)*(?:\.\d{2})?)/g, currency: 'USD' },
-      { pattern: /(\d+(?:,\d+)*(?:\.\d{2})?)\s*usd/gi, currency: 'USD' },
+      { pattern: /\$\s*(\d+(?:,\d+)*(?:\.\d{2})?)/g, currency: 'USD', priority: userCurrency === 'USD' ? 1 : 4 },
+      { pattern: /(\d+(?:,\d+)*(?:\.\d{2})?)\s*usd/gi, currency: 'USD', priority: userCurrency === 'USD' ? 1 : 4 },
 
       // Euro patterns
-      { pattern: /€\s*(\d+(?:,\d+)*(?:\.\d{2})?)/g, currency: 'EUR' },
-      { pattern: /(\d+(?:,\d+)*(?:\.\d{2})?)\s*eur/gi, currency: 'EUR' },
+      { pattern: /€\s*(\d+(?:,\d+)*(?:\.\d{2})?)/g, currency: 'EUR', priority: userCurrency === 'EUR' ? 1 : 3 },
+      { pattern: /(\d+(?:,\d+)*(?:\.\d{2})?)\s*eur/gi, currency: 'EUR', priority: userCurrency === 'EUR' ? 1 : 3 },
 
       // British Pound patterns
-      { pattern: /£\s*(\d+(?:,\d+)*(?:\.\d{2})?)/g, currency: 'GBP' },
-      { pattern: /(\d+(?:,\d+)*(?:\.\d{2})?)\s*gbp/gi, currency: 'GBP' },
+      { pattern: /£\s*(\d+(?:,\d+)*(?:\.\d{2})?)/g, currency: 'GBP', priority: userCurrency === 'GBP' ? 1 : 2 },
+      { pattern: /(\d+(?:,\d+)*(?:\.\d{2})?)\s*gbp/gi, currency: 'GBP', priority: userCurrency === 'GBP' ? 1 : 2 },
 
       // Canadian Dollar patterns
-      { pattern: /(?:c\$|cad\$)\s*(\d+(?:,\d+)*(?:\.\d{2})?)/gi, currency: 'CAD' },
-      { pattern: /(\d+(?:,\d+)*(?:\.\d{2})?)\s*cad/gi, currency: 'CAD' },
+      { pattern: /(?:c\$|cad\$)\s*(\d+(?:,\d+)*(?:\.\d{2})?)/gi, currency: 'CAD', priority: userCurrency === 'CAD' ? 1 : 6 },
+      { pattern: /(\d+(?:,\d+)*(?:\.\d{2})?)\s*cad/gi, currency: 'CAD', priority: userCurrency === 'CAD' ? 1 : 6 },
 
       // Australian Dollar patterns
-      { pattern: /(?:a\$|aud\$)\s*(\d+(?:,\d+)*(?:\.\d{2})?)/gi, currency: 'AUD' },
-      { pattern: /(\d+(?:,\d+)*(?:\.\d{2})?)\s*aud/gi, currency: 'AUD' },
+      { pattern: /(?:a\$|aud\$)\s*(\d+(?:,\d+)*(?:\.\d{2})?)/gi, currency: 'AUD', priority: userCurrency === 'AUD' ? 1 : 7 },
+      { pattern: /(\d+(?:,\d+)*(?:\.\d{2})?)\s*aud/gi, currency: 'AUD', priority: userCurrency === 'AUD' ? 1 : 7 },
 
       // Japanese Yen patterns
-      { pattern: /¥\s*(\d+(?:,\d+)*)/g, currency: 'JPY' },
-      { pattern: /(\d+(?:,\d+)*)\s*jpy/gi, currency: 'JPY' },
+      { pattern: /¥\s*(\d+(?:,\d+)*)/g, currency: 'JPY', priority: userCurrency === 'JPY' ? 1 : 8 },
+      { pattern: /(\d+(?:,\d+)*)\s*jpy/gi, currency: 'JPY', priority: userCurrency === 'JPY' ? 1 : 8 },
     ];
 
-    // First, try to find amounts in user's preferred currency
-    const preferredCurrencyPatterns = currencyPatterns.filter(p => p.currency === userCurrency);
-    for (const { pattern, currency } of preferredCurrencyPatterns) {
-      const matches = Array.from(text.matchAll(pattern));
-      if (matches.length > 0) {
-        const amountStr = matches[0][1].replace(/,/g, ''); // Remove commas
-        const amount = parseFloat(amountStr);
-        if (!isNaN(amount) && amount > 0) {
-          return { amount, currency };
-        }
-      }
-    }
+    // Sort by priority (lower number = higher priority)
+    currencyPatterns.sort((a, b) => a.priority - b.priority);
 
-    // Then try all other currencies
-    const otherCurrencyPatterns = currencyPatterns.filter(p => p.currency !== userCurrency);
-    for (const { pattern, currency } of otherCurrencyPatterns) {
+    // Try each pattern in priority order
+    for (const { pattern, currency } of currencyPatterns) {
+      pattern.lastIndex = 0; // Reset regex
       const matches = Array.from(text.matchAll(pattern));
       if (matches.length > 0) {
         const amountStr = matches[0][1].replace(/,/g, ''); // Remove commas
         const amount = parseFloat(amountStr);
         if (!isNaN(amount) && amount > 0) {
-          // Convert to user's preferred currency
+          // If currency matches user preference, use it directly
+          if (currency === userCurrency) {
+            console.log(`Found amount in user currency: ${amount} ${currency}`);
+            return { amount, currency };
+          }
+          // Otherwise, convert to user currency
           const convertedAmount = convertCurrency(amount, currency, userCurrency);
+          console.log(`Converted ${amount} ${currency} to ${convertedAmount} ${userCurrency}`);
           return { amount: convertedAmount, currency: userCurrency };
         }
       }
@@ -434,7 +582,7 @@ class GmailService {
   /**
    * Auto-fetch and save subscriptions to database
    */
-  async autoFetchAndSaveSubscriptions(): Promise<{ added: number; total: number }> {
+  async autoFetchAndSaveSubscriptions(): Promise<{ added: number; total: number; limitReached?: boolean }> {
     try {
       // Initialize Gmail service
       const initialized = await this.initializeWithSupabaseToken();
@@ -442,10 +590,33 @@ class GmailService {
         throw 'Failed to initialize Gmail service. No Google OAuth token.';
       }
 
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      // Check user plan and fetch count
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('plan_type, gmail_fetch_count')
+        .eq('id', user.id)
+        .single();
+
+      const isFreePlan = !profile || profile.plan_type === 'free';
+      const fetchCount = profile?.gmail_fetch_count || 0;
+
+      // Enforce free plan limit (1 fetch lifetime)
+      if (isFreePlan && fetchCount >= 1) {
+        throw new Error('FREE_PLAN_LIMIT_REACHED');
+      }
+
       // Search for subscription emails
       const messages = await this.searchSubscriptionEmails(100);
 
       if (messages.length === 0) {
+        // Still increment fetch count even if no messages found
+        await this.incrementFetchCount(user.id);
         return { added: 0, total: 0 };
       }
 
@@ -453,13 +624,9 @@ class GmailService {
       const detectedSubscriptions = await this.extractSubscriptions(messages);
 
       if (detectedSubscriptions.length === 0) {
+        // Still increment fetch count even if no subscriptions detected
+        await this.incrementFetchCount(user.id);
         return { added: 0, total: 0 };
-      }
-
-      // Get current user
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        throw new Error('User not authenticated');
       }
 
       // Get default category (create if doesn't exist)
@@ -500,7 +667,7 @@ class GmailService {
       // Filter out duplicates and low-confidence subscriptions
       const subscriptionsToAdd = detectedSubscriptions.filter(sub => {
         const key = `${sub.serviceName.toLowerCase()}-${sub.amount}-${sub.currency}`;
-        return !existingKeys.has(key) && sub.confidence > 0.7;
+        return !existingKeys.has(key) && sub.confidence > 0.6;
       });
 
       let addedCount = 0;
@@ -531,11 +698,78 @@ class GmailService {
         }
       }
 
-      return { added: addedCount, total: detectedSubscriptions.length };
+      // Increment fetch count after successful fetch
+      await this.incrementFetchCount(user.id);
+
+      // Check if limit reached after this fetch
+      const limitReached = isFreePlan && (fetchCount + 1) >= 1;
+
+      return { added: addedCount, total: detectedSubscriptions.length, limitReached };
 
     } catch (error) {
       console.error('Auto-fetch error:', error);
       throw error;
+    }
+  }
+
+  /**
+   * Increment Gmail fetch count for user
+   */
+  private async incrementFetchCount(userId: string): Promise<void> {
+    try {
+      // Get current count
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('gmail_fetch_count')
+        .eq('id', userId)
+        .single();
+
+      const currentCount = (profile as any)?.gmail_fetch_count || 0;
+
+      // Update with incremented count
+      await supabase
+        .from('profiles')
+        .update({
+          gmail_fetch_count: currentCount + 1,
+          gmail_last_fetch_at: new Date().toISOString()
+        } as any)
+        .eq('id', userId);
+    } catch (error) {
+      console.error('Failed to increment fetch count:', error);
+    }
+  }
+
+  /**
+   * Check if user can use Gmail auto-fetch
+   */
+  async canUseFetch(): Promise<{ allowed: boolean; reason?: string; fetchCount?: number }> {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        return { allowed: false, reason: 'Not authenticated' };
+      }
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('plan_type, gmail_fetch_count')
+        .eq('id', user.id)
+        .single();
+
+      const isFreePlan = !profile || profile.plan_type === 'free';
+      const fetchCount = profile?.gmail_fetch_count || 0;
+
+      if (isFreePlan && fetchCount >= 1) {
+        return { 
+          allowed: false, 
+          reason: 'Free plan limit reached (1 fetch lifetime)', 
+          fetchCount 
+        };
+      }
+
+      return { allowed: true, fetchCount };
+    } catch (error) {
+      console.error('Error checking fetch permission:', error);
+      return { allowed: false, reason: 'Error checking permissions' };
     }
   }
 }

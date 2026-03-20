@@ -43,4 +43,7 @@ export const ANALYTICS_EVENTS = {
 
     // Support
     CONTACT_US_CLICK: 'contact_us_click',
+
+    // Calendar
+    CALENDAR_NOTIFY_CLICK: 'calendar_notify_click',
 };

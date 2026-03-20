@@ -16,7 +16,7 @@ import { useSubscriptionLimits } from "@/hooks/useSubscriptionLimits";
 import { AddSubscriptionModal } from "@/components/subscriptions";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 import { DEFAULTS } from "@/lib/constants";
-import { formatCurrencyAmount } from "@/utils/currencyUtils";
+import { formatCurrencyAmount, convertCurrency } from "@/utils/currencyUtils";
 
 const Dashboard: React.FC = () => {
   const { getDisplayName, profile } = useAuth();
@@ -48,9 +48,35 @@ const Dashboard: React.FC = () => {
     );
   }
 
-  // Calculate simple unused mock data for UI visual completion
-  const unusedSimulated = 2;
-  const healthScore = 92;
+  // Calculate health score based on actual subscriptions
+  const calculateHealthScore = () => {
+    const activeSubs = getActiveSubscriptions();
+    
+    if (activeSubs.length === 0) {
+      return 100; // Perfect health with no subscriptions
+    }
+
+    let score = 100;
+    
+    // Deduct points for upcoming renewals (more urgent = more deduction)
+    const urgentRenewals = upcomingRenewalsData.filter((r: any) => r.days_until_renewal <= 7).length;
+    score -= urgentRenewals * 5;
+    
+    // Deduct points for high spending (relative to number of subscriptions)
+    const avgCostPerSub = totalMonthlySpend / activeSubs.length;
+    if (avgCostPerSub > 50) score -= 10;
+    else if (avgCostPerSub > 30) score -= 5;
+    
+    // Bonus points for having reminders set up
+    const subsWithReminders = activeSubs.filter((s: any) => s.reminder_days_before).length;
+    const reminderRatio = subsWithReminders / activeSubs.length;
+    if (reminderRatio > 0.8) score += 5;
+    
+    return Math.max(0, Math.min(100, score));
+  };
+
+  const healthScore = calculateHealthScore();
+  const unusedSimulated = 0; // Will be calculated from actual usage data when available
 
   return (
     <div>
@@ -140,7 +166,18 @@ const Dashboard: React.FC = () => {
                     <div className="sub-name">{sub.name}</div>
                     <div className="sub-meta">{sub.billing_cycle}</div>
                   </div>
-                  <div className="sub-price">{formatCurrencyAmount(sub.cost, sub.currency)}</div>
+                  <div className="sub-price text-right">
+                    {sub.currency !== displayCurrency ? (
+                      <>
+                        {formatCurrencyAmount(convertCurrency(sub.cost, sub.currency, displayCurrency), displayCurrency)}
+                        <div className="text-[10px] text-muted-foreground">
+                          ({formatCurrencyAmount(sub.cost, sub.currency)})
+                        </div>
+                      </>
+                    ) : (
+                      formatCurrencyAmount(sub.cost, sub.currency)
+                    )}
+                  </div>
                   <span className={`badge ${sub.is_active ? 'badge-g' : 'badge-n'}`}>
                     {sub.is_active ? 'Active' : 'Inactive'}
                   </span>
@@ -174,7 +211,18 @@ const Dashboard: React.FC = () => {
                         {daysUntil === 0 ? "Today" : daysUntil === 1 ? "Tomorrow" : `In ${daysUntil} days`}
                       </div>
                     </div>
-                    <div className="sub-price">{formatCurrencyAmount(sub.cost, sub.currency)}</div>
+                    <div className="sub-price text-right">
+                      {sub.currency !== displayCurrency ? (
+                        <>
+                          {formatCurrencyAmount(convertCurrency(sub.cost, sub.currency, displayCurrency), displayCurrency)}
+                          <div className="text-[10px] text-muted-foreground">
+                            ({formatCurrencyAmount(sub.cost, sub.currency)})
+                          </div>
+                        </>
+                      ) : (
+                        formatCurrencyAmount(sub.cost, sub.currency)
+                      )}
+                    </div>
                   </div>
                 );
               })

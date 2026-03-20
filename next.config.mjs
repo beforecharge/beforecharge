@@ -13,6 +13,10 @@ const nextConfig = {
     VITE_DEFAULT_CURRENCY: process.env.VITE_DEFAULT_CURRENCY || "USD",
     VITE_SUPPORTED_CURRENCIES: process.env.VITE_SUPPORTED_CURRENCIES || "USD,EUR,GBP,INR,AED",
     VITE_CREATE_DUMMY_DATA: process.env.VITE_CREATE_DUMMY_DATA || "false"
+  },
+  devIndicators: {
+    appIsrStatus: false,
+    buildActivity: false,
   }
 };
 export default nextConfig;

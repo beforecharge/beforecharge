@@ -1,4 +1,4 @@
-export type PaymentProvider = "stripe" | "razorpay";
+export type PaymentProvider = "lemonsqueezy";
 
 export type PlanType = "free" | "premium" | "enterprise";
 
@@ -14,8 +14,9 @@ export type Currency =
 
 export interface PaymentConfig {
   provider: PaymentProvider;
-  currency: "USD" | "INR";
-  publishableKey: string;
+  currency: Currency;
+  publishableKey?: string; // Not strictly needed for Lemon Squeezy checkout overlay in the same way, but kept for compatibility
+  storeId?: string;
 }
 
 export interface PlanPrice {
@@ -38,6 +39,7 @@ export interface Plan {
     support: "email" | "priority" | "dedicated";
   };
   popular?: boolean;
+  variantId?: string; // Lemon Squeezy Variant ID
 }
 
 export interface PlanFeatures {
@@ -51,58 +53,24 @@ export interface PlanFeatures {
   custom_integrations: boolean;
 }
 
-// Stripe Types
-export interface StripePaymentIntentRequest {
+// Lemon Squeezy Types
+export interface CheckoutRequest {
   planType: PlanType;
-  currency: "usd" | "inr";
+  currency: Currency;
   userId: string;
   billingInterval?: "monthly" | "yearly";
-  metadata?: Record<string, string>;
 }
 
-export interface StripePaymentIntentResponse {
-  client_secret: string;
-  payment_intent_id: string;
-  amount: number;
-  currency: string;
+export interface CheckoutResponse {
+  checkoutUrl: string;
 }
 
-export interface StripeVerificationRequest {
-  paymentIntentId: string;
+export interface PaymentVerificationRequest {
+  orderId: string;
   userId: string;
 }
 
-export interface StripeVerificationResponse {
-  verified: boolean;
-  planType: PlanType;
-  expiresAt: string;
-}
-
-// Razorpay Types
-export interface RazorpayOrderRequest {
-  planType: "free" | "premium" | "enterprise";
-  currency: "INR";
-  userId: string;
-  billingInterval?: "monthly" | "yearly";
-  notes?: Record<string, string>;
-}
-
-export interface RazorpayOrderResponse {
-  id: string;
-  amount: number;
-  currency: string;
-  key: string;
-  order_id: string;
-}
-
-export interface RazorpayVerificationRequest {
-  razorpay_order_id: string;
-  razorpay_payment_id: string;
-  razorpay_signature: string;
-  userId: string;
-}
-
-export interface RazorpayVerificationResponse {
+export interface PaymentVerificationResponse {
   verified: boolean;
   planType: PlanType;
   expiresAt: string;

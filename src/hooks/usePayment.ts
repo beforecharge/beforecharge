@@ -6,10 +6,8 @@ import {
   PaymentProvider,
   PaymentConfig,
   PlanType,
-  StripePaymentIntentRequest,
-  StripePaymentIntentResponse,
-  RazorpayOrderRequest,
-  RazorpayOrderResponse,
+  CheckoutRequest,
+  CheckoutResponse,
 } from "@/types/payment.types";
 import toast from "react-hot-toast";
 
@@ -17,12 +15,9 @@ interface UsePaymentReturn {
   paymentConfig: PaymentConfig | null;
   isConfigLoading: boolean;
   isProcessing: boolean;
-  createPaymentIntent: (
-    request: StripePaymentIntentRequest,
-  ) => Promise<StripePaymentIntentResponse>;
-  createRazorpayOrder: (
-    request: RazorpayOrderRequest,
-  ) => Promise<RazorpayOrderResponse>;
+  createCheckout: (
+    request: CheckoutRequest,
+  ) => Promise<CheckoutResponse>;
   verifyPayment: (
     paymentId: string,
     provider: PaymentProvider,
@@ -39,36 +34,18 @@ export const usePayment = (): UsePaymentReturn => {
   const [isConfigLoading, setIsConfigLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Determine payment provider based on user location/currency
   useEffect(() => {
     const getPaymentConfig = async () => {
       setIsConfigLoading(true);
 
       try {
-        // Default to USD/Stripe
-        let provider: PaymentProvider = "stripe";
-        let currency = "USD";
-
-        // Check user's preferred currency
-        if (profile?.default_currency === "INR") {
-          provider = "razorpay";
-          currency = "INR";
-        }
-
-        // You could also detect location via IP geolocation here
-        // const location = await detectUserLocation();
-        // if (location?.country === 'IN') {
-        //   provider = 'razorpay';
-        //   currency = 'INR';
-        // }
+        const provider: PaymentProvider = "lemonsqueezy";
+        const currency = profile?.default_currency || "USD";
 
         const config: PaymentConfig = {
           provider,
-          currency: currency as "USD" | "INR",
-          publishableKey:
-            (provider === "stripe"
-              ? process.env.VITE_STRIPE_PUBLISHABLE_KEY
-              : process.env.VITE_RAZORPAY_KEY_ID) || "",
+          currency: currency as any,
+          storeId: process.env.VITE_LEMONSQUEEZY_STORE_ID,
         };
 
         setPaymentConfig(config);
@@ -83,32 +60,31 @@ export const usePayment = (): UsePaymentReturn => {
     getPaymentConfig();
   }, [profile]);
 
-  const createPaymentIntent = async (
-    request: StripePaymentIntentRequest,
-  ): Promise<StripePaymentIntentResponse> => {
+  const createCheckout = async (
+    request: CheckoutRequest,
+  ): Promise<CheckoutResponse> => {
     setIsProcessing(true);
 
     try {
       const { data, error } = await supabase.functions.invoke(
-        "create-stripe-intent",
+        "create-lemonsqueezy-checkout",
         {
           body: {
             planType: request.planType,
             currency: request.currency,
             userId: request.userId,
             billingInterval: request.billingInterval,
-            metadata: request.metadata,
           },
         },
       );
 
       if (error) {
-        throw new Error(error.message || "Failed to create payment intent");
+        throw new Error(error.message || "Failed to create checkout");
       }
 
-      return data as StripePaymentIntentResponse;
+      return data as CheckoutResponse;
     } catch (error) {
-      console.error("Error creating Stripe payment intent:", error);
+      console.error("Error creating checkout:", error);
       toast.error("Failed to initialize payment");
       throw error;
     } finally {
@@ -116,51 +92,16 @@ export const usePayment = (): UsePaymentReturn => {
     }
   };
 
-  const createRazorpayOrder = async (
-    request: RazorpayOrderRequest,
-  ): Promise<RazorpayOrderResponse> => {
-    setIsProcessing(true);
-
-    try {
-      const { data, error } = await supabase.functions.invoke(
-        "create-razorpay-order",
-        {
-          body: {
-            planType: request.planType,
-            currency: request.currency,
-            userId: request.userId,
-            billingInterval: request.billingInterval,
-            notes: request.notes,
-          },
-        },
-      );
-
-      if (error) {
-        throw new Error(error.message || "Failed to create Razorpay order");
-      }
-
-      return data as RazorpayOrderResponse;
-    } catch (error) {
-      console.error("Error creating Razorpay order:", error);
-      toast.error("Failed to initialize payment");
-      throw error;
-    } finally {
-      setIsProcessing(false);
-    }
-  };
 
   const verifyPayment = async (
     paymentId: string,
-    provider: PaymentProvider,
+    _provider: PaymentProvider,
     payload: Record<string, unknown> = {},
   ): Promise<boolean> => {
     setIsProcessing(true);
 
     try {
-      const functionName =
-        provider === "stripe"
-          ? "verify-stripe-payment"
-          : "verify-razorpay-payment";
+      const functionName = "verify-lemonsqueezy-payment";
 
       const { data, error } = await supabase.functions.invoke(functionName, {
         body: {
@@ -231,8 +172,7 @@ export const usePayment = (): UsePaymentReturn => {
     paymentConfig,
     isConfigLoading,
     isProcessing,
-    createPaymentIntent,
-    createRazorpayOrder,
+    createCheckout,
     verifyPayment,
     getUserPlan,
   };
