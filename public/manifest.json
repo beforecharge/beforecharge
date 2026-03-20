@@ -1,0 +1,74 @@
+{
+  "name": "BeforeCharge - Subscription Manager",
+  "short_name": "BeforeCharge",
+  "description": "Track, manage, and optimize all your subscription services in one secure dashboard.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080a0f",
+  "theme_color": "#00e5a0",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "productivity", "utilities"],
+  "screenshots": [
+    {
+      "src": "/screenshot-dashboard.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Dashboard view showing subscription overview"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your subscription dashboard",
+      "url": "/dashboard",
+      "icons": [
+        {
+          "src": "/favicon-32x32.png",
+          "sizes": "32x32"
+        }
+      ]
+    },
+    {
+      "name": "Add Subscription",
+      "short_name": "Add",
+      "description": "Add a new subscription",
+      "url": "/subscriptions",
+      "icons": [
+        {
+          "src": "/favicon-32x32.png",
+          "sizes": "32x32"
+        }
+      ]
+    }
+  ]
+}

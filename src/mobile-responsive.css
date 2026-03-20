@@ -1,0 +1,809 @@
+/* ══════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE STYLES FOR BEFORECHARGE
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── MOBILE BREAKPOINTS ────────────────────────────────────── */
+/* 
+  xs: < 480px  (small phones)
+  sm: 480-768px (phones)
+  md: 768-1024px (tablets)
+  lg: 1024-1280px (small laptops)
+  xl: > 1280px (desktops)
+*/
+
+/* ── GLOBAL MOBILE FIXES ───────────────────────────────────── */
+@media (max-width: 1024px) {
+  /* Ensure all interactive elements are clickable */
+  button,
+  a,
+  [role="button"],
+  input,
+  select,
+  textarea,
+  .ni,
+  .ftab,
+  .act,
+  .icon-btn,
+  .add-btn,
+  .sub-row,
+  .trow {
+    position: relative;
+    z-index: 10;
+    pointer-events: auto;
+  }
+
+  /* Ensure panels and cards don't block clicks */
+  .panel,
+  .kpi,
+  .table {
+    position: relative;
+    z-index: 5;
+  }
+
+  /* Main content should not block clicks */
+  .main,
+  .content {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* ── TABLET & BELOW (< 1024px) ──────────────────────────────── */
+@media (max-width: 1024px) {
+  /* Hide sidebar on tablets and mobile */
+  .sb {
+    position: fixed;
+    left: -100%;
+    top: 0;
+    height: 100vh;
+    z-index: 50;
+    transition: left 0.3s ease;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .sb.open {
+    left: 0;
+  }
+
+  /* Show mobile menu button */
+  .mobile-menu-btn {
+    display: flex !important;
+  }
+
+  /* Adjust main content */
+  .main {
+    width: 100%;
+    z-index: 1;
+  }
+
+  /* Ensure topbar is above main content but below sidebar */
+  .topbar {
+    padding: 12px 16px;
+    z-index: 30;
+  }
+
+  .tb-title {
+    font-size: 16px;
+  }
+
+  .tb-eye {
+    font-size: 10px;
+  }
+
+  /* Adjust content padding */
+  .content {
+    padding: 16px;
+  }
+
+  /* KPI Grid - 2 columns on tablet */
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  /* Dashboard columns - stack on tablet */
+  .dash-cols {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* Health banner - stack on tablet */
+  .health-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .hb-score {
+    font-size: 36px;
+  }
+
+  .hb-tags {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  /* Table - make scrollable */
+  .table {
+    overflow-x: auto;
+  }
+
+  .thead,
+  .trow {
+    min-width: 800px;
+  }
+
+  /* Filter bar - wrap on tablet */
+  .filter-bar {
+    flex-wrap: wrap;
+  }
+
+  .search-inp {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+/* ── MOBILE (< 768px) ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* App shell */
+  .app {
+    flex-direction: column;
+  }
+
+  /* Sidebar - full width when open */
+  .sb {
+    width: 280px;
+  }
+
+  /* Hide desktop nav pill */
+  .pill {
+    display: none;
+  }
+
+  /* Topbar adjustments */
+  .topbar {
+    padding: 10px 14px;
+    position: relative;
+    z-index: 30;
+  }
+
+  .tb-r {
+    gap: 5px;
+  }
+
+  .icon-btn {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .add-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+    gap: 4px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .add-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Content */
+  .content {
+    padding: 14px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Ensure all interactive elements are clickable */
+  button,
+  a,
+  [role="button"],
+  input,
+  select,
+  textarea {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Radio buttons and checkboxes need to be clickable */
+  input[type="radio"],
+  input[type="checkbox"] {
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+    min-width: 20px;
+    min-height: 20px;
+  }
+
+  /* Labels for radio/checkbox should be clickable */
+  label {
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+  }
+
+  /* KPI Grid - 1 column on mobile */
+  .kpi-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .kpi {
+    padding: 14px 16px;
+  }
+
+  .kpi-val {
+    font-size: 24px;
+  }
+
+  /* Health Banner - mobile layout */
+  .health-banner {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .hb-score {
+    font-size: 32px;
+  }
+
+  .hb-title {
+    font-size: 13px;
+  }
+
+  .hb-sub {
+    font-size: 11px;
+  }
+
+  .hb-tags {
+    flex-direction: column;
+    width: 100%;
+    gap: 6px;
+  }
+
+  .tag {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Panel adjustments */
+  .panel-top {
+    padding: 12px 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .panel-title {
+    font-size: 13px;
+  }
+
+  .panel {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Subscription rows */
+  .sub-row {
+    padding: 10px 14px;
+    gap: 10px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .sub-ico {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+
+  .sub-name {
+    font-size: 12px;
+  }
+
+  .sub-meta {
+    font-size: 10px;
+  }
+
+  .sub-price {
+    font-size: 11px;
+  }
+
+  /* Table - card view on mobile */
+  .table {
+    border: none;
+    background: transparent;
+  }
+
+  .thead {
+    display: none;
+  }
+
+  .trow {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px;
+    background: var(--c-card);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r);
+    margin-bottom: 10px;
+  }
+
+  .tc-main {
+    width: 100%;
+  }
+
+  .tc {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 4px 0;
+  }
+
+  .tc::before {
+    content: attr(data-label);
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--c-txt3);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .act-group {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  /* Filter bar - full width */
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .search-inp {
+    width: 100%;
+    max-width: none;
+  }
+
+  .ftab {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Forms */
+  .fld {
+    margin-bottom: 10px;
+  }
+
+  .inp,
+  .sel {
+    padding: 9px 12px;
+    font-size: 14px; /* Prevent zoom on iOS */
+  }
+
+  /* Buttons */
+  .btn-primary {
+    padding: 11px;
+    font-size: 13px;
+  }
+}
+
+/* ── SMALL MOBILE (< 480px) ─────────────────────────────────── */
+@media (max-width: 480px) {
+  /* Topbar */
+  .topbar {
+    padding: 8px 12px;
+  }
+
+  .tb-title {
+    font-size: 14px;
+  }
+
+  .tb-eye {
+    display: none;
+  }
+
+  /* Content */
+  .content {
+    padding: 12px;
+  }
+
+  /* Health Banner */
+  .health-banner {
+    padding: 12px;
+  }
+
+  .hb-score {
+    font-size: 28px;
+  }
+
+  .hb-score span {
+    font-size: 14px;
+  }
+
+  /* KPI */
+  .kpi {
+    padding: 12px 14px;
+  }
+
+  .kpi-val {
+    font-size: 22px;
+  }
+
+  .kpi-lbl {
+    font-size: 10px;
+  }
+
+  /* Panel */
+  .panel-top {
+    padding: 10px 12px;
+  }
+
+  .sub-row {
+    padding: 9px 12px;
+  }
+
+  /* Sidebar */
+  .sb {
+    width: 260px;
+  }
+
+  .sb-inner {
+    padding: 14px 10px 0;
+  }
+
+  /* Add button - icon only on very small screens */
+  .add-btn span {
+    display: none;
+  }
+
+  .add-btn {
+    padding: 7px;
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+  }
+
+  .add-btn svg {
+    margin: 0;
+  }
+}
+
+/* ── MOBILE MENU BUTTON ─────────────────────────────────────── */
+.mobile-menu-btn {
+  display: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r2);
+  border: 1px solid var(--c-border);
+  background: transparent;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-txt2);
+  transition: all 0.12s;
+  cursor: pointer;
+}
+
+.mobile-menu-btn:hover {
+  border-color: var(--c-border2);
+  color: var(--c-txt);
+  background: var(--c-card);
+}
+
+/* Mobile overlay */
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 45;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-overlay.active {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 1024px) {
+  .mobile-overlay.active {
+    display: block;
+  }
+}
+
+/* ── HOME PAGE RESPONSIVE ───────────────────────────────────── */
+@media (max-width: 1024px) {
+  .hero {
+    padding: 60px 20px 40px;
+  }
+
+  .hero h1 {
+    font-size: 42px;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .feat.featured {
+    grid-column: 1;
+  }
+
+  .testi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 50px 16px 30px;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+    line-height: 1.2;
+  }
+
+  .hero-sub {
+    font-size: 15px;
+  }
+
+  .cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .cta-group button,
+  .cta-group a {
+    width: 100%;
+  }
+
+  section {
+    padding: 50px 16px;
+  }
+
+  .section-label {
+    font-size: 10px;
+  }
+
+  h2 {
+    font-size: 28px;
+  }
+
+  .feat {
+    padding: 20px;
+  }
+
+  .feat-icon {
+    font-size: 28px;
+  }
+
+  .feat-title {
+    font-size: 16px;
+  }
+
+  .testi {
+    padding: 18px;
+  }
+
+  .plan {
+    padding: 24px;
+  }
+}
+
+/* ── PRICING PAGE RESPONSIVE ────────────────────────────────── */
+@media (max-width: 1024px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .panel.md\:scale-105 {
+    transform: none !important;
+  }
+}
+
+/* ── SETTINGS PAGE RESPONSIVE ───────────────────────────────── */
+@media (max-width: 1024px) {
+  .dash-cols {
+    flex-direction: column;
+  }
+
+  .dash-cols > * {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid.gap-4.sm\:grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── ANALYTICS PAGE RESPONSIVE ──────────────────────────────── */
+@media (max-width: 768px) {
+  .recharts-wrapper {
+    width: 100% !important;
+  }
+
+  .recharts-surface {
+    width: 100% !important;
+  }
+}
+
+/* ── TOUCH IMPROVEMENTS ─────────────────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch targets */
+  .ni,
+  .ftab,
+  .act,
+  .icon-btn,
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Ensure all interactive elements are above overlays */
+  button,
+  a,
+  [role="button"],
+  input,
+  select,
+  textarea,
+  .ni,
+  .ftab,
+  .act,
+  .icon-btn,
+  .add-btn,
+  .sub-row,
+  .trow,
+  .panel {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Remove hover effects on touch devices */
+  .ni:hover,
+  .ftab:hover,
+  .act:hover,
+  .icon-btn:hover,
+  .sub-row:hover,
+  .trow:hover {
+    background: transparent;
+  }
+
+  /* Active states for touch */
+  .ni:active,
+  .ftab:active,
+  .act:active,
+  .icon-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* Improve touch feedback */
+  button:active,
+  a:active,
+  [role="button"]:active {
+    opacity: 0.7;
+  }
+}
+
+/* ── LANDSCAPE MOBILE ───────────────────────────────────────── */
+@media (max-width: 896px) and (orientation: landscape) {
+  .sb {
+    width: 240px;
+  }
+
+  .content {
+    padding: 12px 16px;
+  }
+
+  .health-banner {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .hb-tags {
+    flex-direction: row;
+    width: auto;
+  }
+}
+
+/* ── PRINT STYLES ───────────────────────────────────────────── */
+@media print {
+  .sb,
+  .topbar,
+  .pill,
+  .mobile-menu-btn,
+  .mobile-overlay,
+  .add-btn,
+  .act-group {
+    display: none !important;
+  }
+
+  .main {
+    width: 100%;
+  }
+
+  .content {
+    padding: 0;
+  }
+
+  .panel,
+  .table,
+  .kpi {
+    border: 1px solid #ddd;
+    page-break-inside: avoid;
+  }
+}
+
+/* ── ACCESSIBILITY ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .panel,
+  .kpi,
+  .table,
+  .inp,
+  .sel {
+    border-width: 2px;
+  }
+
+  .ni.on::before {
+    width: 4px;
+  }
+}
+
+/* ── SAFE AREAS (iOS NOTCH) ─────────────────────────────────── */
+@supports (padding: max(0px)) {
+  .topbar {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+
+  .content {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  .sb {
+    padding-left: env(safe-area-inset-left);
+  }
+}

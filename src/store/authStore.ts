@@ -253,6 +253,7 @@ export const useAuthStore = create<AuthState>()(
             throw error;
           }
 
+          // Clear state
           set({
             user: null,
             session: null,
@@ -260,6 +261,10 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
             error: null,
           });
+
+          // Clear persisted storage
+          localStorage.removeItem('auth-storage');
+          localStorage.removeItem('supabase.auth.token');
 
           toast.success("Successfully signed out!");
         } catch (error: any) {

@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuthStore } from "@/store/authStore";
 import { trackEvent, ANALYTICS_EVENTS } from "@/utils/analytics";
+import { SubscriptionWasteQuiz } from "@/components/SubscriptionWasteQuiz";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -66,136 +67,18 @@ const Home: React.FC = () => {
             <span className="ticker-item"><span className="ticker-dot">●</span> Stop the subscription bleed</span>
             <span className="ticker-item"><span className="ticker-dot">●</span> Average user saves £340/year</span>
             <span className="ticker-item"><span className="ticker-dot">●</span> Works in 🇺🇸 🇬🇧 🇦🇪 🇪🇺 🇮🇳</span>
-            <span className="ticker-item"><span className="ticker-dot">●</span> 7-day free trial</span>
             <span className="ticker-item"><span className="ticker-dot">●</span> Never miss a renewal again</span>
             <span className="ticker-item"><span className="ticker-dot">●</span> Know before you owe</span>
             <span className="ticker-item"><span className="ticker-dot">●</span> Stop the subscription bleed</span>
             <span className="ticker-item"><span className="ticker-dot">●</span> Average user saves £340/year</span>
             <span className="ticker-item"><span className="ticker-dot">●</span> Works in 🇺🇸 🇬🇧 🇦🇪 🇪🇺 🇮🇳</span>
-            <span className="ticker-item"><span className="ticker-dot">●</span> 7-day free trial</span>
           </div>
         </div>
       </div>
 
-      {/* HERO */}
-      <section className="hero">
-        <div className="orb orb-1"></div>
-        <div className="orb orb-2"></div>
-        <div className="orb orb-3"></div>
-
-        <div className="badge">
-          <span className="badge-dot"></span>
-          Now available worldwide — USA, UK, UAE & Europe
-        </div>
-
-        <h1>
-          Know <span className="highlight">before</span><br />
-          you get charged.
-        </h1>
-
-        <p className="hero-sub">
-          BeforeCharge tracks every subscription you own and alerts you 3 days before any charge hits your card. No more surprise bills. No more wasted money.
-        </p>
-
-        <div className="hero-actions">
-          <button className="btn-primary" onClick={handleCtaClick}>
-            {user ? "Go to Dashboard" : "Start for Free — No card needed"}
-          </button>
-          <button className="btn-secondary" onClick={(e) => scrollToSection(e, "how")}>
-            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><polygon points="10,8 16,12 10,16" /></svg>
-            See how it works
-          </button>
-        </div>
-
-        <div className="hero-trust">
-          <span className="trust-item">
-            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12" /></svg>
-            Free 7-day trial
-          </span>
-          <span className="trust-item">
-            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12" /></svg>
-            No credit card required
-          </span>
-          <span className="trust-item">
-            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12" /></svg>
-            Cancel anytime
-          </span>
-          <span className="trust-item">
-            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12" /></svg>
-            GDPR & privacy-first
-          </span>
-        </div>
-
-        {/* DASHBOARD PREVIEW */}
-        <div className="preview-wrap">
-          <div className="preview-glow"></div>
-          <div className="dashboard">
-            <div className="dash-header">
-              <div className="dot dot-r"></div>
-              <div className="dot dot-y"></div>
-              <div className="dot dot-g"></div>
-              <div className="dash-url">app.beforecharge.com</div>
-            </div>
-            <div className="dash-body">
-              <div className="stat-card">
-                <div className="stat-label">Monthly Spend</div>
-                <div className="stat-value red">$284.97</div>
-                <div className="stat-change">↑ $42 vs last month</div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-label">Active Subscriptions</div>
-                <div className="stat-value">14</div>
-                <div className="stat-change">3 renewing this week</div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-label">Saved This Year</div>
-                <div className="stat-value green">$340</div>
-                <div className="stat-change">↑ from cancelled subs</div>
-              </div>
-              <div className="dash-subs">
-                <div className="sub-row">
-                  <div className="sub-left">
-                    <div className="sub-icon" style={{ background: "rgba(255,0,0,0.12)" }}>📺</div>
-                    <div>
-                      <div className="sub-name">Netflix</div>
-                      <div className="sub-cycle">Monthly · Auto-renews</div>
-                    </div>
-                  </div>
-                  <div className="sub-right">
-                    <span className="sub-price">$22.99</span>
-                    <span className="sub-alert alert-red">⚡ Charges in 2 days</span>
-                  </div>
-                </div>
-                <div className="sub-row">
-                  <div className="sub-left">
-                    <div className="sub-icon" style={{ background: "rgba(0,150,255,0.12)" }}>☁️</div>
-                    <div>
-                      <div className="sub-name">Dropbox Plus</div>
-                      <div className="sub-cycle">Annual · $119.99/yr</div>
-                    </div>
-                  </div>
-                  <div className="sub-right">
-                    <span className="sub-price">$9.99</span>
-                    <span className="sub-alert alert-yellow">⏰ In 5 days</span>
-                  </div>
-                </div>
-                <div className="sub-row">
-                  <div className="sub-left">
-                    <div className="sub-icon" style={{ background: "rgba(18,232,136,0.12)" }}>🎵</div>
-                    <div>
-                      <div className="sub-name">Spotify Premium</div>
-                      <div className="sub-cycle">Monthly · Family plan</div>
-                    </div>
-                  </div>
-                  <div className="sub-right">
-                    <span className="sub-price">$16.99</span>
-                    <span className="sub-alert alert-green">✓ 18 days away</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* HERO - Interactive Quiz */}
+      <section className="hero" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <SubscriptionWasteQuiz />
       </section>
 
       {/* PAIN STATS */}
@@ -385,7 +268,7 @@ const Home: React.FC = () => {
         <div className="pricing">
           <div className="section-label">Pricing</div>
           <h2>Pays for itself in one cancelled subscription</h2>
-          <p style={{ color: "var(--muted2-before)", fontSize: "17px", fontWeight: 300, marginTop: "12px" }}>Start free. No credit card. Upgrade when you're ready.</p>
+          <p style={{ color: "var(--muted2-before)", fontSize: "17px", fontWeight: 300, marginTop: "12px" }}>Start free. Upgrade when you're ready.</p>
 
           <div className="pricing-grid">
             <div className="plan">
@@ -422,7 +305,7 @@ const Home: React.FC = () => {
               <button className="plan-btn plan-btn-primary" onClick={() => {
                 trackEvent(ANALYTICS_EVENTS.PLAN_SELECT, { plan: 'personal' });
                 navigate("/signup");
-              }}>Start 7-Day Free Trial</button>
+              }}>Start Free Trial</button>
             </div>
 
             <div className="plan">
@@ -457,9 +340,6 @@ const Home: React.FC = () => {
             <button className="btn-primary" style={{ fontSize: "18px", padding: "18px 48px", display: "inline-block" }} onClick={handleCtaClick}>
               Try BeforeCharge Free →
             </button>
-            <div style={{ marginTop: "24px", color: "var(--muted-before)", fontSize: "13px" }}>
-              7-day free trial · No credit card · Cancel anytime
-            </div>
           </div>
         </div>
       </section>

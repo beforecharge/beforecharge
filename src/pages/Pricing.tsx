@@ -11,17 +11,306 @@ import {
   BarChart3,
   Bell,
   Download,
+  AlertCircle,
+  Package,
+  DollarSign,
+  Trash2,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { usePayment } from "@/hooks/usePayment";
-import { StripePaymentModal, RazorpayPaymentModal } from "@/components/payment";
 import { PLANS, YEARLY_PLANS, PLAN_FEATURES } from "@/lib/constants";
 import { Plan, PlanType } from "@/types/payment.types";
-import toast from "react-hot-toast";
 import { trackEvent, ANALYTICS_EVENTS } from "@/utils/analytics";
+import { LemonSqueezyPaymentModal } from "@/components/payment";
+
+// Subscription category data with real averages
+const SUBSCRIPTION_DATA = {
+  streaming: { cost: 14.99, forgetRate: 0.22, label: "Streaming" },
+  cloud: { cost: 9.99, forgetRate: 0.31, label: "Cloud storage" },
+  music: { cost: 10.99, forgetRate: 0.18, label: "Music" },
+  news: { cost: 12.99, forgetRate: 0.44, label: "News/magazines" },
+  fitness: { cost: 14.99, forgetRate: 0.38, label: "Fitness/health" },
+  productivity: { cost: 16.00, forgetRate: 0.29, label: "Productivity tools" },
+  gaming: { cost: 14.99, forgetRate: 0.26, label: "Gaming" },
+};
+
+// Subscription Waste Estimator Component
+const SubscriptionWasteEstimator: React.FC<{ currency: "USD" | "INR"; billingInterval: "monthly" | "yearly" }> = ({ currency, billingInterval }) => {
+  const [streamingCount, setStreamingCount] = useState<string>("");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [freeTrialFrequency, setFreeTrialFrequency] = useState<string>("");
+  const [showResults, setShowResults] = useState(false);
+
+  const currencySymbol = currency === "INR" ? "₹" : "$";
+  const conversionRate = currency === "INR" ? 83 : 1; // Approximate USD to INR
+  
+  const personalPlanPrice = billingInterval === "yearly" 
+    ? (currency === "INR" ? 699 : 69.99) 
+    : (currency === "INR" ? 69 : 6.99);
+  const personalPlanYearlyCost = billingInterval === "yearly" 
+    ? personalPlanPrice 
+    : personalPlanPrice * 12;
+
+  // Calculate estimates based on selections
+  const calculateEstimate = () => {
+    let totalSubs = 0;
+    let monthlyCost = 0;
+    let forgottenSubs = 0;
+    let wastedCost = 0;
+
+    // Streaming services
+    if (streamingCount === "1-2") {
+      totalSubs += 1.5;
+      monthlyCost += 1.5 * SUBSCRIPTION_DATA.streaming.cost;
+      forgottenSubs += 1.5 * SUBSCRIPTION_DATA.streaming.forgetRate;
+      wastedCost += 1.5 * SUBSCRIPTION_DATA.streaming.cost * SUBSCRIPTION_DATA.streaming.forgetRate;
+    } else if (streamingCount === "3-4") {
+      totalSubs += 3.5;
+      monthlyCost += 3.5 * SUBSCRIPTION_DATA.streaming.cost;
+      forgottenSubs += 3.5 * SUBSCRIPTION_DATA.streaming.forgetRate;
+      wastedCost += 3.5 * SUBSCRIPTION_DATA.streaming.cost * SUBSCRIPTION_DATA.streaming.forgetRate;
+    } else if (streamingCount === "5+") {
+      totalSubs += 6;
+      monthlyCost += 6 * SUBSCRIPTION_DATA.streaming.cost;
+      forgottenSubs += 6 * SUBSCRIPTION_DATA.streaming.forgetRate;
+      wastedCost += 6 * SUBSCRIPTION_DATA.streaming.cost * SUBSCRIPTION_DATA.streaming.forgetRate;
+    }
+
+    // Other categories
+    selectedCategories.forEach(cat => {
+      const data = SUBSCRIPTION_DATA[cat as keyof typeof SUBSCRIPTION_DATA];
+      if (data) {
+        totalSubs += 1;
+        monthlyCost += data.cost;
+        forgottenSubs += data.forgetRate;
+        wastedCost += data.cost * data.forgetRate;
+      }
+    });
+
+    // Free trial impact
+    if (freeTrialFrequency === "occasionally") {
+      totalSubs += 1;
+      monthlyCost += 11.50;
+      forgottenSubs += 0.67;
+      wastedCost += 11.50 * 0.67;
+    } else if (freeTrialFrequency === "often") {
+      totalSubs += 2;
+      monthlyCost += 23;
+      forgottenSubs += 1.34;
+      wastedCost += 23 * 0.67;
+    } else if (freeTrialFrequency === "always") {
+      totalSubs += 3;
+      monthlyCost += 34.50;
+      forgottenSubs += 2;
+      wastedCost += 34.50 * 0.67;
+    }
+
+    // Convert to user's currency
+    monthlyCost *= conversionRate;
+    wastedCost *= conversionRate;
+    const annualCost = monthlyCost * 12;
+    const annualWaste = wastedCost * 12;
+    const netSaving = annualWaste - personalPlanYearlyCost;
+
+    return {
+      totalSubs: Math.round(totalSubs),
+      monthlyCost: Math.round(monthlyCost),
+      annualCost: Math.round(annualCost),
+      forgottenSubs: Math.round(forgottenSubs * 10) / 10,
+      annualWaste: Math.round(annualWaste),
+      netSaving: Math.round(Math.max(0, netSaving)),
+    };
+  };
+
+  const estimate = calculateEstimate();
+  const hasSelections = streamingCount || selectedCategories.length > 0 || freeTrialFrequency;
+
+  useEffect(() => {
+    setShowResults(!!hasSelections);
+  }, [hasSelections]);
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategories(prev =>
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto px-4 my-8">
+      <div className="panel p-6 sm:p-8 bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <Sparkles className="h-5 w-5 text-primary" />
+          <h3 className="text-lg sm:text-xl font-bold text-center">Subscription Waste Estimator</h3>
+        </div>
+        
+        <p className="text-center text-muted-foreground mb-8 text-xs sm:text-sm">
+          Answer 3 quick questions to see how much you're likely wasting
+        </p>
+
+        <div className="space-y-8">
+          {/* Question 1: Streaming Services */}
+          <div className="space-y-3">
+            <label className="block text-sm font-semibold text-center">
+              1. How many streaming services do you use?
+            </label>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {[
+                { value: "1-2", label: "1–2" },
+                { value: "3-4", label: "3–4" },
+                { value: "5+", label: "5+" },
+              ].map(option => (
+                <button
+                  key={option.value}
+                  onClick={() => setStreamingCount(option.value)}
+                  className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                    streamingCount === option.value
+                      ? "bg-primary text-black shadow-lg scale-105"
+                      : "bg-white/5 hover:bg-white/10 border border-white/10 hover:border-primary/30 text-muted-foreground hover:text-white"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Question 2: Other Categories */}
+          <div className="space-y-3">
+            <label className="block text-sm font-semibold text-center">
+              2. Do you use any of these? (tap to select)
+            </label>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {Object.entries(SUBSCRIPTION_DATA).filter(([key]) => key !== "streaming").map(([key, data]) => (
+                <button
+                  key={key}
+                  onClick={() => toggleCategory(key)}
+                  className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
+                    selectedCategories.includes(key)
+                      ? "bg-primary text-black shadow-lg"
+                      : "bg-white/5 hover:bg-white/10 border border-white/10 hover:border-primary/30 text-muted-foreground hover:text-white"
+                  }`}
+                >
+                  {data.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Question 3: Free Trials */}
+          <div className="space-y-3">
+            <label className="block text-sm font-semibold text-center">
+              3. Have you ever signed up for a free trial?
+            </label>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {[
+                { value: "occasionally", label: "Yes, occasionally" },
+                { value: "often", label: "Yes, fairly often" },
+                { value: "always", label: "All the time" },
+              ].map(option => (
+                <button
+                  key={option.value}
+                  onClick={() => setFreeTrialFrequency(option.value)}
+                  className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
+                    freeTrialFrequency === option.value
+                      ? "bg-primary text-black shadow-lg scale-105"
+                      : "bg-white/5 hover:bg-white/10 border border-white/10 hover:border-primary/30 text-muted-foreground hover:text-white"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Results */}
+          {showResults && estimate.totalSubs > 0 && (
+            <div className="space-y-4 pt-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+              
+              <p className="text-center text-sm font-medium text-muted-foreground mb-4">
+                Based on people like you, you're likely paying for:
+              </p>
+
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div className="bg-black/30 border border-white/10 rounded-lg p-4 text-center">
+                  <div className="flex items-center justify-center gap-2 text-primary mb-1">
+                    <Package className="h-4 w-4" />
+                    <span className="text-xs font-medium">Active Subscriptions</span>
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-bold">{estimate.totalSubs}</div>
+                </div>
+
+                <div className="bg-black/30 border border-white/10 rounded-lg p-4 text-center">
+                  <div className="flex items-center justify-center gap-2 text-primary mb-1">
+                    <DollarSign className="h-4 w-4" />
+                    <span className="text-xs font-medium">Monthly Spending</span>
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-bold">
+                    {currencySymbol}{estimate.monthlyCost}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    {currencySymbol}{estimate.annualCost}/year
+                  </div>
+                </div>
+
+                <div className="bg-black/30 border border-red-500/20 rounded-lg p-4 text-center">
+                  <div className="flex items-center justify-center gap-2 text-red-400 mb-1">
+                    <Trash2 className="h-4 w-4" />
+                    <span className="text-xs font-medium">Forgotten About</span>
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-bold text-red-400">
+                    {estimate.forgottenSubs}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">subscriptions</div>
+                </div>
+
+                <div className="bg-black/30 border border-red-500/20 rounded-lg p-4 text-center">
+                  <div className="flex items-center justify-center gap-2 text-red-400 mb-1">
+                    <AlertCircle className="h-4 w-4" />
+                    <span className="text-xs font-medium">Estimated Waste</span>
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-bold text-red-400">
+                    {currencySymbol}{estimate.annualWaste}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">per year</div>
+                </div>
+              </div>
+
+              <div className="bg-primary/20 border border-primary/40 rounded-lg p-4 sm:p-5 mt-4">
+                <div className="text-center space-y-2">
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    BeforeCharge Personal costs {currencySymbol}{personalPlanYearlyCost.toFixed(0)}/year
+                  </p>
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="text-sm sm:text-base font-semibold">You'd save:</span>
+                    <span className="text-3xl sm:text-4xl font-bold text-primary">
+                      {currencySymbol}{estimate.netSaving}
+                    </span>
+                  </div>
+                  <p className="text-xs text-primary/80">
+                    in the first year alone! 🎉
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {!showResults && (
+            <p className="text-center text-xs text-muted-foreground pt-4">
+              Select options above to see your personalized estimate
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Pricing: React.FC = () => {
   const navigate = useNavigate();
@@ -29,54 +318,33 @@ const Pricing: React.FC = () => {
   const { paymentConfig, isConfigLoading, isProcessing } = usePayment();
 
   const [selectedPlan, setSelectedPlan] = useState<PlanType | null>(null);
+  const [selectedPlanForPayment, setSelectedPlanForPayment] = useState<PlanType | null>(null);
   const [planLoading, setPlanLoading] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [currency, setCurrency] = useState<"USD" | "INR">("USD");
-  const [isStripeAvailable, setIsStripeAvailable] = useState(false);
   const [billingInterval, setBillingInterval] = useState<"monthly" | "yearly">(
     "monthly",
   );
-  const [showStripeModal, setShowStripeModal] = useState(false);
-  const [showRazorpayModal, setShowRazorpayModal] = useState(false);
-  const [selectedPlanForPayment, setSelectedPlanForPayment] =
-    useState<PlanType | null>(null);
 
   useEffect(() => {
     const detectUserLocation = () => {
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const isIndianTimezone = timezone.includes('Asia/Kolkata') || timezone.includes('Asia/Calcutta');
-
-      const userIsIndian =
-        profile?.default_currency === "INR" ||
-        paymentConfig?.provider === "razorpay" ||
-        isIndianTimezone;
-
+      const userIsIndian = profile?.default_currency === "INR";
       setCurrency(userIsIndian ? "INR" : "USD");
     };
 
     detectUserLocation();
-  }, [profile, paymentConfig]);
+  }, [profile]);
 
+  // Load Lemon Squeezy script
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't navigate if any modals are open as you would only want to close the modal
-      if (e.key === 'Escape' && !showStripeModal && !showRazorpayModal) {
-        if (!user) {
-          navigate('/');
-        } else if (window.history.length > 2) {
-          navigate(-1);
-        } else {
-          navigate('/');
-        }
-      }
+    const script = document.createElement("script");
+    script.src = "https://app.lemonsqueezy.com/js/lemon.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
     };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [navigate, user, showStripeModal, showRazorpayModal]);
-
-  useEffect(() => {
-    const stripeKey = process.env.VITE_STRIPE_PUBLISHABLE_KEY;
-    setIsStripeAvailable(!!stripeKey);
   }, []);
 
   const handlePlanSelect = async (planType: PlanType) => {
@@ -85,46 +353,14 @@ const Pricing: React.FC = () => {
       return;
     }
 
-    if (!paymentConfig) {
-      toast.error("Payment configuration not available");
-      return;
-    }
-
     setSelectedPlan(planType);
-    setPlanLoading(true);
+    setSelectedPlanForPayment(planType);
+    setShowPaymentModal(true);
+
     trackEvent(ANALYTICS_EVENTS.PLAN_SELECT, {
       plan: planType,
       billing: billingInterval
     });
-
-    try {
-      const plan = PLANS.find((p) => p.type === planType);
-      if (!plan) {
-        throw new Error("Plan not found");
-      }
-
-      setSelectedPlanForPayment(planType);
-
-      if (paymentConfig.provider === "stripe") {
-        if (!isStripeAvailable) {
-          toast.error(
-            "Payment provider not configured. Please contact support.",
-          );
-          setPlanLoading(false);
-          setSelectedPlanForPayment(null);
-          return;
-        }
-        setShowStripeModal(true);
-      } else if (paymentConfig.provider === "razorpay") {
-        setShowRazorpayModal(true);
-      }
-    } catch (error) {
-      console.error("Payment initialization error:", error);
-      toast.error("Failed to initialize payment. Please try again.");
-    } finally {
-      setPlanLoading(false);
-      setSelectedPlan(null);
-    }
   };
 
   if (planLoading || isConfigLoading) {
@@ -177,7 +413,12 @@ const Pricing: React.FC = () => {
           Upgrade your subscription management with powerful features and
           unlimited tracking.
         </p>
+      </div>
 
+      {/* Subscription Waste Estimator */}
+      <SubscriptionWasteEstimator currency={currency} billingInterval={billingInterval} />
+
+      <div className="space-y-4">
         {/* Currency Display */}
         <div className="flex items-center justify-center gap-2">
           <span className="text-sm text-muted-foreground">
@@ -186,7 +427,7 @@ const Pricing: React.FC = () => {
         </div>
 
         {/* Billing Interval Toggle */}
-        <div className="flex items-center justify-center gap-4 mb-4">
+        <div className="flex items-center justify-center gap-4 mb-8 pb-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">Billing:</span>
             <div className="flex bg-black/50 border border-white/10 rounded-lg p-1">
@@ -207,13 +448,13 @@ const Pricing: React.FC = () => {
                   setBillingInterval("yearly");
                   trackEvent(ANALYTICS_EVENTS.BILLING_TOGGLE, { interval: 'yearly' });
                 }}
-                className={`px-4 py-2 rounded text-sm font-medium transition-all relative ${billingInterval === "yearly"
+                className={`px-4 py-2 pr-12 rounded text-sm font-medium transition-all relative ${billingInterval === "yearly"
                   ? "bg-white/10 text-white shadow-sm"
                   : "text-muted-foreground hover:text-white"
                   }`}
               >
                 Yearly
-                <span className="absolute -top-2 -right-2 bg-primary text-black font-bold text-xs.5 px-1.5 py-0.5 rounded-sm">
+                <span className="absolute top-1/2 -translate-y-1/2 right-1.5 bg-primary text-black font-bold text-[8px] px-1.5 py-0.5 rounded-full shadow-sm whitespace-nowrap">
                   Save
                 </span>
               </button>
@@ -223,7 +464,7 @@ const Pricing: React.FC = () => {
       </div>
 
       {/* Pricing Cards */}
-      <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
+      <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4 mt-16 pt-6">
         {getCurrentPlans().map((plan) => {
           const features = PLAN_FEATURES[plan.type] || [];
           const price = getPlanPrice(plan);
@@ -233,14 +474,15 @@ const Pricing: React.FC = () => {
             <div
               key={plan.type}
               className={`panel relative flex flex-col ${isPopular
-                ? "border-primary/50 shadow-[0_0_30px_rgba(204,255,0,0.1)] md:scale-105 z-10"
+                ? "border-primary/50 shadow-[0_0_30px_rgba(204,255,0,0.1)] md:scale-105"
                 : ""
                 }`}
+              style={{ zIndex: isPopular ? 10 : 1 }}
             >
               {isPopular && (
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <Badge className="bg-primary text-black font-bold border-none px-3 py-1">
-                    Most Popular
+                <div className="absolute -top-5 left-0 right-0 flex justify-center z-20">  
+                  <Badge className="bg-primary text-black font-bold border-none px-5 py-1.5 shadow-lg whitespace-nowrap text-sm">
+                    ⭐ Most Popular
                   </Badge>
                 </div>
               )}
@@ -287,12 +529,11 @@ const Pricing: React.FC = () => {
                 {(plan.type === "premium" || plan.type === "enterprise") && (
                   <div className="bg-primary/10 p-3 rounded-lg border border-primary/20 text-left">
                     <div className="flex items-center gap-2 text-sm font-medium text-primary">
-                      <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
-                      Coming Soon: Auto-fetch
+                      <Zap className="h-4 w-4 flex-shrink-0 fill-primary" />
+                      <span>Auto-fetch Included</span>
                     </div>
-                    <p className="text-xs text-primary/70 mt-1">
-                      AI-powered email scanning to automatically detect and
-                      import your subscriptions
+                    <p className="text-xs text-primary/70 mt-1 leading-relaxed">
+                      AI-powered email scanning finds and imports subscriptions automatically
                     </p>
                   </div>
                 )}
@@ -301,9 +542,9 @@ const Pricing: React.FC = () => {
               <div className="p-6 space-y-6 flex-1 flex flex-col">
                 <div className="space-y-3 flex-1">
                   {features.map((feature, index) => {
-                    const isComingSoon = feature.includes("Coming Soon");
-                    const iconColor = isComingSoon ? "text-primary/70" : "text-primary";
-                    const textColor = isComingSoon ? "text-primary/70 font-medium" : "text-muted-foreground";
+                    const isComingSoon = false;
+                    const iconColor = "text-primary";
+                    const textColor = "text-muted-foreground";
 
                     return (
                       <div key={index} className="flex items-center gap-3">
@@ -413,36 +654,19 @@ const Pricing: React.FC = () => {
         </div>
       </div>
 
-      {/* Payment Modals */}
+      {/* Payment Modal */}
       {selectedPlanForPayment && (
-        <>
-          {isStripeAvailable && (
-            <React.Suspense fallback={<LoadingSpinner />}>
-              <StripePaymentModal
-                isOpen={showStripeModal}
-                onClose={() => {
-                  setShowStripeModal(false);
-                  setSelectedPlanForPayment(null);
-                  setPlanLoading(false);
-                }}
-                planType={selectedPlanForPayment}
-                currency={currency}
-                billingInterval={billingInterval}
-              />
-            </React.Suspense>
-          )}
-
-          <RazorpayPaymentModal
-            isOpen={showRazorpayModal}
-            onClose={() => {
-              setShowRazorpayModal(false);
-              setSelectedPlanForPayment(null);
-              setPlanLoading(false);
-            }}
-            planType={selectedPlanForPayment}
-            billingInterval={billingInterval}
-          />
-        </>
+        <LemonSqueezyPaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => {
+            setShowPaymentModal(false);
+            setSelectedPlanForPayment(null);
+            setPlanLoading(false);
+          }}
+          planType={selectedPlanForPayment}
+          currency={currency}
+          billingInterval={billingInterval}
+        />
       )}
     </div>
   );

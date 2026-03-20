@@ -6,13 +6,16 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "next start",
-    "setup": "node setup.js"
+    "setup": "node setup.js",
+    "create-test-users": "tsx scripts/create-test-users.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -61,19 +64,25 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^24.10.0",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",
-    "@vitejs/plugin-react": "^4.1.1",
+    "@vitest/ui": "^4.1.0",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.53.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
+    "jsdom": "^29.0.0",
+    "next-sitemap": "^4.2.3",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
+    "tsx": "^4.21.0",
     "typescript": "^5.2.2",
-    "vite": "^5.0.0"
+    "vitest": "^4.1.0"
   }
 }
