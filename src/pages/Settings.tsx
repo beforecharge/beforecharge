@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { User, Bell, Palette, Shield, Save, Eye, EyeOff, Globe } from "lucide-react";
+import { User, Bell, Shield, Save, Eye, EyeOff, Globe } from "lucide-react";
 
 import { useAuth } from "@/hooks/useAuth";
 import useSubscriptions from "@/hooks/useSubscriptions";
-import { useUIStore } from "@/store/uiStore";
 import { Currency } from "@/types/app.types";
 import {
   SUPPORTED_CURRENCIES,
@@ -23,7 +22,6 @@ import CurrencyPreview from "@/components/ui/currency-preview";
 
 const Settings: React.FC = () => {
   const { user, profile, updateProfile } = useAuth();
-  const { theme, setTheme } = useUIStore();
   const { getActiveSubscriptions, getTotalMonthlyCost } = useSubscriptions();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -513,46 +511,6 @@ const Settings: React.FC = () => {
 
         {/* Sidebar Settings Area */}
         <div className="w-full lg:w-80 space-y-6">
-          {/* Theme Settings */}
-          <div className="panel">
-            <div className="panel-top">
-              <div className="panel-title">
-                <div className="panel-title-ico" style={{ background: "var(--c-violet-bg)", color: "var(--c-violet)" }}>
-                  <Palette className="h-4 w-4" />
-                </div>
-                Appearance
-              </div>
-            </div>
-            <div className="p-4">
-              <Label className="mb-3 block">Theme</Label>
-              <div className="space-y-3">
-                {[
-                  { value: "light", label: "Light", emoji: "☀️" },
-                  { value: "dark", label: "Dark", emoji: "🌙" },
-                  { value: "system", label: "System", emoji: "💻" },
-                ].map((themeOption) => (
-                  <label
-                    key={themeOption.value}
-                    className="flex items-center space-x-3 cursor-pointer"
-                  >
-                    <input
-                      type="radio"
-                      name="theme"
-                      value={themeOption.value}
-                      checked={theme === themeOption.value}
-                      onChange={(e) => setTheme(e.target.value as any)}
-                      className="h-4 w-4 text-primary bg-black border-white/20 focus:ring-primary focus:ring-offset-background"
-                    />
-                    <span className="text-sm font-medium">
-                      <span className="mr-2">{themeOption.emoji}</span>
-                      {themeOption.label}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          </div>
-
           {/* Account Stats */}
           <div className="panel">
             <div className="panel-top">
