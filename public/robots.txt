@@ -1,21 +1,6 @@
-# robots.txt — BeforeCharge
-
+# *
 User-agent: *
 Allow: /
-Allow: /pricing
-Allow: /features
-Allow: /about
-Allow: /contact
-Allow: /blog/
-Allow: /privacy
-Allow: /privacy/
-Allow: /terms
-Allow: /terms/
-Allow: /_next/static/
-Allow: /static/
-Allow: /*.css$
-Allow: /*.js$
-
 Disallow: /dashboard
 Disallow: /subscriptions
 Disallow: /analytics
@@ -26,16 +11,20 @@ Disallow: /api/
 Disallow: /admin/
 Disallow: /_next/server/
 
+# Googlebot
 User-agent: Googlebot
-Crawl-delay: 0
 
+# Bingbot
 User-agent: Bingbot
 Crawl-delay: 1
 
+# MJ12bot
 User-agent: MJ12bot
 Disallow: /
 
+# DotBot
 User-agent: DotBot
 Disallow: /
 
-Sitemap: https://beforecharge.com/sitemap.xml
+# Host
+Host: https://beforecharge.com

@@ -596,19 +596,31 @@ class GmailService {
         throw new Error('User not authenticated');
       }
 
-      // Check user plan and fetch count
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('plan_type, gmail_fetch_count')
-        .eq('id', user.id)
-        .single();
+      // Check user plan and fetch count (if columns exist)
+      let isFreePlan = true;
+      let fetchCount = 0;
+      
+      try {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('plan_type, gmail_fetch_count')
+          .eq('id', user.id)
+          .single();
 
-      const isFreePlan = !profile || profile.plan_type === 'free';
-      const fetchCount = profile?.gmail_fetch_count || 0;
+        isFreePlan = !profile || (profile as any).plan_type === 'free';
+        fetchCount = (profile as any)?.gmail_fetch_count || 0;
 
-      // Enforce free plan limit (1 fetch lifetime)
-      if (isFreePlan && fetchCount >= 1) {
-        throw new Error('FREE_PLAN_LIMIT_REACHED');
+        // Enforce free plan limit (1 fetch lifetime)
+        if (isFreePlan && fetchCount >= 1) {
+          throw new Error('FREE_PLAN_LIMIT_REACHED');
+        }
+      } catch (error: any) {
+        // If columns don't exist, skip plan check and allow fetch
+        if (!error?.message?.includes('column') && error?.message !== 'FREE_PLAN_LIMIT_REACHED') {
+          console.warn('Could not check plan limits:', error);
+        } else if (error?.message === 'FREE_PLAN_LIMIT_REACHED') {
+          throw error;
+        }
       }
 
       // Search for subscription emails
@@ -734,8 +746,11 @@ class GmailService {
           gmail_last_fetch_at: new Date().toISOString()
         } as any)
         .eq('id', userId);
-    } catch (error) {
-      console.error('Failed to increment fetch count:', error);
+    } catch (error: any) {
+      // Silently fail if columns don't exist yet
+      if (!error?.message?.includes('column')) {
+        console.error('Failed to increment fetch count:', error);
+      }
     }
   }
 
@@ -749,24 +764,32 @@ class GmailService {
         return { allowed: false, reason: 'Not authenticated' };
       }
 
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('plan_type, gmail_fetch_count')
-        .eq('id', user.id)
-        .single();
+      try {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('plan_type, gmail_fetch_count')
+          .eq('id', user.id)
+          .single();
 
-      const isFreePlan = !profile || profile.plan_type === 'free';
-      const fetchCount = profile?.gmail_fetch_count || 0;
+        const isFreePlan = !profile || (profile as any).plan_type === 'free';
+        const fetchCount = (profile as any)?.gmail_fetch_count || 0;
 
-      if (isFreePlan && fetchCount >= 1) {
-        return { 
-          allowed: false, 
-          reason: 'Free plan limit reached (1 fetch lifetime)', 
-          fetchCount 
-        };
+        if (isFreePlan && fetchCount >= 1) {
+          return { 
+            allowed: false, 
+            reason: 'Free plan limit reached (1 fetch lifetime)', 
+            fetchCount 
+          };
+        }
+
+        return { allowed: true, fetchCount };
+      } catch (error: any) {
+        // If columns don't exist, allow fetch
+        if (error?.message?.includes('column')) {
+          return { allowed: true, fetchCount: 0 };
+        }
+        throw error;
       }
-
-      return { allowed: true, fetchCount };
     } catch (error) {
       console.error('Error checking fetch permission:', error);
       return { allowed: false, reason: 'Error checking permissions' };

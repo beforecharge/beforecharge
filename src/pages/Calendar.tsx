@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Calendar as CalendarIcon, Bell, Info, Zap, DollarSign } from "lucide-react";
+import { Calendar as CalendarIcon, Bell, Zap, DollarSign } from "lucide-react";
 import toast from "react-hot-toast";
 import { trackEvent, ANALYTICS_EVENTS } from "@/utils/analytics";
 import { Calendar } from "@/components/ui/calendar";
