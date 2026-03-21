@@ -31,7 +31,7 @@ export const supabase: SupabaseClient<Database> = createClient(
       persistSession: true,
       detectSessionInUrl: true,
       flowType: 'pkce', // Force PKCE flow instead of implicit
-      storage: window.localStorage,
+      storage: typeof window !== 'undefined' ? window.localStorage : undefined,
       storageKey: 'supabase.auth.token',
     },
     realtime: {
@@ -71,29 +71,10 @@ export const auth = {
 
   // Sign in with Google
   signInWithGoogle: async () => {
-    // Determine the correct redirect URL based on environment
-    const getRedirectUrl = () => {
-      const origin = window.location.origin;
-
-      // For development
-      if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
-        return `${origin}/auth/callback`;
-      }
-
-      // For production - ensure we use the correct domain
-      if (origin.includes('beforecharge.com')) {
-        // Use the same subdomain (www or non-www) as current origin
-        return `${origin}/auth/callback`;
-      }
-
-      // Fallback to current origin
-      return `${origin}/auth/callback`;
-    };
-
-    const redirectUrl = getRedirectUrl();
+    // Redirect to home page - Supabase will detect the OAuth code automatically
+    const redirectUrl = `${window.location.origin}/`;
+    
     console.log('OAuth redirect URL:', redirectUrl);
-    console.log('Current origin:', window.location.origin);
-    console.log('Environment:', window.location.origin.includes('localhost') ? 'development' : 'production');
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
