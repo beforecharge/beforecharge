@@ -7,8 +7,44 @@
 @tailwind utilities;
 
 @layer base {
+  /* Light theme (default) */
+  :root {
+    --background: 0 0% 100%;
+    /* #FFFFFF */
+    --foreground: 222 47% 11%;
+    /* #0F172A */
+    --card: 0 0% 100%;
+    /* #FFFFFF */
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 153 84% 49%;
+    /* #12E888 - Keep the same green */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96%;
+    /* #F1F5F9 */
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    /* #64748B */
+    --accent: 210 40% 96%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
+    /* #EF4444 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 32% 91%;
+    /* #E2E8F0 */
+    --input: 214 32% 91%;
+    --ring: 153 84% 49%;
+    --radius: 0.5rem;
+    --chart-1: 153 84% 49%;
+    --chart-2: 217 90% 61%;
+    --chart-3: 0 84% 60%;
+    --chart-4: 38 91% 55%;
+    --chart-5: 27 87% 67%;
+  }
 
-  :root,
+  /* Dark theme */
   .dark {
     --background: 230 30% 4%;
     /* #07080D */
