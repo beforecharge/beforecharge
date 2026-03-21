@@ -95,7 +95,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 <div className="av-chevron">▾</div>
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="start" side="bottom">
+            <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => { navigate("/settings"); closeMobileMenu(); }}>
@@ -189,7 +189,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               <DropdownMenuTrigger asChild>
                 <div className="av" title="Account">{getInitials()}</div>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent>
                 <DropdownMenuItem onClick={() => navigate("/settings")}>Settings</DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSignOut} className="text-red-500">Sign out</DropdownMenuItem>
               </DropdownMenuContent>
