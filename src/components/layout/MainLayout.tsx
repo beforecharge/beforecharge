@@ -6,7 +6,6 @@ import {
   BarChart3,
   Settings,
   Bell,
-  Calendar,
   Menu,
   X,
 } from "lucide-react";
@@ -29,7 +28,6 @@ interface MainLayoutProps {
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Subscriptions", href: "/subscriptions", icon: CreditCard },
-  { name: "Calendar", href: "/calendar", icon: Calendar },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
 ];
 

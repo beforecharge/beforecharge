@@ -322,19 +322,17 @@ export const YEARLY_PLANS: Plan[] = [
 export const PLAN_FEATURES: Record<PlanType, string[]> = {
   free: [
     "Up to 3 subscriptions",
-    "Upcoming renewals list",
+    "Renewal tracking",
     "Basic reminders",
-    "Manual data entry",
+    "Manual entry",
   ],
   premium: [
     "Up to 25 subscriptions",
-    "Advanced analytics & insights",
+    "Advanced analytics",
     "Smart reminders",
     "Data export (CSV)",
     "Priority support",
     "Cost optimization tips",
-    "Cancellation guides (Coming Soon)",
-    "Calendar view (Coming Soon)",
   ],
   enterprise: [
     "Unlimited subscriptions",
@@ -343,8 +341,6 @@ export const PLAN_FEATURES: Record<PlanType, string[]> = {
     "Advanced reporting",
     "Dedicated support",
     "Custom categories",
-    "Multi-workspace support (Coming Soon)",
-    "Auto-fetch subscriptions (Coming Soon)",
   ],
 };
 

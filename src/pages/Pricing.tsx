@@ -480,8 +480,8 @@ const Pricing: React.FC = () => {
               style={{ zIndex: isPopular ? 10 : 1 }}
             >
               {isPopular && (
-                <div className="absolute -top-5 left-0 right-0 flex justify-center z-20">  
-                  <Badge className="bg-primary text-black font-bold border-none px-5 py-1.5 shadow-lg whitespace-nowrap text-sm">
+                <div className="absolute -top-4 left-0 right-0 flex justify-center z-20">  
+                  <Badge className="bg-primary text-black font-bold border-none px-4 py-1 shadow-lg whitespace-nowrap text-xs">
                     ⭐ Most Popular
                   </Badge>
                 </div>
