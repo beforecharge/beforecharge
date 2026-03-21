@@ -1,4 +1,5 @@
 /* ── TOKENS ──────────────────────────────── */
+/* Dark theme tokens (default for custom components) */
 :root {
   --c-bg: #07080d;
   --c-surface: #0c0d14;
@@ -44,6 +45,43 @@
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Light theme overrides */
+:root:not(.dark) {
+  --c-bg: #ffffff;
+  --c-surface: #f8f9fa;
+  --c-card: #ffffff;
+  --c-card2: #f1f3f500;
+  --c-elevated: #f1f3f5;
+  --c-border: rgba(0, 0, 0, 0.08);
+  --c-border2: rgba(0, 0, 0, 0.12);
+  --c-border3: rgba(0, 0, 0, 0.16);
+
+  --c-green: #10b86f;
+  --c-green2: #0da05f;
+  --c-green-bg: rgba(16, 184, 111, 0.08);
+  --c-green-bg2: rgba(16, 184, 111, 0.15);
+  --c-green-rim: rgba(16, 184, 111, 0.25);
+
+  --c-red: #dc2626;
+  --c-red-bg: rgba(220, 38, 38, 0.08);
+  --c-red-rim: rgba(220, 38, 38, 0.20);
+
+  --c-amber: #d97706;
+  --c-amber-bg: rgba(217, 119, 6, 0.08);
+  --c-amber-rim: rgba(217, 119, 6, 0.20);
+
+  --c-blue: #2563eb;
+  --c-blue-bg: rgba(37, 99, 235, 0.08);
+
+  --c-violet: #7c3aed;
+  --c-violet-bg: rgba(124, 58, 237, 0.08);
+
+  --c-txt: #0f172a;
+  --c-txt2: #475569;
+  --c-txt3: #94a3b8;
+  --c-txt4: #e2e8f0;
+}
+
 /* ── NOISE TEXTURE ────────────────────────── */
 body::before {
   content: '';
@@ -56,8 +94,21 @@ body::before {
 }
 
 /* Update Tailwind Base Colors to Match */
-.dark,
+/* Light theme */
 :root {
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --border: 214 32% 91%;
+  --primary: 154 84% 49%;
+  --primary-foreground: 0 0% 100%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+}
+
+/* Dark theme */
+.dark {
   --background: 228 30% 4%;
   /* #07080d */
   --foreground: 222 35% 94%;

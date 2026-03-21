@@ -3,6 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import App from "./App";
 import { useAuthStore } from "@/store/authStore";
+import { useUIStore } from "@/store/uiStore";
 import { autoInitializeDatabase } from "@/lib/initDatabase";
 
 // We want to wrap the entire application in BrowserRouter to let Vite/React Router handle everything just like before.
@@ -13,6 +14,10 @@ export default function NextApp() {
     useEffect(() => {
         // Initialize the auth store
         useAuthStore.getState().initialize();
+
+        // Initialize theme
+        const theme = useUIStore.getState().theme;
+        useUIStore.getState().setTheme(theme);
 
         // Initialize database with default data
         autoInitializeDatabase();
