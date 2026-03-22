@@ -19,24 +19,25 @@ export const useGmailAutoFetch = () => {
   const [fetchCount, setFetchCount] = useState(0);
 
   // Check Gmail access and fetch limits on mount and when user changes
-  useEffect(() => {
-    const checkAccess = async () => {
-      if (user) {
-        const access = await gmailService.hasGmailAccess();
-        setHasGmailAccess(access);
+  const checkAccess = useCallback(async () => {
+    if (user) {
+      const access = await gmailService.hasGmailAccess();
+      setHasGmailAccess(access);
 
-        // Check fetch limits
-        const fetchPermission = await gmailService.canUseFetch();
-        setCanFetch(fetchPermission.allowed);
-        setFetchCount(fetchPermission.fetchCount || 0);
-      } else {
-        setHasGmailAccess(false);
-        setCanFetch(false);
-        setFetchCount(0);
-      }
-    };
-    checkAccess();
+      // Check fetch limits
+      const fetchPermission = await gmailService.canUseFetch();
+      setCanFetch(fetchPermission.allowed);
+      setFetchCount(fetchPermission.fetchCount || 0);
+    } else {
+      setHasGmailAccess(false);
+      setCanFetch(false);
+      setFetchCount(0);
+    }
   }, [user]);
+
+  useEffect(() => {
+    checkAccess();
+  }, [checkAccess]);
 
   const requestGmailAccess = useCallback(async () => {
     try {
@@ -87,9 +88,9 @@ export const useGmailAutoFetch = () => {
     try {
       // Check if fetch limit reached
       if (!canFetch) {
-        toast.error('Free plan limit reached. You have already used your 1 Gmail auto-fetch. Upgrade to Premium for unlimited fetches.', { 
+        toast.error('Free plan: You already have 1 auto-detected subscription. Delete it to fetch again, or upgrade to Premium for unlimited.', { 
           id: 'auto-fetch',
-          duration: 5000 
+          duration: 6000 
         });
         throw new Error('FETCH_LIMIT_REACHED');
       }
@@ -113,10 +114,15 @@ export const useGmailAutoFetch = () => {
 
       const result = await autoFetch();
 
-      if (result.limitReached && result.added <= 1) {
+      if (result.limitReached && result.added === 1) {
         toast.success(
-          `Successfully added ${result.added} subscription from Gmail. Free plan limit reached - upgrade for unlimited fetches!`,
-          { id: 'auto-fetch', duration: 5000 }
+          `Added 1 subscription from Gmail. Free plan allows 1 auto-detected subscription - upgrade for unlimited!`,
+          { id: 'auto-fetch', duration: 6000 }
+        );
+      } else if (result.limitReached && result.added === 0) {
+        toast.success(
+          `Found ${result.total} subscription${result.total > 1 ? 's' : ''} but they were already in your list. Free plan limit: 1 auto-fetch used.`,
+          { id: 'auto-fetch', duration: 6000 }
         );
       } else if (result.added > 0) {
         toast.success(
@@ -138,9 +144,9 @@ export const useGmailAutoFetch = () => {
       const errorMsg = typeof err === 'string' ? err : (err?.message || '');
       
       if (errorMsg === 'FETCH_LIMIT_REACHED' || errorMsg === 'FREE_PLAN_LIMIT_REACHED') {
-        toast.error('Free plan limit reached. You have already used your 1 Gmail auto-fetch. Upgrade to Premium for unlimited fetches.', { 
+        toast.error('Free plan: You already have 1 auto-detected subscription. Delete it to fetch again, or upgrade to Premium.', { 
           id: 'auto-fetch',
-          duration: 5000 
+          duration: 6000 
         });
       } else if (errorMsg === 'GMAIL_ACCESS_REQUIRED') {
         toast.error('Gmail access required. Redirecting to sign in with Google...', { 
@@ -172,6 +178,7 @@ export const useGmailAutoFetch = () => {
     autoFetch,
     autoFetchWithToast,
     requestGmailAccess,
+    refreshPermissions: checkAccess,
     isLoading,
     lastResult,
     hasGmailAccess,

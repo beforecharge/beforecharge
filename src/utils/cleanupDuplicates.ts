@@ -64,7 +64,7 @@ export async function cleanupDuplicateSubscriptions(userId: string): Promise<{
         }
 
         // Remove duplicates
-        const deletePromises = duplicatesToRemove.map(id => db.subscriptions.delete(id));
+        const deletePromises = duplicatesToRemove.map(id => db.subscriptions.delete(id, userId));
         const results = await Promise.allSettled(deletePromises);
 
         const successfulDeletes = results.filter(result => result.status === 'fulfilled').length;

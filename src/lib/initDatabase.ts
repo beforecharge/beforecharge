@@ -15,8 +15,6 @@ interface DatabaseInitResult {
  */
 export async function initializeDatabase(): Promise<DatabaseInitResult> {
   try {
-    console.log("🔍 Checking database connection...");
-
     // Test database connection
     const { error: testError } = await supabase
       .from("categories")
@@ -30,8 +28,6 @@ export async function initializeDatabase(): Promise<DatabaseInitResult> {
         error: testError.message,
       };
     }
-
-    console.log("✅ Database connection successful");
 
     // Check if default categories already exist
     const { data: existingCategories, error: categoriesError } = await supabase
@@ -57,10 +53,9 @@ export async function initializeDatabase(): Promise<DatabaseInitResult> {
     );
 
     if (categoriesToCreate.length === 0) {
-      console.log("✅ All default categories already exist");
       return {
         success: true,
-        message: "Database already initialized with default categories",
+        message: "Database initialized",
         categoriesCreated: 0,
       };
     }
@@ -248,8 +243,6 @@ export async function autoInitializeDatabase(): Promise<void> {
       );
       return;
     }
-
-    console.log("🚀 Auto-initializing database...");
 
     const result = await initializeDatabase();
 

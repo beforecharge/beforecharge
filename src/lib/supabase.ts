@@ -205,11 +205,12 @@ export const db = {
     },
 
     // Delete subscription
-    delete: async (id: string) => {
+    delete: async (id: string, userId: string) => {
       const { error } = await supabase
         .from('subscriptions')
         .delete()
-        .eq('id', id);
+        .eq('id', id)
+        .eq('user_id', userId);
 
       return { error };
     },

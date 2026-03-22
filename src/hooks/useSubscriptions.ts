@@ -168,7 +168,6 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
       }
 
       if (existingSubscriptions && existingSubscriptions.length > 0) {
-        console.log('User already has subscriptions, skipping dummy data creation');
         return;
       }
 
@@ -180,8 +179,6 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
         console.warn('Required categories not found for dummy data');
         return;
       }
-
-      console.log('Creating sample subscriptions for new user');
 
       const dummyPromises = DUMMY_SUBSCRIPTIONS.map(async (dummy, index) => {
         let categoryId = streamingCategory.id;
@@ -354,7 +351,7 @@ export const useSubscriptions = (): UseSubscriptionsReturn => {
     }
 
     try {
-      const { error } = await db.subscriptions.delete(id);
+      const { error } = await db.subscriptions.delete(id, user.id);
       if (error) throw error;
 
       setSubscriptions(prev => prev.filter(sub => sub.id !== id));

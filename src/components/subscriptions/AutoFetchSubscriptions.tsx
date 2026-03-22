@@ -282,18 +282,22 @@ const AutoFetchSubscriptions: React.FC<AutoFetchSubscriptionsProps> = ({
           </div>
 
           {/* Privacy & Security */}
-          <Card className="border-blue-800 bg-blue-50 dark:bg-blue-950/20">
+          <Card className="border-green-800 bg-green-900/20">
             <CardContent className="pt-6">
               <div className="flex items-start gap-3">
-                <Shield className="h-6 w-6 text-blue-600 shrink-0 mt-1" />
+                <Shield className="h-6 w-6 text-green-400 shrink-0 mt-1" />
                 <div>
-                  <h4 className="font-medium text-blue-100 dark:text-blue-100">
-                    Your Privacy is Our Priority
+                  <h4 className="font-medium text-green-100">
+                    Privacy Protected
                   </h4>
-                  <p className="text-sm text-blue-300 dark:text-blue-300 mt-2">
-                    We only read email headers and subscription-related content.
-                    No personal emails or sensitive information is stored. All
-                    data is encrypted and you can revoke access anytime.
+                  <p className="text-sm text-green-200 mt-2 mb-2">
+                    Gmail scanning is processed through our secure server. Your email content 
+                    is NOT visible in your browser's network tab and is NOT stored on our servers.
+                  </p>
+                  <p className="text-sm text-green-200">
+                    We only extract subscription information and immediately discard email content. 
+                    All data is encrypted in transit. You can revoke access anytime from your 
+                    Google Account settings.
                   </p>
                 </div>
               </div>

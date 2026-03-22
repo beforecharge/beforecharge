@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import LoadingSpinner from '@/components/ui/loading-spinner';
 import { useGmailAutoFetch, AutoFetchResult } from '@/hooks/useGmailAutoFetch';
+import { useSubscriptions } from '@/hooks/useSubscriptions';
 import { Mail, Chrome } from 'lucide-react';
 import { trackEvent, ANALYTICS_EVENTS } from "@/utils/analytics";
 
@@ -18,7 +19,13 @@ const AutoFetchButton: React.FC<AutoFetchButtonProps> = ({
   size = 'sm',
   className = ''
 }) => {
-  const { autoFetchWithToast, requestGmailAccess, isLoading, isEnabled, hasGmailAccess, canFetch, fetchCount } = useGmailAutoFetch();
+  const { autoFetchWithToast, requestGmailAccess, refreshPermissions, isLoading, isEnabled, hasGmailAccess, canFetch } = useGmailAutoFetch();
+  const { subscriptions } = useSubscriptions();
+
+  // Refresh permissions when subscriptions change (e.g., when one is deleted)
+  useEffect(() => {
+    refreshPermissions();
+  }, [subscriptions.length, refreshPermissions]);
 
   const handleAutoFetch = async () => {
     try {
@@ -35,7 +42,7 @@ const AutoFetchButton: React.FC<AutoFetchButtonProps> = ({
       trackEvent(ANALYTICS_EVENTS.GOOGLE_AUTH_CLICK, { context: 'gmail-access' });
       await requestGmailAccess();
     } catch (error) {
-      console.error('Error connecting Gmail:', error);
+      // Error handled by auth system
     }
   };
 
@@ -68,10 +75,10 @@ const AutoFetchButton: React.FC<AutoFetchButtonProps> = ({
         size={size}
         disabled={true}
         className={className}
-        title="Free plan limit reached (1 fetch used). Upgrade to Premium for unlimited fetches."
+        title="Free plan: You have 1 auto-detected subscription. Delete it to fetch again."
       >
         <Mail className="mr-2 h-4 w-4" />
-        <span className="hidden sm:inline">Limit Reached ({fetchCount}/1)</span>
+        <span className="hidden sm:inline">Already Fetched (Delete to Re-fetch)</span>
         <span className="sm:hidden">Limit Reached</span>
       </Button>
     );
