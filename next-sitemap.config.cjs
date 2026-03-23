@@ -37,10 +37,11 @@ module.exports = {
       },
       {
         userAgent: 'Googlebot',
-        crawlDelay: 0,
+        allow: '/',
       },
       {
         userAgent: 'Bingbot',
+        allow: '/',
         crawlDelay: 1,
       },
       {

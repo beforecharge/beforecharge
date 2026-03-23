@@ -12,7 +12,6 @@ Disallow: /_next/server/
 
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 0
 
 User-agent: Bingbot
 Allow: /
