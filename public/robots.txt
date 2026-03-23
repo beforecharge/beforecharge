@@ -28,3 +28,4 @@ Disallow: /
 
 # Host
 Host: https://beforecharge.com
+Sitemap: https://beforecharge.com/sitemap.xml
