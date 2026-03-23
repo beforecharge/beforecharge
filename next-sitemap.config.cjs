@@ -65,9 +65,15 @@ module.exports = {
     } else if (path === '/pricing') {
       priority = 0.9;
       changefreq = 'monthly';
-    } else if (['/login', '/signup'].includes(path)) {
-      priority = 0.5;
-      changefreq = 'yearly';
+    } else if (path === '/features') {
+      priority = 0.8;
+      changefreq = 'monthly';
+    } else if (path === '/about') {
+      priority = 0.7;
+      changefreq = 'monthly';
+    } else if (path === '/blog') {
+      priority = 0.8;
+      changefreq = 'weekly';
     } else if (['/privacy', '/terms'].includes(path)) {
       priority = 0.4;
       changefreq = 'yearly';

@@ -19,6 +19,9 @@ import Contact from "@/pages/Contact";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
 import CalendarPage from "@/pages/Calendar";
+import Features from "@/pages/Features";
+import About from "@/pages/About";
+import Blog from "@/pages/Blog";
 
 // Loading component
 import LoadingSpinner from "@/components/ui/loading-spinner";
@@ -363,6 +366,9 @@ const App: React.FC = () => {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/features" element={<Features />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/blog" element={<Blog />} />
 
           {/* Catch all route - redirect to home */}
           <Route path="*" element={<Navigate to="/" replace />} />
